@@ -20,9 +20,5 @@ services:
      - ./frontend:/usr/src/app
   ekanban-mongodb:
     build: mongodb/.
-    environment:
-     - MONGODB_USERNAME=ekanban
-     - MONGODB_PASSWORD=nabnake
-     - MONGODB_DBNAME=ekanban
     ports:
      - "27017:27017"
