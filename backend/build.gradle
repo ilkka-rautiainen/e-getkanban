@@ -7,23 +7,18 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M2'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: 'org.junit.platform.gradle.plugin'
-
-ext.junitVintageVersion  = '4.12.0-M2'
-ext.junitPlatformVersion = '1.0.0-M2'
-ext.junitJupiterVersion  = '5.0.0-M2'
 
 jar {
 	baseName = 'ekanban-backend'
 	version = '0.0.1-SNAPSHOT'
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -31,11 +26,84 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
-    compile("org.springframework.boot:spring-boot-devtools")
-    compile('org.springframework.boot:spring-boot-starter-web')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+//1. exclude commons-logging
+configurations.all {
+    exclude group: 'commons-logging', module: 'commons-logging'
 }
+
+project.ext {
+    cucumberVersion = '1.2.4'
+    junitVersion = '4.12'
+    contextRunnerVersion = '4.12.1'
+    restAVersion = '3.0.1'
+    slf4jVersion = '1.7.21'
+    logbackVersion = '1.1.7'
+    hamcrestVersion = '1.3'
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    compile 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.slf4j:jcl-over-slf4j:' + slf4jVersion
+    compile 'ch.qos.logback:logback-classic:' + logbackVersion
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'info.cukes:cucumber-java:' + cucumberVersion
+    testCompile 'info.cukes:cucumber-junit:' + cucumberVersion
+    testCompile 'info.cukes:cucumber-spring:' + cucumberVersion
+    testCompile 'junit:junit:' + junitVersion
+    testCompile 'de.bechte.junit:junit-hierarchicalcontextrunner:' + contextRunnerVersion
+    testCompile 'io.rest-assured:rest-assured:' + restAVersion
+    testCompile 'org.hamcrest:hamcrest-all:' + hamcrestVersion
+}
+
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+    acceptanceTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/acceptance-test/java')
+        }
+        resources.srcDir file('src/acceptance-test/resources')
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+    acceptanceTestCompile.extendsFrom testCompile
+    acceptanceTestRuntime.extendsFrom testRuntime
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+}
+
+task acceptanceTest(type: Test) {
+    testClassesDir = sourceSets.acceptanceTest.output.classesDir
+    classpath = sourceSets.acceptanceTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+}
+
+tasks.withType(Test) {
+    reports.html.destination = file('${reporting.baseDir}/${name}')
+    testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
+}
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+
+check.dependsOn acceptanceTest
+acceptanceTest.mustRunAfter integrationTest
