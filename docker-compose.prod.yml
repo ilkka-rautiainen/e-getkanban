@@ -1,0 +1,18 @@
+version: '2'
+services:
+  ekanban-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile-prod
+    ports:
+     - "8080:8080"
+    depends_on:
+     - ekanban-mongodb
+  ekanban-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-prod
+    ports:
+     - "80:3000"
+  ekanban-mongodb:
+    build: mongodb/.
