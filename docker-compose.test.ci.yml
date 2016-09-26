@@ -1,0 +1,17 @@
+version: '2'
+services:
+  ekanban-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile-prod
+    depends_on:
+     - ekanban-mongodb
+    command:
+     - "./gradlew"
+     - "test"
+  ekanban-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-test-ci
+  ekanban-mongodb:
+    build: mongodb/.
