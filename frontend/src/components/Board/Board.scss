@@ -1,0 +1,12 @@
+@import "../../variables";
+
+.Board {
+  flex: 1;
+  border: 2px solid $board-border-color;
+  border-radius: 5px;
+
+  .phase-row {
+    height: 100%;
+    margin: 0;
+  }
+}

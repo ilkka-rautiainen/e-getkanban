@@ -1,0 +1,37 @@
+@import "../../variables";
+
+.PhaseWithTwoColumns {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .phase-header {
+    height: #{$phase-header-height - $column-header-height};
+    border-bottom-width: 2px;
+    border-bottom-style: dashed;
+    border-bottom-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .align-wrapper {
+      text-align: center;
+    }
+  }
+
+  .column-row {
+    margin: 0;
+    flex: 1;
+
+    .column-col {
+      height: 100%;
+      padding: 0;
+
+      &:not(:last-child) {
+        .Column {
+          border-right: 1px solid $column-separator-color;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+@import "../../variables";
+
+.PhaseContainer {
+  height: 100%;
+  padding: 0;
+
+  &:not(:last-child) {
+    border-right: 2px solid $phase-separator-color;
+  }
+
+  &.single-col {
+    flex: 1;
+  }
+
+  &.two-cols {
+    flex: 2;
+  }
+}

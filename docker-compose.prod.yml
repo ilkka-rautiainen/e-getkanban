@@ -8,11 +8,14 @@ services:
      - "8080:8080"
     depends_on:
      - ekanban-mongodb
+    restart: always
   ekanban-frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile-prod
     ports:
      - "80:3000"
+    restart: always
   ekanban-mongodb:
     build: mongodb/.
+    restart: always

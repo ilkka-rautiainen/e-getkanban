@@ -1,0 +1,8 @@
+// Dimensions
+$phase-header-height: 100px;
+$column-header-height: 30px;
+
+// Colors
+$board-border-color: black;
+$phase-separator-color: black;
+$column-separator-color: lighten($phase-separator-color, 50%);

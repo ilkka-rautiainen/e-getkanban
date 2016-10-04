@@ -1,6 +1,11 @@
 version: '2'
 services:
   ekanban-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-dev
+    volumes:
+     - ./frontend:/usr/src/app
     command:
      - "npm"
      - "test"

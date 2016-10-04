@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
-docker-compose -f ../docker-compose.dev.yml -f ../docker-compose.dev.frontend-sleep.yml -p ekanban-run-command-in-frontend stop ekanban-frontend
-docker-compose -f ../docker-compose.dev.yml -f ../docker-compose.dev.frontend-sleep.yml -p ekanban-run-command-in-frontend rm -f ekanban-frontend
-docker-compose -f ../docker-compose.dev.yml -f ../docker-compose.dev.frontend-sleep.yml -p ekanban-run-command-in-frontend up --build --force-recreate -d ekanban-frontend
-docker exec ekanbanruncommandinfrontend_ekanban-frontend_1 "$@"
-docker-compose -f ../docker-compose.dev.yml -f ../docker-compose.dev.frontend-sleep.yml -p ekanban-run-command-in-frontend stop ekanban-frontend
-docker-compose -f ../docker-compose.dev.yml -f ../docker-compose.dev.frontend-sleep.yml -p ekanban-run-command-in-frontend rm -f ekanban-frontend
+# Note: might give the error: Error response from daemon: No such container: ekanban-run-command-in-frontend
+docker stop ekanban-run-command-in-frontend
+docker rm -f ekanban-run-command-in-frontend
+
+docker build -t ekanban-run-command-in-frontend -f Dockerfile-dev .
+docker run -v `pwd`:/usr/src/app -d --name ekanban-run-command-in-frontend ekanban-run-command-in-frontend
+docker exec ekanban-run-command-in-frontend "$@"
+
+docker stop ekanban-run-command-in-frontend
+docker rm -f ekanban-run-command-in-frontend
