@@ -41,7 +41,6 @@ public class Stepdefs extends SpringSteps {
     public void i_have_games(Integer count) throws Throwable {
         for (Integer i = 0; i < count; i++) {
             GameBuilder.aGame()
-                    .withId(i.toString())
                     .withPlayerName("player " + i.toString())
                     .create(gameRepository);
         }
