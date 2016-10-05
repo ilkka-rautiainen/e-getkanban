@@ -2,6 +2,8 @@ package fi.aalto.ekanban.builders;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 import fi.aalto.ekanban.enums.FinancialValue;
 import fi.aalto.ekanban.models.games.Card;
 import fi.aalto.ekanban.models.games.CardPhasePoint;
@@ -19,6 +21,7 @@ public final class CardBuilder {
     private String outcome;
 
     private CardBuilder() {
+        this.id = ObjectId.get().toString();
     }
 
     public static CardBuilder aCard() {

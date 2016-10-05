@@ -2,6 +2,8 @@ package fi.aalto.ekanban.builders;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 import fi.aalto.ekanban.models.games.Board;
 import fi.aalto.ekanban.models.games.Card;
 import fi.aalto.ekanban.models.games.EventCard;
@@ -14,6 +16,7 @@ public final class BoardBuilder {
     private List<Phase> phases;
 
     private BoardBuilder() {
+        this.id = ObjectId.get().toString();
     }
 
     public static BoardBuilder aBoard() {

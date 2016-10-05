@@ -13,13 +13,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestContextManager;
 
+import fi.aalto.ekanban.SpringIntegrationTest;
 import fi.aalto.ekanban.builders.*;
 import fi.aalto.ekanban.models.games.Game;
 import fi.aalto.ekanban.models.games.Card;
@@ -28,11 +25,7 @@ import fi.aalto.ekanban.models.games.Phase;
 import fi.aalto.ekanban.repositories.GameRepository;
 
 @RunWith(HierarchicalContextRunner.class)
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class GameControllerTest {
-
-    private static final Logger logger =
-            LoggerFactory.getLogger(GameControllerTest.class);
+public class GameControllerTest extends SpringIntegrationTest {
 
     private Response response;
 
@@ -43,8 +36,7 @@ public class GameControllerTest {
     int port;
 
     @Before
-    public void setUp() throws Exception {
-        new TestContextManager(getClass()).prepareTestInstance(this);
+    public void setUp() {
         RestAssured.port = port;
         resetDb();
     }
@@ -91,11 +83,11 @@ public class GameControllerTest {
 
             @Test
             public void shouldReturnAllGames() {
+                Integer sizeOfCreatedGames = 1;
                 logger.info(response.prettyPrint());
                 response.then()
                     .statusCode(200)
-                    .body("[0].id", equalTo(createdGame.getId()))
-                    .body("[0].playerName", equalTo(createdGame.getPlayerName()));
+                    .body("size()", equalTo(sizeOfCreatedGames));
             }
 
         }

@@ -1,5 +1,7 @@
 package fi.aalto.ekanban.builders;
 
+import org.bson.types.ObjectId;
+
 import fi.aalto.ekanban.models.games.CardPhasePoint;
 
 public final class CardPhasePointBuilder {
@@ -9,6 +11,7 @@ public final class CardPhasePointBuilder {
     private Integer pointsDone;
 
     private CardPhasePointBuilder() {
+        this.id = ObjectId.get().toString();
     }
 
     public static CardPhasePointBuilder aCardPhasePoint() {

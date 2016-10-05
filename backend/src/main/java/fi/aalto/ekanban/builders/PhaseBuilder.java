@@ -3,6 +3,8 @@ package fi.aalto.ekanban.builders;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 import fi.aalto.ekanban.models.games.Column;
 import fi.aalto.ekanban.models.games.Phase;
 
@@ -13,6 +15,7 @@ public final class PhaseBuilder {
     private String name;
 
     private PhaseBuilder() {
+        this.id = ObjectId.get().toString();
     }
 
     public static PhaseBuilder aPhase() {
