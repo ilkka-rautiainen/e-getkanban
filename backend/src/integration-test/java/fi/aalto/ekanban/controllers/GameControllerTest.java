@@ -3,6 +3,9 @@ package fi.aalto.ekanban.controllers;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 
+import java.util.Arrays;
+import java.util.List;
+
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -17,8 +20,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestContextManager;
 
-import fi.aalto.ekanban.builders.GameBuilder;
-import fi.aalto.ekanban.models.Game;
+import fi.aalto.ekanban.builders.*;
+import fi.aalto.ekanban.models.games.Game;
+import fi.aalto.ekanban.models.games.Card;
+import fi.aalto.ekanban.models.games.EventCard;
+import fi.aalto.ekanban.models.games.Phase;
 import fi.aalto.ekanban.repositories.GameRepository;
 
 @RunWith(HierarchicalContextRunner.class)
@@ -40,6 +46,7 @@ public class GameControllerTest {
     public void setUp() throws Exception {
         new TestContextManager(getClass()).prepareTestInstance(this);
         RestAssured.port = port;
+        resetDb();
     }
 
     @After
@@ -55,9 +62,23 @@ public class GameControllerTest {
 
         @Before
         public void initGames() {
+            List<Card> backlogDeck = Arrays.asList(CardBuilder.aCard().build());
+            List<EventCard> eventCardDeck = Arrays.asList(EventCardBuilder.anEventCard().build());
+            List<Phase> phases = Arrays.asList(
+                    PhaseBuilder.aPhase().analysis().build(),
+                    PhaseBuilder.aPhase().development().build(),
+                    PhaseBuilder.aPhase().test().build(),
+                    PhaseBuilder.aPhase().deployed().build()
+            );
+
             createdGame = GameBuilder.aGame()
-                .withId("1")
                 .withPlayerName("player")
+                .withBoard(
+                        BoardBuilder.aBoard()
+                            .withBacklogDeck(backlogDeck)
+                            .withEventCardDeck(eventCardDeck)
+                            .withPhases(phases)
+                            .build())
                 .create(gameRepository);
         }
 

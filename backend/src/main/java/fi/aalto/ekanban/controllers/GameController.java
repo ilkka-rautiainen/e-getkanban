@@ -1,6 +1,6 @@
 package fi.aalto.ekanban.controllers;
 
-import fi.aalto.ekanban.models.Game;
+import fi.aalto.ekanban.models.games.Game;
 import fi.aalto.ekanban.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
