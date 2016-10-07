@@ -2,6 +2,8 @@ package fi.aalto.ekanban.builders;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 import fi.aalto.ekanban.models.games.EventCard;
 import fi.aalto.ekanban.models.GameOptionChange;
 
@@ -11,6 +13,7 @@ public final class EventCardBuilder {
     private List<GameOptionChange> gameOptionChanges;
 
     private EventCardBuilder() {
+        this.id = ObjectId.get().toString();
     }
 
     public static EventCardBuilder anEventCard() {

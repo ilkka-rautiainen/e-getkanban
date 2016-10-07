@@ -83,11 +83,11 @@ public class GameControllerTest extends SpringIntegrationTest {
 
             @Test
             public void shouldReturnAllGames() {
+                Integer sizeOfCreatedGames = 1;
                 logger.info(response.prettyPrint());
                 response.then()
                     .statusCode(200)
-                    .body("[0].id", equalTo(createdGame.getId()))
-                    .body("[0].playerName", equalTo(createdGame.getPlayerName()));
+                    .body("size()", equalTo(sizeOfCreatedGames));
             }
 
         }
