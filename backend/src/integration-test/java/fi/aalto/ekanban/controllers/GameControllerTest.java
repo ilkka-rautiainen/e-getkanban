@@ -3,6 +3,9 @@ package fi.aalto.ekanban.controllers;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 
+import java.util.Arrays;
+import java.util.List;
+
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -10,23 +13,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestContextManager;
 
-import fi.aalto.ekanban.builders.GameBuilder;
-import fi.aalto.ekanban.models.Game;
+import fi.aalto.ekanban.SpringIntegrationTest;
+import fi.aalto.ekanban.builders.*;
+import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.models.db.games.Card;
+import fi.aalto.ekanban.models.db.games.EventCard;
+import fi.aalto.ekanban.models.db.games.Phase;
 import fi.aalto.ekanban.repositories.GameRepository;
 
 @RunWith(HierarchicalContextRunner.class)
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class GameControllerTest {
-
-    private static final Logger logger =
-            LoggerFactory.getLogger(GameControllerTest.class);
+public class GameControllerTest extends SpringIntegrationTest {
 
     private Response response;
 
@@ -37,9 +36,9 @@ public class GameControllerTest {
     int port;
 
     @Before
-    public void setUp() throws Exception {
-        new TestContextManager(getClass()).prepareTestInstance(this);
+    public void setUp() {
         RestAssured.port = port;
+        resetDb();
     }
 
     @After
@@ -55,9 +54,23 @@ public class GameControllerTest {
 
         @Before
         public void initGames() {
+            List<Card> backlogDeck = Arrays.asList(CardBuilder.aCard().build());
+            List<EventCard> eventCardDeck = Arrays.asList(EventCardBuilder.anEventCard().build());
+            List<Phase> phases = Arrays.asList(
+                    PhaseBuilder.aPhase().analysis().build(),
+                    PhaseBuilder.aPhase().development().build(),
+                    PhaseBuilder.aPhase().test().build(),
+                    PhaseBuilder.aPhase().deployed().build()
+            );
+
             createdGame = GameBuilder.aGame()
-                .withId("1")
                 .withPlayerName("player")
+                .withBoard(
+                        BoardBuilder.aBoard()
+                            .withBacklogDeck(backlogDeck)
+                            .withEventCardDeck(eventCardDeck)
+                            .withPhases(phases)
+                            .build())
                 .create(gameRepository);
         }
 
@@ -70,11 +83,11 @@ public class GameControllerTest {
 
             @Test
             public void shouldReturnAllGames() {
+                Integer sizeOfCreatedGames = 1;
                 logger.info(response.prettyPrint());
                 response.then()
                     .statusCode(200)
-                    .body("[0].id", equalTo(createdGame.getId()))
-                    .body("[0].playerName", equalTo(createdGame.getPlayerName()));
+                    .body("size()", equalTo(sizeOfCreatedGames));
             }
 
         }

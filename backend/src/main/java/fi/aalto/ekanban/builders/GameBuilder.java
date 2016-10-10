@@ -1,11 +1,13 @@
 package fi.aalto.ekanban.builders;
 
-import fi.aalto.ekanban.models.Game;
+import fi.aalto.ekanban.models.db.games.Board;
+import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.repositories.GameRepository;
 
 public final class GameBuilder {
     private String id;
     private String playerName;
+    private Board board;
 
     private GameBuilder() {
     }
@@ -24,10 +26,16 @@ public final class GameBuilder {
         return this;
     }
 
+    public GameBuilder withBoard(Board board) {
+        this.board = board;
+        return this;
+    }
+
     public Game create(GameRepository gameRepository) {
         Game game = new Game();
         game.setId(id);
         game.setPlayerName(playerName);
+        game.setBoard(board);
         gameRepository.save(game);
         return game;
     }
