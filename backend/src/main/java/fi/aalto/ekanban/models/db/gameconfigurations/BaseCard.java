@@ -1,8 +1,8 @@
-package fi.aalto.ekanban.models;
+package fi.aalto.ekanban.models.db.gameconfigurations;
 
 import java.util.List;
 
-import fi.aalto.ekanban.models.games.CardPhasePoint;
+import fi.aalto.ekanban.models.db.games.CardPhasePoint;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;

@@ -1,6 +1,5 @@
-package fi.aalto.ekanban.models;
+package fi.aalto.ekanban.models.db.games;
 
-import fi.aalto.ekanban.models.games.Card;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;

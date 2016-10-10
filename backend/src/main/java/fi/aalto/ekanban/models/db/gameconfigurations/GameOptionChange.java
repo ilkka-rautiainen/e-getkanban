@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.models;
+package fi.aalto.ekanban.models.db.gameconfigurations;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -43,6 +43,8 @@ public class GameOptionChange {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
         if (!(o instanceof GameOptionChange)) return false;
 
         GameOptionChange that = (GameOptionChange) o;

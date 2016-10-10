@@ -5,9 +5,9 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 import fi.aalto.ekanban.enums.FinancialValue;
-import fi.aalto.ekanban.models.games.Card;
-import fi.aalto.ekanban.models.games.CardPhasePoint;
-import fi.aalto.ekanban.models.GameOptionChange;
+import fi.aalto.ekanban.models.db.games.Card;
+import fi.aalto.ekanban.models.db.games.CardPhasePoint;
+import fi.aalto.ekanban.models.db.gameconfigurations.GameOptionChange;
 
 public final class CardBuilder {
     private String id;

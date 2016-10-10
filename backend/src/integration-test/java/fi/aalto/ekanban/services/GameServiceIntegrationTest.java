@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import fi.aalto.ekanban.SpringIntegrationTest;
-import fi.aalto.ekanban.models.games.Game;
+import fi.aalto.ekanban.models.db.games.Game;
 
 @RunWith(HierarchicalContextRunner.class)
 public class GameServiceIntegrationTest extends SpringIntegrationTest {

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import fi.aalto.ekanban.models.games.Card;
-import fi.aalto.ekanban.models.games.Column;
+import fi.aalto.ekanban.models.db.games.Card;
+import fi.aalto.ekanban.models.db.games.Column;
 
 public final class ColumnBuilder {
     private String id;

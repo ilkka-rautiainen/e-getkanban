@@ -1,6 +1,6 @@
 package fi.aalto.ekanban.builders;
 
-import fi.aalto.ekanban.models.GameOptionChange;
+import fi.aalto.ekanban.models.db.gameconfigurations.GameOptionChange;
 
 public final class GameOptionChangeBuilder {
     private String id;

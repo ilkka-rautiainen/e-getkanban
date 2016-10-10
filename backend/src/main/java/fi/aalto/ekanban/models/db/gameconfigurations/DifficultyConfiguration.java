@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.models;
+package fi.aalto.ekanban.models.db.gameconfigurations;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class DifficultyConfiguration {
     private List<GameOptionChange> initialGameOptionChanges;
 
     @Field
-    private List<BaseEventCardConfiguration> eventCardConfigurations;
+    private List<EventCardInstantiator> eventCardConfigurations;
 
     @Field
     private List<String> baseCardIds;
@@ -48,11 +48,11 @@ public class DifficultyConfiguration {
         this.initialGameOptionChanges = initialGameOptionChanges;
     }
 
-    public List<BaseEventCardConfiguration> getEventCardConfigurations() {
+    public List<EventCardInstantiator> getEventCardConfigurations() {
         return eventCardConfigurations;
     }
 
-    public void setEventCardConfigurations(List<BaseEventCardConfiguration> eventCardConfigurations) {
+    public void setEventCardConfigurations(List<EventCardInstantiator> eventCardConfigurations) {
         this.eventCardConfigurations = eventCardConfigurations;
     }
 
@@ -67,6 +67,8 @@ public class DifficultyConfiguration {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
         if (!(o instanceof DifficultyConfiguration)) return false;
 
         DifficultyConfiguration that = (DifficultyConfiguration) o;

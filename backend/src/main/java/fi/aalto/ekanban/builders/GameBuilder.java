@@ -1,7 +1,7 @@
 package fi.aalto.ekanban.builders;
 
-import fi.aalto.ekanban.models.games.Board;
-import fi.aalto.ekanban.models.games.Game;
+import fi.aalto.ekanban.models.db.games.Board;
+import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.repositories.GameRepository;
 
 public final class GameBuilder {

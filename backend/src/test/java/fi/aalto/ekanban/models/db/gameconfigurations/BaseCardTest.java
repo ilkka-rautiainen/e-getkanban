@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.models;
+package fi.aalto.ekanban.models.db.gameconfigurations;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;

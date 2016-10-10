@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.models;
+package fi.aalto.ekanban.models.db.gameconfigurations;
 
 import java.util.List;
 
@@ -6,8 +6,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+/*
+    Contains parameters to instantiate an EventCardTemplate for a game
+ */
 @Document
-public class BaseEventCardConfiguration {
+public class EventCardInstantiator {
 
     @Id
     private String id;
@@ -56,9 +59,11 @@ public class BaseEventCardConfiguration {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BaseEventCardConfiguration)) return false;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
+        if (!(o instanceof EventCardInstantiator)) return false;
 
-        BaseEventCardConfiguration that = (BaseEventCardConfiguration) o;
+        EventCardInstantiator that = (EventCardInstantiator) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (gameOptionChanges != null ? !gameOptionChanges.equals(that.gameOptionChanges) : that.gameOptionChanges != null)

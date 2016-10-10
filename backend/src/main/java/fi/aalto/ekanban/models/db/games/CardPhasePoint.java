@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.models.games;
+package fi.aalto.ekanban.models.db.games;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -54,6 +54,8 @@ public class CardPhasePoint {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
         if (!(o instanceof CardPhasePoint)) return false;
 
         CardPhasePoint that = (CardPhasePoint) o;

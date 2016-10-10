@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.models.games;
+package fi.aalto.ekanban.models.db.games;
 
 import java.util.List;
 
@@ -56,6 +56,8 @@ public class Phase {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
         if (!(o instanceof Phase)) return false;
 
         Phase phase = (Phase) o;
