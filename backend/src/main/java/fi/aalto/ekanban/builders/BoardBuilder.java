@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import fi.aalto.ekanban.models.games.Board;
-import fi.aalto.ekanban.models.games.Card;
-import fi.aalto.ekanban.models.games.EventCard;
-import fi.aalto.ekanban.models.games.Phase;
+import fi.aalto.ekanban.models.db.games.Board;
+import fi.aalto.ekanban.models.db.games.Card;
+import fi.aalto.ekanban.models.db.games.EventCard;
+import fi.aalto.ekanban.models.db.games.Phase;
 
 public final class BoardBuilder {
     private String id;

@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import fi.aalto.ekanban.models.games.Column;
-import fi.aalto.ekanban.models.games.Phase;
+import fi.aalto.ekanban.models.db.games.Column;
+import fi.aalto.ekanban.models.db.games.Phase;
 
 public final class PhaseBuilder {
     private String id;

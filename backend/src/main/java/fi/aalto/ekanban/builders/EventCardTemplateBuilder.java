@@ -2,7 +2,7 @@ package fi.aalto.ekanban.builders;
 
 import java.util.List;
 
-import fi.aalto.ekanban.models.EventCardTemplate;
+import fi.aalto.ekanban.models.db.gameconfigurations.EventCardTemplate;
 
 public final class EventCardTemplateBuilder {
     private String id;

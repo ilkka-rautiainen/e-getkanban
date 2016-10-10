@@ -2,7 +2,7 @@ package fi.aalto.ekanban.builders;
 
 import org.bson.types.ObjectId;
 
-import fi.aalto.ekanban.models.games.CardPhasePoint;
+import fi.aalto.ekanban.models.db.games.CardPhasePoint;
 
 public final class CardPhasePointBuilder {
     private String id;

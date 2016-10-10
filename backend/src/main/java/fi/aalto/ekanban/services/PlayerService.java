@@ -2,8 +2,8 @@ package fi.aalto.ekanban.services;
 
 import org.springframework.stereotype.Service;
 
-import fi.aalto.ekanban.models.games.Game;
-import fi.aalto.ekanban.models.games.Turn;
+import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.models.Turn;
 
 @Service
 public class PlayerService {

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import fi.aalto.ekanban.models.games.EventCard;
-import fi.aalto.ekanban.models.GameOptionChange;
+import fi.aalto.ekanban.models.db.games.EventCard;
+import fi.aalto.ekanban.models.db.gameconfigurations.GameOptionChange;
 
 public final class EventCardBuilder {
     private String id;

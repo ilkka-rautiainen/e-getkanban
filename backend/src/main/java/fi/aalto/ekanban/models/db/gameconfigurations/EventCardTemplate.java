@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.models;
+package fi.aalto.ekanban.models.db.gameconfigurations;
 
 import java.util.List;
 
@@ -6,6 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+/*
+    Template for an event card. E.g. "Add {0} € money". To be instantiated to a game by an EventCardInstantiator.
+ */
 @Document
 public class EventCardTemplate {
 
@@ -56,6 +59,8 @@ public class EventCardTemplate {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
         if (!(o instanceof EventCardTemplate)) return false;
 
         EventCardTemplate that = (EventCardTemplate) o;

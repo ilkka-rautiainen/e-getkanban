@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.models.games;
+package fi.aalto.ekanban.models;
 
 public class Turn {
     //TODO implement

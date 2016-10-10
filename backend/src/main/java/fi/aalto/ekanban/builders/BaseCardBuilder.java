@@ -3,18 +3,18 @@ package fi.aalto.ekanban.builders;
 import java.util.List;
 
 import fi.aalto.ekanban.enums.FinancialValue;
-import fi.aalto.ekanban.models.BaseCard;
-import fi.aalto.ekanban.models.games.CardPhasePoint;
-import fi.aalto.ekanban.models.GameOptionChange;
+import fi.aalto.ekanban.models.db.gameconfigurations.BaseCard;
+import fi.aalto.ekanban.models.db.games.CardPhasePoint;
+import fi.aalto.ekanban.models.db.gameconfigurations.GameOptionChange;
 
 public final class BaseCardBuilder {
-    String id;
-    List<CardPhasePoint> cardPhasePoints;
-    FinancialValue financialValue;
-    List<GameOptionChange> gameOptionChangesWhenDeployed;
-    String subscribesWhenDeployed;
-    String description;
-    String outcome;
+    private String id;
+    private List<CardPhasePoint> cardPhasePoints;
+    private FinancialValue financialValue;
+    private List<GameOptionChange> gameOptionChangesWhenDeployed;
+    private String subscribesWhenDeployed;
+    private String description;
+    private String outcome;
 
     private BaseCardBuilder() {
     }

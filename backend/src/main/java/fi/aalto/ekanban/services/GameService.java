@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import fi.aalto.ekanban.models.games.Game;
-import fi.aalto.ekanban.models.games.Turn;
+import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.models.Turn;
 
 @Service
 public class GameService {

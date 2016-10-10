@@ -1,6 +1,6 @@
-package fi.aalto.ekanban.models.games;
+package fi.aalto.ekanban.models.db.games;
 
-import fi.aalto.ekanban.models.BaseCard;
+import fi.aalto.ekanban.models.db.gameconfigurations.BaseCard;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 

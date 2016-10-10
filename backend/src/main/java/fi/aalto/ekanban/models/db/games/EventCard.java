@@ -1,8 +1,8 @@
-package fi.aalto.ekanban.models.games;
+package fi.aalto.ekanban.models.db.games;
 
 import java.util.List;
 
-import fi.aalto.ekanban.models.GameOptionChange;
+import fi.aalto.ekanban.models.db.gameconfigurations.GameOptionChange;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -46,6 +46,8 @@ public class EventCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
         if (!(o instanceof EventCard)) return false;
 
         EventCard eventCard = (EventCard) o;

@@ -2,15 +2,15 @@ package fi.aalto.ekanban.builders;
 
 import java.util.List;
 
-import fi.aalto.ekanban.models.BaseEventCardConfiguration;
-import fi.aalto.ekanban.models.DifficultyConfiguration;
-import fi.aalto.ekanban.models.GameOptionChange;
+import fi.aalto.ekanban.models.db.gameconfigurations.EventCardInstantiator;
+import fi.aalto.ekanban.models.db.gameconfigurations.DifficultyConfiguration;
+import fi.aalto.ekanban.models.db.gameconfigurations.GameOptionChange;
 
 public final class DifficultyConfigurationBuilder {
     private String id;
     private String name;
     private List<GameOptionChange> initialGameOptionChanges;
-    private List<BaseEventCardConfiguration> eventCardConfigurations;
+    private List<EventCardInstantiator> eventCardConfigurations;
 
     private DifficultyConfigurationBuilder() {
     }
@@ -34,7 +34,7 @@ public final class DifficultyConfigurationBuilder {
         return this;
     }
 
-    public DifficultyConfigurationBuilder withEventCardConfigurations(List<BaseEventCardConfiguration> eventCardConfigurations) {
+    public DifficultyConfigurationBuilder withEventCardConfigurations(List<EventCardInstantiator> eventCardConfigurations) {
         this.eventCardConfigurations = eventCardConfigurations;
         return this;
     }

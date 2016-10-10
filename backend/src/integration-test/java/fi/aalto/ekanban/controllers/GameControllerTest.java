@@ -18,10 +18,10 @@ import org.springframework.beans.factory.annotation.Value;
 
 import fi.aalto.ekanban.SpringIntegrationTest;
 import fi.aalto.ekanban.builders.*;
-import fi.aalto.ekanban.models.games.Game;
-import fi.aalto.ekanban.models.games.Card;
-import fi.aalto.ekanban.models.games.EventCard;
-import fi.aalto.ekanban.models.games.Phase;
+import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.models.db.games.Card;
+import fi.aalto.ekanban.models.db.games.EventCard;
+import fi.aalto.ekanban.models.db.games.Phase;
 import fi.aalto.ekanban.repositories.GameRepository;
 
 @RunWith(HierarchicalContextRunner.class)
