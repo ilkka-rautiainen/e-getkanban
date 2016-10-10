@@ -1,10 +1,7 @@
 package fi.aalto.ekanban.controllers;
 
-import static io.restassured.RestAssured.when;
-import static org.hamcrest.Matchers.equalTo;
-
-import java.util.Arrays;
-import java.util.List;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import io.restassured.RestAssured;
@@ -17,15 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import fi.aalto.ekanban.SpringIntegrationTest;
-import fi.aalto.ekanban.builders.*;
-import fi.aalto.ekanban.models.db.games.Game;
-import fi.aalto.ekanban.models.db.games.Card;
-import fi.aalto.ekanban.models.db.games.EventCard;
-import fi.aalto.ekanban.models.db.games.Phase;
+import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.repositories.GameRepository;
 
 @RunWith(HierarchicalContextRunner.class)
 public class GameControllerTest extends SpringIntegrationTest {
+
+    private static final String GAMES = "/games";
 
     private Response response;
 
@@ -46,50 +41,69 @@ public class GameControllerTest extends SpringIntegrationTest {
         gameRepository.deleteAll();
     }
 
-    public class getAllGames {
+    public class createGame {
 
-        private static final String GAMES = "/games";
-
-        private Game createdGame;
-
-        @Before
-        public void initGames() {
-            List<Card> backlogDeck = Arrays.asList(CardBuilder.aCard().build());
-            List<EventCard> eventCardDeck = Arrays.asList(EventCardBuilder.anEventCard().build());
-            List<Phase> phases = Arrays.asList(
-                    PhaseBuilder.aPhase().analysis().build(),
-                    PhaseBuilder.aPhase().development().build(),
-                    PhaseBuilder.aPhase().test().build(),
-                    PhaseBuilder.aPhase().deployed().build()
-            );
-
-            createdGame = GameBuilder.aGame()
-                .withPlayerName("player")
-                .withBoard(
-                        BoardBuilder.aBoard()
-                            .withBacklogDeck(backlogDeck)
-                            .withEventCardDeck(eventCardDeck)
-                            .withPhases(phases)
-                            .build())
-                .create(gameRepository);
-        }
-
-        public class whenNoParametersGiven {
-
+        public class withValidRequest {
             @Before
             public void doRequest() {
-                response = when().get(GAMES);
+                response = given()
+                            .formParam("playerName", "Player")
+                            .formParam("difficultyLevel", GameDifficulty.NORMAL)
+                        .when().post(GAMES);
             }
 
             @Test
-            public void shouldReturnAllGames() {
-                Integer sizeOfCreatedGames = 1;
+            public void shouldReturnNewGame() {
                 logger.info(response.prettyPrint());
                 response.then()
-                    .statusCode(200)
-                    .body("size()", equalTo(sizeOfCreatedGames));
+                        .statusCode(200)
+                        .body(is(notNullValue()));
+            }
+        }
+
+        public class withoutPlayerName {
+            @Before
+            public void doRequest() {response = given().formParam("difficultyLevel", GameDifficulty.NORMAL).when().post(GAMES); }
+
+            @Test
+            public void shouldReturn400() { response.then().statusCode(400); }
+
+            @Test
+            public void shouldReturnPlayerNameNotFoundInErrorDescription() {
+                response.then().body("message", equalTo("Required String parameter 'playerName' is not present"));
+            }
+        }
+
+        public class withoutGameDifficulty {
+            @Before
+            public void doRequest() { response = given().formParam("playerName", "Player").when().post(GAMES); }
+
+            @Test
+            public void shouldReturn400() { response.then().statusCode(400); }
+
+            @Test
+            public void shouldReturnDifficultyLevelNotFoundInErrorDescription() {
+                response.then().body("message", equalTo("Required GameDifficulty parameter 'difficultyLevel' is not present"));
+            }
+        }
+
+        public class withInvalidGameDifficulty {
+            @Before
+            public void doRequest() {
+                response = given()
+                        .formParam("playerName", "Player")
+                        .formParam("difficultyLevel", "thisisntagamedifficultyatall")
+                        .when().post(GAMES);
             }
 
+            @Test
+            public void shouldReturn400() { response.then().statusCode(400); }
+
+            @Test
+            public void shouldReturnDifficultyLevelNotFoundInErrorDescription() {
+                response.then().body("message",
+                        containsString("Failed to convert value of type [java.lang.String] to required type"));
+            }
         }
 
     }

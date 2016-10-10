@@ -36,8 +36,7 @@ public final class GameBuilder {
         game.setId(id);
         game.setPlayerName(playerName);
         game.setBoard(board);
-        gameRepository.save(game);
-        return game;
+        return gameRepository.save(game);
     }
 
     public Game build() {
