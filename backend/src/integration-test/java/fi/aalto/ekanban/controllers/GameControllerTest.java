@@ -68,7 +68,7 @@ public class GameControllerTest extends SpringIntegrationTest {
             public void doRequest() {response = given().formParam("difficultyLevel", GameDifficulty.NORMAL).when().post(GAME_PATH); }
 
             @Test
-            public void shouldReturn400() { logger.info(response.prettyPrint()); response.then().statusCode(400); }
+            public void shouldReturn400() { response.then().statusCode(400); }
 
             @Test
             public void shouldReturnPlayerNameNotFoundInErrorDescription() {
@@ -94,11 +94,11 @@ public class GameControllerTest extends SpringIntegrationTest {
             }
 
             @Test
-            public void shouldReturn400() { logger.info(response.prettyPrint()); response.then().statusCode(400); }
+            public void shouldReturn400() { response.then().statusCode(400); }
 
             @Test
-            public void shouldReturnPlayerNameNotFoundInErrorDescription() {
-                response.then().body("message", equalTo("Name should be at most 128 characters long"));
+            public void shouldReturnNameTooLong() {
+                response.then().body("message", equalTo("Name should be at most 128 characters long\n"));
             }
         }
 
