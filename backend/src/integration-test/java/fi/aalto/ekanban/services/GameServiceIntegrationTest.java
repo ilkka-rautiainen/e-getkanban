@@ -49,9 +49,6 @@ public class GameServiceIntegrationTest extends SpringIntegrationTest {
                 assertThat(newGame, is(notNullValue()));
             }
 
-            @Test
-            public void shouldSetPlayerName() { assertThat(newGame.getPlayerName(), equalTo(playerName)); }
-
         }
 
     }

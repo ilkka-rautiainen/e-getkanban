@@ -1,5 +1,8 @@
 package fi.aalto.ekanban.builders;
 
+import static fi.aalto.ekanban.ApplicationConstants.IN_PROGRESS;
+import static fi.aalto.ekanban.ApplicationConstants.DONE;
+
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -36,12 +39,12 @@ public final class ColumnBuilder {
     }
 
     public ColumnBuilder inProgress() {
-        this.name = "In Progress";
+        this.name = IN_PROGRESS;
         return this;
     }
 
     public ColumnBuilder done() {
-        this.name = "Done";
+        this.name = DONE;
         return this;
     }
 

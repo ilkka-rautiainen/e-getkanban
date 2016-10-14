@@ -1,12 +1,16 @@
 package fi.aalto.ekanban.builders;
 
+import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS;
+import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT;
+import static fi.aalto.ekanban.ApplicationConstants.TEST;
+import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED;
+
 import java.util.Arrays;
 import java.util.List;
 
-import org.bson.types.ObjectId;
-
 import fi.aalto.ekanban.models.db.games.Column;
-import fi.aalto.ekanban.models.db.games.Phase;
+import fi.aalto.ekanban.models.db.gameconfigurations.Phase;
+import fi.aalto.ekanban.repositories.PhaseRepository;
 
 public final class PhaseBuilder {
     private String id;
@@ -14,9 +18,7 @@ public final class PhaseBuilder {
     private Integer wipLimit;
     private String name;
 
-    private PhaseBuilder() {
-        this.id = ObjectId.get().toString();
-    }
+    private PhaseBuilder() {}
 
     public static PhaseBuilder aPhase() {
         return new PhaseBuilder();
@@ -47,7 +49,7 @@ public final class PhaseBuilder {
         this.columns = Arrays.asList(
                 ColumnBuilder.aColumn().inProgress().build(),
                 ColumnBuilder.aColumn().done().build());
-        this.name = "Analysis";
+        this.name = ANALYSIS;
         return this;
     }
 
@@ -57,21 +59,30 @@ public final class PhaseBuilder {
                 ColumnBuilder.aColumn().inProgress().build(),
                 ColumnBuilder.aColumn().done().build()
         );
-        this.name = "Development";
+        this.name = DEVELOPMENT;
         return this;
     }
 
     public PhaseBuilder test() {
         this.wipLimit = 3;
         this.columns = Arrays.asList(ColumnBuilder.aColumn().build());
-        this.name = "Test";
+        this.name = TEST;
         return this;
     }
 
     public PhaseBuilder deployed() {
         this.columns = Arrays.asList(ColumnBuilder.aColumn().build());
-        this.name = "Deployed";
+        this.name = DEPLOYED;
         return this;
+    }
+
+    public Phase create(PhaseRepository repository) {
+        Phase phase = new Phase();
+        phase.setId(id);
+        phase.setColumns(columns);
+        phase.setWipLimit(wipLimit);
+        phase.setName(name);
+        return repository.save(phase);
     }
 
     public Phase build() {

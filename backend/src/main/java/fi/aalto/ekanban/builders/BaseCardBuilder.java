@@ -6,6 +6,7 @@ import fi.aalto.ekanban.enums.FinancialValue;
 import fi.aalto.ekanban.models.db.gameconfigurations.BaseCard;
 import fi.aalto.ekanban.models.db.games.CardPhasePoint;
 import fi.aalto.ekanban.models.db.gameconfigurations.GameOptionChange;
+import fi.aalto.ekanban.repositories.BaseCardRepository;
 
 public final class BaseCardBuilder {
     private String id;
@@ -58,7 +59,17 @@ public final class BaseCardBuilder {
         return this;
     }
 
+    public BaseCard create(BaseCardRepository baseCardRepository) {
+        BaseCard baseCard = initBaseCard();
+        return baseCardRepository.save(baseCard);
+    }
+
     public BaseCard build() {
+        BaseCard baseCard = initBaseCard();
+        return baseCard;
+    }
+
+    private BaseCard initBaseCard() {
         BaseCard baseCard = new BaseCard();
         baseCard.setId(id);
         baseCard.setCardPhasePoints(cardPhasePoints);
@@ -69,4 +80,5 @@ public final class BaseCardBuilder {
         baseCard.setOutcome(outcome);
         return baseCard;
     }
+
 }
