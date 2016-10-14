@@ -13,7 +13,7 @@ Feature: Start Game
       And game should have player name as Player
       And game should include a board
         And board should include 1 backlog deck
-          And backlog deck should have 50 cards
+          And backlog deck should have 15 cards
             And each card should contain phase points
               And 1. phase is Analysis
               And 2. phase is Dev
@@ -21,20 +21,18 @@ Feature: Start Game
             And each card should have empty day started
             And each card should have empty day deployed
             And each card should have financial value
-        And board should include event card deck
-          And event card deck should have 15 event cards
         And board should include different phases
-          And 1. phase is Analysis
-            And Analysis should have two columns
-              And first column is In Progress
-              And second column is Done
-          And 2. phase is Development
-            And Development should have two columns
-              And first column is In Progress
-              And second column is Done
-          And 3. phase is Test
-            And Test should have one column
-          And 4. phase is Deployed
-            And Deployed should have one column
+          And 1. phase in board is Analysis
+            And Analysis should have 2 column(s)
+              And 1. column of Analysis is In Progress
+              And 2. column of Analysis is Done
+          And 2. phase in board is Development
+            And Development should have 2 column(s)
+              And 1. column of Development is In Progress
+              And 2. column of Development is Done
+          And 3. phase in board is Test
+            And Test should have 1 column(s)
+          And 4. phase in board is Deployed
+            And Deployed should have 1 column(s)
 
 

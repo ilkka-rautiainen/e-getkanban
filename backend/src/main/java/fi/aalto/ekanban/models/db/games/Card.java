@@ -1,8 +1,9 @@
 package fi.aalto.ekanban.models.db.games;
 
-import fi.aalto.ekanban.models.db.gameconfigurations.BaseCard;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import fi.aalto.ekanban.models.db.gameconfigurations.BaseCard;
 
 @Document
 public class Card extends BaseCard {
@@ -11,7 +12,13 @@ public class Card extends BaseCard {
     private Integer dayStarted;
 
     @Field
+    private Integer dayDeployed;
+
+    @Field
     private Integer subscribers;
+
+    @Field
+    private Integer orderNumber;
 
     public Integer getDayStarted() {
         return dayStarted;
@@ -21,12 +28,28 @@ public class Card extends BaseCard {
         this.dayStarted = dayStarted;
     }
 
+    public Integer getDayDeployed() {
+        return dayDeployed;
+    }
+
+    public void setDayDeployed(Integer dayDeployed) {
+        this.dayDeployed = dayDeployed;
+    }
+
     public Integer getSubscribers() {
         return subscribers;
     }
 
     public void setSubscribers(Integer subscribers) {
         this.subscribers = subscribers;
+    }
+
+    public Integer getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     @Override
@@ -50,6 +73,8 @@ public class Card extends BaseCard {
             return false;
         if (outcome != null ? !outcome.equals(card.outcome) : card.outcome != null) return false;
         if (dayStarted != null ? !dayStarted.equals(card.dayStarted) : card.dayStarted != null) return false;
+        if (dayDeployed != null ? !dayDeployed.equals(card.dayDeployed) : card.dayDeployed != null) return false;
+        if (orderNumber != null ? !orderNumber.equals(card.orderNumber) : card.orderNumber != null) return false;
         return subscribers != null ? subscribers.equals(card.subscribers) : card.subscribers == null;
     }
 
@@ -57,7 +82,9 @@ public class Card extends BaseCard {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (dayStarted != null ? dayStarted.hashCode() : 0);
+        result = 31 * result + (dayDeployed != null ? dayDeployed.hashCode() : 0);
         result = 31 * result + (subscribers != null ? subscribers.hashCode() : 0);
+        result = 31 * result + (orderNumber != null ? orderNumber.hashCode() : 0);
         return result;
     }
 }

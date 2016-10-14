@@ -5,9 +5,10 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 import fi.aalto.ekanban.enums.FinancialValue;
+import fi.aalto.ekanban.models.db.gameconfigurations.BaseCard;
+import fi.aalto.ekanban.models.db.gameconfigurations.GameOptionChange;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.CardPhasePoint;
-import fi.aalto.ekanban.models.db.gameconfigurations.GameOptionChange;
 
 public final class CardBuilder {
     private String id;
@@ -15,10 +16,12 @@ public final class CardBuilder {
     private FinancialValue financialValue;
     private List<GameOptionChange> gameOptionChangesWhenDeployed;
     private String subscribesWhenDeployed;
-    private Integer dayStarted;
-    private Integer subscribers;
     private String description;
     private String outcome;
+    private Integer dayStarted;
+    private Integer dayDeployed;
+    private Integer subscribers;
+    private Integer orderNumber;
 
     private CardBuilder() {
         this.id = ObjectId.get().toString();
@@ -28,8 +31,28 @@ public final class CardBuilder {
         return new CardBuilder();
     }
 
+    public CardBuilder withDayStarted(Integer dayStarted) {
+        this.dayStarted = dayStarted;
+        return this;
+    }
+
+    public CardBuilder withDayDeployed(Integer dayDeployed) {
+        this.dayDeployed = dayDeployed;
+        return this;
+    }
+
+    public CardBuilder withSubscribers(Integer subscribers) {
+        this.subscribers = subscribers;
+        return this;
+    }
+
     public CardBuilder withId(String id) {
         this.id = id;
+        return this;
+    }
+
+    public CardBuilder withOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
         return this;
     }
 
@@ -53,16 +76,6 @@ public final class CardBuilder {
         return this;
     }
 
-    public CardBuilder withDayStarted(Integer dayStarted) {
-        this.dayStarted = dayStarted;
-        return this;
-    }
-
-    public CardBuilder withSubscribers(Integer subscribers) {
-        this.subscribers = subscribers;
-        return this;
-    }
-
     public CardBuilder withDescription(String description) {
         this.description = description;
         return this;
@@ -73,18 +86,30 @@ public final class CardBuilder {
         return this;
     }
 
+    public CardBuilder fromBaseCard(BaseCard baseCard) {
+        this.id = baseCard.getId();
+        this.cardPhasePoints = baseCard.getCardPhasePoints();
+        this.financialValue = baseCard.getFinancialValue();
+        this.gameOptionChangesWhenDeployed = baseCard.getGameOptionChangesWhenDeployed();
+        this.subscribesWhenDeployed = baseCard.getSubscribesWhenDeployed();
+        this.description = baseCard.getDescription();
+        this.outcome = baseCard.getOutcome();
+        return this;
+    }
+
     public Card build() {
         Card card = new Card();
+        card.setDayStarted(dayStarted);
+        card.setDayDeployed(dayDeployed);
+        card.setSubscribers(subscribers);
         card.setId(id);
+        card.setOrderNumber(orderNumber);
         card.setCardPhasePoints(cardPhasePoints);
         card.setFinancialValue(financialValue);
         card.setGameOptionChangesWhenDeployed(gameOptionChangesWhenDeployed);
         card.setSubscribesWhenDeployed(subscribesWhenDeployed);
-        card.setDayStarted(dayStarted);
-        card.setSubscribers(subscribers);
         card.setDescription(description);
         card.setOutcome(outcome);
         return card;
     }
-
 }

@@ -2,6 +2,7 @@ package fi.aalto.ekanban.controllers;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
+import static fi.aalto.ekanban.ApplicationConstants.GAME_PATH;
 
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import io.restassured.RestAssured;
@@ -17,10 +18,10 @@ import fi.aalto.ekanban.SpringIntegrationTest;
 import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.repositories.GameRepository;
 
+import java.util.Random;
+
 @RunWith(HierarchicalContextRunner.class)
 public class GameControllerTest extends SpringIntegrationTest {
-
-    private static final String GAMES = "/games";
 
     private Response response;
 
@@ -49,24 +50,25 @@ public class GameControllerTest extends SpringIntegrationTest {
                 response = given()
                             .formParam("playerName", "Player")
                             .formParam("difficultyLevel", GameDifficulty.NORMAL)
-                        .when().post(GAMES);
+                        .when().post(GAME_PATH);
             }
+
+            @Test
+            public void shouldReturn200() { response.then().statusCode(200); }
 
             @Test
             public void shouldReturnNewGame() {
                 logger.info(response.prettyPrint());
-                response.then()
-                        .statusCode(200)
-                        .body(is(notNullValue()));
+                response.then().body(is(notNullValue()));
             }
         }
 
         public class withoutPlayerName {
             @Before
-            public void doRequest() {response = given().formParam("difficultyLevel", GameDifficulty.NORMAL).when().post(GAMES); }
+            public void doRequest() {response = given().formParam("difficultyLevel", GameDifficulty.NORMAL).when().post(GAME_PATH); }
 
             @Test
-            public void shouldReturn400() { response.then().statusCode(400); }
+            public void shouldReturn400() { logger.info(response.prettyPrint()); response.then().statusCode(400); }
 
             @Test
             public void shouldReturnPlayerNameNotFoundInErrorDescription() {
@@ -74,9 +76,35 @@ public class GameControllerTest extends SpringIntegrationTest {
             }
         }
 
+        public class withTooLongPlayerName {
+            @Before
+            public void doRequest() {
+                char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+                Random random = new Random();
+                StringBuilder sb = new StringBuilder();
+                for (Integer i=0; i<130; i++) {
+                    char c = chars[random.nextInt(chars.length)];
+                    sb.append(c);
+                }
+                String tooLongPlayerName = sb.toString();
+                response = given()
+                        .formParam("playerName", tooLongPlayerName)
+                        .formParam("difficultyLevel", GameDifficulty.NORMAL)
+                        .when().post(GAME_PATH);
+            }
+
+            @Test
+            public void shouldReturn400() { logger.info(response.prettyPrint()); response.then().statusCode(400); }
+
+            @Test
+            public void shouldReturnPlayerNameNotFoundInErrorDescription() {
+                response.then().body("message", equalTo("Name should be at most 128 characters long"));
+            }
+        }
+
         public class withoutGameDifficulty {
             @Before
-            public void doRequest() { response = given().formParam("playerName", "Player").when().post(GAMES); }
+            public void doRequest() { response = given().formParam("playerName", "Player").when().post(GAME_PATH); }
 
             @Test
             public void shouldReturn400() { response.then().statusCode(400); }
@@ -93,7 +121,7 @@ public class GameControllerTest extends SpringIntegrationTest {
                 response = given()
                         .formParam("playerName", "Player")
                         .formParam("difficultyLevel", "thisisntagamedifficultyatall")
-                        .when().post(GAMES);
+                        .when().post(GAME_PATH);
             }
 
             @Test
