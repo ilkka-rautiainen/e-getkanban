@@ -17,7 +17,7 @@ public class PlayerService {
         if (adjustWipLimitsAction != null && game.getBoard() != null && game.getBoard().getPhases() != null) {
             game.getBoard().getPhases()
                     .forEach(phase -> {
-                        String key = phase.getName();
+                        String key = phase.getId();
                         Integer newWipLimitForPhaseOrUseOldIfNotGiven =
                                 adjustWipLimitsAction.getPhaseWipLimits().getOrDefault(key, phase.getWipLimit());
                         phase.setWipLimit(newWipLimitForPhaseOrUseOldIfNotGiven);

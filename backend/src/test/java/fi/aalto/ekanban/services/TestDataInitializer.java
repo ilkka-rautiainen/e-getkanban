@@ -15,11 +15,26 @@ import fi.aalto.ekanban.models.db.phases.Phase;
 public class TestDataInitializer {
 
     public static Game initNormalDifficultyGame() {
-        Phase analysisPhase = PhaseBuilder.aPhase().analysis().build();
-        Phase developmentPhase = PhaseBuilder.aPhase().development().build();
-        Phase testPhase = PhaseBuilder.aPhase().test().build();
-        Phase deployedPhase = PhaseBuilder.aPhase().deployed().build();
+        Phase analysisPhase = PhaseBuilder.aPhase().analysis().withId("1").build();
+        Phase developmentPhase = PhaseBuilder.aPhase().development().withId("2").build();
+        Phase testPhase = PhaseBuilder.aPhase().test().withId("3").build();
+        Phase deployedPhase = PhaseBuilder.aPhase().deployed().withId("4").build();
 
+        List<Phase> normalDifficultyPhases = Arrays.asList(analysisPhase, developmentPhase, testPhase, deployedPhase);
+        List<Card> backLogDeck = buildBacklogDeck(analysisPhase, developmentPhase, testPhase);
+
+        Board gameBoard = BoardBuilder.aBoard()
+                .withBacklogDeck(backLogDeck)
+                .withPhases(normalDifficultyPhases)
+                .build();
+
+        return GameBuilder.aGame()
+                .withBoard(gameBoard)
+                .withPlayerName("player")
+                .build();
+    }
+
+    private static List<Card> buildBacklogDeck(Phase analysisPhase, Phase developmentPhase, Phase testPhase) {
         CardPhasePoint analysisCardPoints = CardPhasePointBuilder.aCardPhasePoint()
                 .withTotalPoints(5)
                 .withPhaseId(analysisPhase.getId())
@@ -57,17 +72,7 @@ public class TestDataInitializer {
                     .build());
         }
 
-        List<Phase> normalDifficultyPhases = Arrays.asList(analysisPhase, developmentPhase, testPhase, deployedPhase);
-
-        Board gameBoard = BoardBuilder.aBoard()
-                .withBacklogDeck(backlogDeckCards)
-                .withPhases(normalDifficultyPhases)
-                .build();
-
-        return GameBuilder.aGame()
-                .withBoard(gameBoard)
-                .withPlayerName("player")
-                .build();
+        return backlogDeckCards;
     }
 
 }

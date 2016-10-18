@@ -3,17 +3,12 @@ package fi.aalto.ekanban.services;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE;
 import static fi.aalto.ekanban.services.TestDataInitializer.initNormalDifficultyGame;
 import static fi.aalto.ekanban.services.PlayerService.adjustWipLimits;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
 
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.After;
@@ -80,18 +75,16 @@ public class PlayerServiceTest {
         }
 
         public class withSinglePhaseWipLimitChanged {
-            //TODO add form validation for negative values, test at that level
-            private String phaseName;
-            String[] phaseNames = {ANALYSIS_PHASE, DEVELOPMENT_PHASE, TEST_PHASE, DEPLOYED_PHASE};
+            private String phaseId;
             Integer randomlySelectedPhase;
             Integer newWipLimit;
 
             @Before
             public void doAction() {
                 randomlySelectedPhase = random.nextInt(4);
-                phaseName = phaseNames[randomlySelectedPhase];
+                phaseId = initializedGame.getBoard().getPhases().get(randomlySelectedPhase).getId();
                 newWipLimit = 5;
-                phaseWipLimits.put(phaseName, newWipLimit);
+                phaseWipLimits.put(phaseId, newWipLimit);
                 AdjustWipLimitsAction singlePhaseWipLimitChangeAction =
                         AdjustWipLimitsActionBuilder.anAdjustWipLimitsAction()
                                 .withPhaseWipLimits(phaseWipLimits)
@@ -115,9 +108,12 @@ public class PlayerServiceTest {
 
             @Before
             public void doAction() {
-                phaseWipLimits.put(ANALYSIS_PHASE, newWipLimitOfAnalysisPhase);
-                phaseWipLimits.put(DEVELOPMENT_PHASE, newWipLimitOfDevelopmentPhase);
-                phaseWipLimits.put(TEST_PHASE, newWipLimitOfTestPhase);
+                String analysisPhaseId = initializedGame.getBoard().getPhases().get(0).getId();
+                String developmentPhaseId = initializedGame.getBoard().getPhases().get(1).getId();
+                String testPhaseId = initializedGame.getBoard().getPhases().get(2).getId();
+                phaseWipLimits.put(analysisPhaseId, newWipLimitOfAnalysisPhase);
+                phaseWipLimits.put(developmentPhaseId, newWipLimitOfDevelopmentPhase);
+                phaseWipLimits.put(testPhaseId, newWipLimitOfTestPhase);
 
                 AdjustWipLimitsAction singlePhaseWipLimitChangeAction =
                         AdjustWipLimitsActionBuilder.anAdjustWipLimitsAction()
