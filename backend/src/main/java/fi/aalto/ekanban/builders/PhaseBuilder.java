@@ -1,15 +1,15 @@
 package fi.aalto.ekanban.builders;
 
-import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS;
-import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT;
-import static fi.aalto.ekanban.ApplicationConstants.TEST;
-import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED;
+import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE;
 
 import java.util.Arrays;
 import java.util.List;
 
-import fi.aalto.ekanban.models.db.games.Column;
-import fi.aalto.ekanban.models.db.gameconfigurations.Phase;
+import fi.aalto.ekanban.models.db.phases.Column;
+import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.repositories.PhaseRepository;
 
 public final class PhaseBuilder {
@@ -49,7 +49,7 @@ public final class PhaseBuilder {
         this.columns = Arrays.asList(
                 ColumnBuilder.aColumn().inProgress().build(),
                 ColumnBuilder.aColumn().done().build());
-        this.name = ANALYSIS;
+        this.name = ANALYSIS_PHASE;
         return this;
     }
 
@@ -59,20 +59,20 @@ public final class PhaseBuilder {
                 ColumnBuilder.aColumn().inProgress().build(),
                 ColumnBuilder.aColumn().done().build()
         );
-        this.name = DEVELOPMENT;
+        this.name = DEVELOPMENT_PHASE;
         return this;
     }
 
     public PhaseBuilder test() {
         this.wipLimit = 3;
         this.columns = Arrays.asList(ColumnBuilder.aColumn().build());
-        this.name = TEST;
+        this.name = TEST_PHASE;
         return this;
     }
 
     public PhaseBuilder deployed() {
         this.columns = Arrays.asList(ColumnBuilder.aColumn().build());
-        this.name = DEPLOYED;
+        this.name = DEPLOYED_PHASE;
         return this;
     }
 

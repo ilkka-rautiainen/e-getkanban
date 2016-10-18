@@ -7,7 +7,7 @@ import org.bson.types.ObjectId;
 import fi.aalto.ekanban.models.db.games.Board;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.EventCard;
-import fi.aalto.ekanban.models.db.gameconfigurations.Phase;
+import fi.aalto.ekanban.models.db.phases.Phase;
 
 public final class BoardBuilder {
     private String id;

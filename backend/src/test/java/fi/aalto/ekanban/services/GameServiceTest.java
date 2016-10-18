@@ -3,10 +3,10 @@ package fi.aalto.ekanban.services;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS;
-import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT;
-import static fi.aalto.ekanban.ApplicationConstants.TEST;
-import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED;
+import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE;
 
 import java.util.Arrays;
 
@@ -72,10 +72,10 @@ public class GameServiceTest {
 
             Mockito.when(gameInitService.getInitializedGame(gameDifficulty)).thenReturn(blankGame);
             Mockito.when(gameRepository.save(Mockito.any(Game.class))).thenReturn(blankGame);
-            Mockito.when(phaseRepository.findByName(ANALYSIS)).thenReturn(PhaseBuilder.aPhase().analysis().build());
-            Mockito.when(phaseRepository.findByName(DEVELOPMENT)).thenReturn(PhaseBuilder.aPhase().development().build());
-            Mockito.when(phaseRepository.findByName(TEST)).thenReturn(PhaseBuilder.aPhase().test().build());
-            Mockito.when(phaseRepository.findByName(DEPLOYED)).thenReturn(PhaseBuilder.aPhase().deployed().build());
+            Mockito.when(phaseRepository.findByName(ANALYSIS_PHASE)).thenReturn(PhaseBuilder.aPhase().analysis().build());
+            Mockito.when(phaseRepository.findByName(DEVELOPMENT_PHASE)).thenReturn(PhaseBuilder.aPhase().development().build());
+            Mockito.when(phaseRepository.findByName(TEST_PHASE)).thenReturn(PhaseBuilder.aPhase().test().build());
+            Mockito.when(phaseRepository.findByName(DEPLOYED_PHASE)).thenReturn(PhaseBuilder.aPhase().deployed().build());
             Mockito.when(baseCardRepository.findAll()).thenReturn(Arrays.asList(BaseCardBuilder.aBaseCard().build()));
 
             newGame = gameService.startGame(playerName, gameDifficulty);

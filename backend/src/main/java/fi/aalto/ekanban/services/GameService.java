@@ -1,9 +1,9 @@
 package fi.aalto.ekanban.services;
 
-import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS;
-import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT;
-import static fi.aalto.ekanban.ApplicationConstants.TEST;
-import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED;
+import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.models.Turn;
 import fi.aalto.ekanban.models.db.gameconfigurations.BaseCard;
 import fi.aalto.ekanban.models.db.games.*;
-import fi.aalto.ekanban.models.db.gameconfigurations.Phase;
+import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
 import fi.aalto.ekanban.repositories.GameRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
@@ -70,10 +70,10 @@ public class GameService {
     }
 
     private List<Phase> initNormalPhases() {
-        Phase analysis = phaseRepository.findByName(ANALYSIS);
-        Phase development = phaseRepository.findByName(DEVELOPMENT);
-        Phase test = phaseRepository.findByName(TEST);
-        Phase deployment = phaseRepository.findByName(DEPLOYED);
+        Phase analysis = phaseRepository.findByName(ANALYSIS_PHASE);
+        Phase development = phaseRepository.findByName(DEVELOPMENT_PHASE);
+        Phase test = phaseRepository.findByName(TEST_PHASE);
+        Phase deployment = phaseRepository.findByName(DEPLOYED_PHASE);
 
         return Arrays.asList(analysis, development, test, deployment);
     }

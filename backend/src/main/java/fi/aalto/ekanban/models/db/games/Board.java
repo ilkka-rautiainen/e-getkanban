@@ -2,10 +2,11 @@ package fi.aalto.ekanban.models.db.games;
 
 import java.util.List;
 
-import fi.aalto.ekanban.models.db.gameconfigurations.Phase;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import fi.aalto.ekanban.models.db.phases.Phase;
 
 @Document
 public class Board {
