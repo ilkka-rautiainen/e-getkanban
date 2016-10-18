@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import fi.aalto.ekanban.enums.FinancialValue;
 import fi.aalto.ekanban.enums.GameDifficulty;
-import fi.aalto.ekanban.models.db.gameconfigurations.Phase;
+import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.repositories.GameRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
 
@@ -94,12 +94,10 @@ public class Stepdefs extends SpringSteps {
 
     @Then("^(\\d+). phase is (.+)$")
     public void phase_is(Integer phaseNumber, String phaseName) throws Throwable {
-        if (phaseName.equals("Dev"))
-            phaseName = "Development";
-        Phase phaseByGivenName = phaseRepository.findByName(phaseName);
+        Phase phaseWithGivenName = phaseRepository.findByName(phaseName);
         //This gets all the phaseIds to array and then checks by index
         response.body("board.backlogDeck.cardPhasePoints.phaseId[0]["+(phaseNumber-1)+"]",
-                is(phaseByGivenName.getId()));
+                is(phaseWithGivenName.getId()));
     }
 
     @Then("^each card should have empty day started$")
@@ -142,12 +140,12 @@ public class Stepdefs extends SpringSteps {
         response.body("board.phases.name["+(phaseNumber-1)+"]", is(phaseName));
     }
 
-    @Then("^(.+) should have (\\d+) column\\(s\\)$")
+    @Then("^the phase (.+) should have (\\d+) column\\(s\\)$")
     public void analysis_should_have_two_columns(String phaseName, Integer columnCount) throws Throwable {
         response.body("board.phases.find { it.name == '"+phaseName+"'}.columns.size()", equalTo(columnCount));
     }
 
-    @Then("^(\\d+). column of (.+) is (.+)$")
+    @Then("^(\\d+). column in phase (.+) is (.+)$")
     public void column_is(Integer columnNumber, String phaseName, String columnName) throws Throwable {
         response.body("board.phases.find { it.name == '"+phaseName+"'}.columns.name["+(columnNumber-1)+"]",
                 equalTo(columnName));

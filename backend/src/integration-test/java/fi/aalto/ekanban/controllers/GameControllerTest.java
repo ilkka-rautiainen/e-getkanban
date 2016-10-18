@@ -7,6 +7,7 @@ import static fi.aalto.ekanban.ApplicationConstants.GAME_PATH;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,8 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import fi.aalto.ekanban.SpringIntegrationTest;
 import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.repositories.GameRepository;
-
-import java.util.Random;
 
 @RunWith(HierarchicalContextRunner.class)
 public class GameControllerTest extends SpringIntegrationTest {
@@ -79,14 +78,7 @@ public class GameControllerTest extends SpringIntegrationTest {
         public class withTooLongPlayerName {
             @Before
             public void doRequest() {
-                char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-                Random random = new Random();
-                StringBuilder sb = new StringBuilder();
-                for (Integer i=0; i<130; i++) {
-                    char c = chars[random.nextInt(chars.length)];
-                    sb.append(c);
-                }
-                String tooLongPlayerName = sb.toString();
+                String tooLongPlayerName = RandomStringUtils.randomAscii(130);
                 response = given()
                         .formParam("playerName", tooLongPlayerName)
                         .formParam("difficultyLevel", GameDifficulty.NORMAL)

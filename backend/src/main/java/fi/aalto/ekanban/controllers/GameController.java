@@ -2,6 +2,7 @@ package fi.aalto.ekanban.controllers;
 
 import static fi.aalto.ekanban.ApplicationConstants.GAME_PATH;
 
+import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Size;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.services.GameService;
-
-import java.util.Set;
 
 @RestController
 @RequestMapping(GAME_PATH)
@@ -34,7 +33,7 @@ public class GameController {
 
     @ExceptionHandler(value = { ConstraintViolationException.class })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public String handleResourceNotFoundException(ConstraintViolationException e) {
+    public String handleTooLongPlayerNameException(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         StringBuilder strBuilder = new StringBuilder();
         for (ConstraintViolation<?> violation : violations ) {

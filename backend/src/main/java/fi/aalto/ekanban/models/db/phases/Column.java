@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.models.db.games;
+package fi.aalto.ekanban.models.db.phases;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import fi.aalto.ekanban.models.db.games.Card;
 
 @Document
 public class Column {

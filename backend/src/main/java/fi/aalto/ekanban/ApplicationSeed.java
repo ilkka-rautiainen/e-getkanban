@@ -1,9 +1,9 @@
 package fi.aalto.ekanban;
 
-import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS;
-import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT;
-import static fi.aalto.ekanban.ApplicationConstants.TEST;
-import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED;
+import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +18,7 @@ import fi.aalto.ekanban.builders.BaseCardBuilder;
 import fi.aalto.ekanban.builders.CardPhasePointBuilder;
 import fi.aalto.ekanban.builders.PhaseBuilder;
 import fi.aalto.ekanban.enums.FinancialValue;
-import fi.aalto.ekanban.models.db.gameconfigurations.Phase;
+import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.models.db.games.CardPhasePoint;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
@@ -45,21 +45,21 @@ public class ApplicationSeed {
     }
 
     private void seedPhases(PhaseRepository phaseRepository) {
-        if (phaseRepository.findByName(ANALYSIS) == null)
+        if (phaseRepository.findByName(ANALYSIS_PHASE) == null)
             PhaseBuilder.aPhase().analysis().create(phaseRepository);
-        if (phaseRepository.findByName(DEVELOPMENT) == null)
+        if (phaseRepository.findByName(DEVELOPMENT_PHASE) == null)
             PhaseBuilder.aPhase().development().create(phaseRepository);
-        if (phaseRepository.findByName(TEST) == null)
+        if (phaseRepository.findByName(TEST_PHASE) == null)
             PhaseBuilder.aPhase().test().create(phaseRepository);
-        if (phaseRepository.findByName(DEPLOYED) == null)
+        if (phaseRepository.findByName(DEPLOYED_PHASE) == null)
             PhaseBuilder.aPhase().deployed().create(phaseRepository);
     }
 
     private void seedBaseCards(BaseCardRepository baseCardRepository, PhaseRepository phaseRepository) {
         if (baseCardRepository.findAll().isEmpty()) {
-            Phase analysisPhase = phaseRepository.findByName(ANALYSIS);
-            Phase developmentPhase = phaseRepository.findByName(DEVELOPMENT);
-            Phase testPhase = phaseRepository.findByName(TEST);
+            Phase analysisPhase = phaseRepository.findByName(ANALYSIS_PHASE);
+            Phase developmentPhase = phaseRepository.findByName(DEVELOPMENT_PHASE);
+            Phase testPhase = phaseRepository.findByName(TEST_PHASE);
 
             CardPhasePoint analysisCardPoints = CardPhasePointBuilder.aCardPhasePoint()
                     .withTotalPoints(5)

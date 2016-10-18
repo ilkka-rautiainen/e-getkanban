@@ -1,14 +1,14 @@
 package fi.aalto.ekanban.builders;
 
-import static fi.aalto.ekanban.ApplicationConstants.IN_PROGRESS;
-import static fi.aalto.ekanban.ApplicationConstants.DONE;
+import static fi.aalto.ekanban.ApplicationConstants.IN_PROGRESS_COLUMN;
+import static fi.aalto.ekanban.ApplicationConstants.DONE_COLUMN;
 
 import java.util.List;
 
 import org.bson.types.ObjectId;
 
 import fi.aalto.ekanban.models.db.games.Card;
-import fi.aalto.ekanban.models.db.games.Column;
+import fi.aalto.ekanban.models.db.phases.Column;
 
 public final class ColumnBuilder {
     private String id;
@@ -39,12 +39,12 @@ public final class ColumnBuilder {
     }
 
     public ColumnBuilder inProgress() {
-        this.name = IN_PROGRESS;
+        this.name = IN_PROGRESS_COLUMN;
         return this;
     }
 
     public ColumnBuilder done() {
-        this.name = DONE;
+        this.name = DONE_COLUMN;
         return this;
     }
 
