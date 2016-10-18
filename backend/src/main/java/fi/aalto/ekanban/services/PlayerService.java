@@ -2,8 +2,9 @@ package fi.aalto.ekanban.services;
 
 import org.springframework.stereotype.Service;
 
-import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.models.AdjustWipLimitsAction;
 import fi.aalto.ekanban.models.Turn;
+import fi.aalto.ekanban.models.db.games.Game;
 
 @Service
 public class PlayerService {
@@ -12,8 +13,17 @@ public class PlayerService {
         return null;
     }
 
-    public Game adjustWipLimits(Game game) {
-        return null;
+    public static Game adjustWipLimits(Game game, AdjustWipLimitsAction adjustWipLimitsAction) {
+        if (adjustWipLimitsAction != null && game.getBoard() != null && game.getBoard().getPhases() != null) {
+            game.getBoard().getPhases()
+                    .forEach(phase -> {
+                        String key = phase.getId();
+                        Integer newWipLimitForPhaseOrUseOldIfNotGiven =
+                                adjustWipLimitsAction.getPhaseWipLimits().getOrDefault(key, phase.getWipLimit());
+                        phase.setWipLimit(newWipLimitForPhaseOrUseOldIfNotGiven);
+                    });
+        }
+        return game;
     }
 
     public Game assignResources(Game game) {
