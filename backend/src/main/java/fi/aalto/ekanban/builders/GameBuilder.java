@@ -43,6 +43,7 @@ public final class GameBuilder {
         Game game = new Game();
         game.setId(id);
         game.setPlayerName(playerName);
+        game.setBoard(board);
         return game;
     }
 }

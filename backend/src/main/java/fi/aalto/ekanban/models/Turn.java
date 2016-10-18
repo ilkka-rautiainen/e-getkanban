@@ -1,5 +1,15 @@
 package fi.aalto.ekanban.models;
 
 public class Turn {
-    //TODO implement
+
+    private AdjustWipLimitsAction adjustWipLimitsAction;
+
+    public AdjustWipLimitsAction getAdjustWipLimitsAction() {
+        return adjustWipLimitsAction;
+    }
+
+    public void setAdjustWipLimitsAction(AdjustWipLimitsAction adjustWipLimitsAction) {
+        this.adjustWipLimitsAction = adjustWipLimitsAction;
+    }
+
 }
