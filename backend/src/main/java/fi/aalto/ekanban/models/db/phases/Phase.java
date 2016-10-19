@@ -1,7 +1,9 @@
 package fi.aalto.ekanban.models.db.phases;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -77,4 +79,14 @@ public class Phase {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
+
+    @JsonIgnore
+    public boolean isFullWip() {
+        return getTotalAmountOfCards() >= wipLimit;
+    }
+
+    public Integer getTotalAmountOfCards() {
+        return columns.stream().collect(Collectors.summingInt(column -> column.getCards().size()));
+    }
+
 }

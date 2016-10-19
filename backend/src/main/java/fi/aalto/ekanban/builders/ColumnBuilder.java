@@ -3,6 +3,7 @@ package fi.aalto.ekanban.builders;
 import static fi.aalto.ekanban.ApplicationConstants.IN_PROGRESS_COLUMN;
 import static fi.aalto.ekanban.ApplicationConstants.DONE_COLUMN;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -40,11 +41,13 @@ public final class ColumnBuilder {
 
     public ColumnBuilder inProgress() {
         this.name = IN_PROGRESS_COLUMN;
+        this.cards = new ArrayList<>();
         return this;
     }
 
     public ColumnBuilder done() {
         this.name = DONE_COLUMN;
+        this.cards = new ArrayList<>();
         return this;
     }
 

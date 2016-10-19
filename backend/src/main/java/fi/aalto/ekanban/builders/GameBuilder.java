@@ -3,11 +3,13 @@ package fi.aalto.ekanban.builders;
 import fi.aalto.ekanban.models.db.games.Board;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.repositories.GameRepository;
+import sun.nio.cs.ext.GB18030;
 
 public final class GameBuilder {
     private String id;
     private String playerName;
     private Board board;
+    private Integer currentDay;
 
     private GameBuilder() {
     }
@@ -31,11 +33,17 @@ public final class GameBuilder {
         return this;
     }
 
+    public GameBuilder withCurrentDay(Integer currentDay) {
+        this.currentDay = currentDay;
+        return this;
+    }
+
     public Game create(GameRepository gameRepository) {
         Game game = new Game();
         game.setId(id);
         game.setPlayerName(playerName);
         game.setBoard(board);
+        game.setCurrentDay(currentDay);
         return gameRepository.save(game);
     }
 
@@ -44,6 +52,7 @@ public final class GameBuilder {
         game.setId(id);
         game.setPlayerName(playerName);
         game.setBoard(board);
+        game.setCurrentDay(currentDay);
         return game;
     }
 }

@@ -10,7 +10,8 @@ import fi.aalto.ekanban.models.db.games.Game;
 public class GameInitService {
 
     public Game getInitializedGame(GameDifficulty gameDifficulty) {
-        Game blankGame = GameBuilder.aGame().build();
+        Game blankGame = GameBuilder.aGame()
+                .withCurrentDay(1).build();
         //modify the blankGame with different difficulty options in medium & advanced
         return blankGame;
     }

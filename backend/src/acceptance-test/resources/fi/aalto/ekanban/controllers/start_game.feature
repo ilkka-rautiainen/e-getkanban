@@ -11,6 +11,7 @@ Feature: Start Game
 
     Then I should get a new game
       And game should have player name as Player
+      And game should have current day of 1
       And game should include a board
         And board should include 1 backlog deck
           And backlog deck should have 15 cards

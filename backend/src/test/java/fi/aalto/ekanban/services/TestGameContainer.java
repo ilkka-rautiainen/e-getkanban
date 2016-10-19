@@ -10,27 +10,50 @@ import fi.aalto.ekanban.models.db.games.Board;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.CardPhasePoint;
 import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.models.db.phases.Column;
 import fi.aalto.ekanban.models.db.phases.Phase;
 
-public class TestDataInitializer {
+public class TestGameContainer {
+    private Game game;
 
-    public static Game initNormalDifficultyGame() {
+    public static TestGameContainer withNormalDifficultyGame() {
+        TestGameContainer testGameContainer = new TestGameContainer();
+        testGameContainer.initializeWithNormalDifficultyGame();
+        return testGameContainer;
+    }
+
+    public static TestGameContainer withGame(Game game) {
+        return new TestGameContainer(game);
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    private TestGameContainer() { }
+
+    private TestGameContainer(Game game) {
+        this.game = game;
+    }
+
+    private void initializeWithNormalDifficultyGame() {
         Phase analysisPhase = PhaseBuilder.aPhase().analysis().withId("1").build();
         Phase developmentPhase = PhaseBuilder.aPhase().development().withId("2").build();
         Phase testPhase = PhaseBuilder.aPhase().test().withId("3").build();
         Phase deployedPhase = PhaseBuilder.aPhase().deployed().withId("4").build();
 
         List<Phase> normalDifficultyPhases = Arrays.asList(analysisPhase, developmentPhase, testPhase, deployedPhase);
-        List<Card> backLogDeck = buildBacklogDeck(analysisPhase, developmentPhase, testPhase);
+        List<Card> backlogDeck = buildBacklogDeck(analysisPhase, developmentPhase, testPhase);
 
         Board gameBoard = BoardBuilder.aBoard()
-                .withBacklogDeck(backLogDeck)
+                .withBacklogDeck(backlogDeck)
                 .withPhases(normalDifficultyPhases)
                 .build();
 
-        return GameBuilder.aGame()
+        game = GameBuilder.aGame()
                 .withBoard(gameBoard)
                 .withPlayerName("player")
+                .withCurrentDay(9)
                 .build();
     }
 
@@ -49,22 +72,22 @@ public class TestDataInitializer {
                 .build();
         List<CardPhasePoint> cardPhasePoints = Arrays.asList(analysisCardPoints, developmentCardPoints, testCardPoints);
 
-        List<Card> backlogDeckCards = new ArrayList<>();
+        List<Card> backlogDeck = new ArrayList<>();
 
         for (Integer i = 0; i < 15; i=i+3) {
-            backlogDeckCards.add(CardBuilder.aCard()
+            backlogDeck.add(CardBuilder.aCard()
                     .withFinancialValue(FinancialValue.HIGH)
                     .withCardPhasePoints(cardPhasePoints)
                     .withSubscribesWhenDeployed("1")
                     .withOrderNumber(i+1)
                     .build());
-            backlogDeckCards.add(CardBuilder.aCard()
+            backlogDeck.add(CardBuilder.aCard()
                     .withFinancialValue(FinancialValue.MED)
                     .withCardPhasePoints(cardPhasePoints)
                     .withSubscribesWhenDeployed("1")
                     .withOrderNumber(i+2)
                     .build());
-            backlogDeckCards.add(CardBuilder.aCard()
+            backlogDeck.add(CardBuilder.aCard()
                     .withFinancialValue(FinancialValue.LOW)
                     .withCardPhasePoints(cardPhasePoints)
                     .withSubscribesWhenDeployed("1")
@@ -72,7 +95,7 @@ public class TestDataInitializer {
                     .build());
         }
 
-        return backlogDeckCards;
+        return backlogDeck;
     }
 
 }

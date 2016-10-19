@@ -5,6 +5,7 @@ import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE;
 import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE;
 import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,13 +66,13 @@ public final class PhaseBuilder {
 
     public PhaseBuilder test() {
         this.wipLimit = 3;
-        this.columns = Arrays.asList(ColumnBuilder.aColumn().build());
+        this.columns = Arrays.asList(ColumnBuilder.aColumn().withCards(new ArrayList<>()).build());
         this.name = TEST_PHASE;
         return this;
     }
 
     public PhaseBuilder deployed() {
-        this.columns = Arrays.asList(ColumnBuilder.aColumn().build());
+        this.columns = Arrays.asList(ColumnBuilder.aColumn().withCards(new ArrayList<>()).build());
         this.name = DEPLOYED_PHASE;
         return this;
     }

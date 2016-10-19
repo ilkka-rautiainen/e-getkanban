@@ -13,6 +13,8 @@ public class Game {
     private String playerName;
     @Field
     private Board board;
+    @Field
+    private Integer currentDay;
 
     public Board getBoard() {
         return board;
@@ -38,6 +40,14 @@ public class Game {
         this.playerName = playerName;
     }
 
+    public Integer getCurrentDay() {
+        return currentDay;
+    }
+
+    public void setCurrentDay(Integer currentDay) {
+        this.currentDay = currentDay;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,6 +59,7 @@ public class Game {
 
         if (id != null ? !id.equals(game.id) : game.id != null) return false;
         if (playerName != null ? !playerName.equals(game.playerName) : game.playerName != null) return false;
+        if (currentDay != null ? !currentDay.equals(game.currentDay) : game.currentDay != null) return false;
         return board != null ? board.equals(game.board) : game.board == null;
 
     }
@@ -58,6 +69,7 @@ public class Game {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (playerName != null ? playerName.hashCode() : 0);
         result = 31 * result + (board != null ? board.hashCode() : 0);
+        result = 31 * result + (currentDay != null ? currentDay.hashCode() : 0);
         return result;
     }
 }
