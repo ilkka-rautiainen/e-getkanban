@@ -4,6 +4,8 @@ public class Turn {
 
     private AdjustWipLimitsAction adjustWipLimitsAction;
 
+    private DrawFromBacklogAction drawFromBacklogAction;
+
     public AdjustWipLimitsAction getAdjustWipLimitsAction() {
         return adjustWipLimitsAction;
     }
@@ -12,4 +14,11 @@ public class Turn {
         this.adjustWipLimitsAction = adjustWipLimitsAction;
     }
 
+    public DrawFromBacklogAction getDrawFromBacklogAction() {
+        return drawFromBacklogAction;
+    }
+
+    public void setDrawFromBacklogAction(DrawFromBacklogAction drawFromBacklogAction) {
+        this.drawFromBacklogAction = drawFromBacklogAction;
+    }
 }
