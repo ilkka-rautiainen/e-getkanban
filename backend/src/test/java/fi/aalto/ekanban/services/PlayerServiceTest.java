@@ -5,25 +5,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import static fi.aalto.ekanban.services.PlayerService.adjustWipLimits;
 import static fi.aalto.ekanban.services.PlayerService.drawFromBacklog;
+import static fi.aalto.ekanban.services.PlayerService.moveCards;
 
 import java.util.*;
 
 import com.rits.cloning.Cloner;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
-import fi.aalto.ekanban.builders.CardBuilder;
-import fi.aalto.ekanban.builders.DrawFromBacklogActionBuilder;
-import fi.aalto.ekanban.models.DrawFromBacklogAction;
-import fi.aalto.ekanban.models.db.games.Card;
-import fi.aalto.ekanban.models.db.phases.Phase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import fi.aalto.ekanban.builders.CardBuilder;
+import fi.aalto.ekanban.builders.DrawFromBacklogActionBuilder;
+import fi.aalto.ekanban.models.DrawFromBacklogAction;
+import fi.aalto.ekanban.models.db.games.Card;
+import fi.aalto.ekanban.models.db.phases.Phase;
+import fi.aalto.ekanban.builders.MoveCardActionBuilder;
+import fi.aalto.ekanban.models.MoveCardAction;
 import fi.aalto.ekanban.builders.AdjustWipLimitsActionBuilder;
 import fi.aalto.ekanban.models.AdjustWipLimitsAction;
 import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.models.db.phases.Column;
 
 @RunWith(HierarchicalContextRunner.class)
 public class PlayerServiceTest {
@@ -40,6 +44,331 @@ public class PlayerServiceTest {
     @Before
     public void initGame() {
         initialGameContainer = TestGameContainer.withNormalDifficultyGame();
+    }
+
+    public class moveCards {
+        private Card firstCardToMove;
+        private Card secondCardToMove;
+
+        private TestGameContainer gameWithCardsMovedContainer;
+        private Column fromColumnAfter;
+        private Column toColumnAfter;
+
+        @Before
+        public void buildCardsToMoveAndSetColumns() {
+            firstCardToMove = CardBuilder.aCard().withId("1").build();
+            secondCardToMove = CardBuilder.aCard().withId("2").build();
+        }
+
+        public class withToColumnInSamePhase {
+
+            public class andToColumnIsNextAdjacent {
+                @Before
+                public void moveCards() {
+                    TestGameContainer.ColumnName fromColumnName = TestGameContainer.ColumnName.ANALYSIS_IN_PROGRESS;
+                    TestGameContainer.ColumnName toColumnName = TestGameContainer.ColumnName.ANALYSIS_DONE;
+                    moveTestGameCards(fromColumnName, toColumnName);
+                }
+                @Test
+                public void shouldRemoveCardsFromOldColumn() {
+                    assertThat(fromColumnAfter.getCards(), not(hasItems(firstCardToMove, secondCardToMove)));
+                }
+                @Test
+                public void shouldAllowAllCardsToBeMovedToNewColumn() {
+                    assertThat(toColumnAfter.getCards(), hasItems(firstCardToMove, secondCardToMove));
+                }
+            }
+
+            public class andToColumnIsPreviousAdjacent {
+                @Before
+                public void moveCards() {
+                    TestGameContainer.ColumnName fromColumnName = TestGameContainer.ColumnName.ANALYSIS_DONE;
+                    TestGameContainer.ColumnName toColumnName = TestGameContainer.ColumnName.ANALYSIS_IN_PROGRESS;
+                    moveTestGameCards(fromColumnName, toColumnName);
+                }
+                @Test
+                public void shouldRemainCardsInOldColumnIntact() {
+                    assertThat(fromColumnAfter.getCards(), hasItems(firstCardToMove, secondCardToMove));
+                }
+                @Test
+                public void shouldNotMoveAnyCardsToNewColumn() {
+                    assertThat(toColumnAfter.getCards(), not(hasItems(firstCardToMove, secondCardToMove)));
+                }
+            }
+
+            public class andTheColumnsAreTheSame {
+                @Before
+                public void moveCards() {
+                    TestGameContainer.ColumnName fromColumnName = TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS;
+                    TestGameContainer.ColumnName toColumnName = TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS;
+                    moveTestGameCards(fromColumnName, toColumnName);
+                }
+
+                @Test
+                public void shouldRemainCardsInOldColumnIntact() {
+                    assertThat(fromColumnAfter.getCards(), hasItems(firstCardToMove, secondCardToMove));
+                }
+            }
+        }
+
+        public class withToColumnInAnotherPhase {
+            public class whenPhaseIsAdjacentNextOne {
+                public class andToColumnIsNextAdjacent {
+                    private TestGameContainer.ColumnName fromColumnName;
+                    private TestGameContainer.ColumnName toColumnName;
+
+                    @Before
+                    public void setFromAndToColumn() {
+                        fromColumnName = TestGameContainer.ColumnName.ANALYSIS_DONE;
+                        toColumnName = TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS;
+                    }
+
+                    public class andPhaseHoldsLessCardsThanWipLimitAllows {
+                        public class whenWipLimitDoesNotGetFull {
+                            @Before
+                            public void moveCards() {
+                                moveTestGameCards(fromColumnName, toColumnName);
+                            }
+                            @Test
+                            public void shouldRemoveCardsFromOldColumn() {
+                                assertThat(fromColumnAfter.getCards(), not(hasItems(firstCardToMove, secondCardToMove)));
+                            }
+                            @Test
+                            public void shouldAllowAllCardsToBeMovedToNewColumn() {
+                                assertThat(toColumnAfter.getCards(), hasItems(firstCardToMove, secondCardToMove));
+                            }
+                        }
+
+                        public class whenWipLimitGetsFull {
+                            private Card fromColumnFirstCardBefore;
+                            private Integer fromPhaseCardCountBefore;
+
+                            @Before
+                            public void fillToPhaseToOneToFullAndMoveCards() {
+                                initialGameContainer.fillDevelopmentInProgressToOneToFullWip();
+
+                                Column fromColumn = initialGameContainer.getColumn(fromColumnName);
+                                addMovingCardsIntoFromColumn(fromColumn);
+                                fromColumnFirstCardBefore = fromColumn.getCards().get(0);
+
+                                Phase fromColumnPhase = initialGameContainer.getAnalysisPhase();
+                                fromPhaseCardCountBefore = fromColumnPhase.getTotalAmountOfCards();
+
+                                moveTestGameCards(fromColumnName, toColumnName);
+                            }
+                            @Test
+                            public void shouldAllowOnlyOneCardToBeMovedToNewColumn() {
+                                Phase afterMoveFromColumnPhase = gameWithCardsMovedContainer.getAnalysisPhase();
+                                Integer amountOfRemovedCardsInFromPhase =
+                                        fromPhaseCardCountBefore - afterMoveFromColumnPhase.getTotalAmountOfCards();
+                                assertThat(amountOfRemovedCardsInFromPhase, equalTo(1));
+                            }
+                            @Test
+                            public void shouldFillTheCardsOfNewPhaseUpToWipLimit() {
+                                Phase afterMoveToColumnPhase = gameWithCardsMovedContainer.getDevelopmentPhase();
+                                assertThat(afterMoveToColumnPhase.getWipLimit(),
+                                        equalTo(afterMoveToColumnPhase.getTotalAmountOfCards()));
+                            }
+                            @Test
+                            public void shouldLeaveSomeOfTheCardsToOldColumn() {
+                                assertThat(fromColumnAfter.getCards().get(0), equalTo(secondCardToMove));
+                            }
+                            @Test
+                            public void shouldPickMovedCardsFromTheStartOfTheFromColumn() {
+                                assertThat(toColumnAfter.getCards().get(0), equalTo(fromColumnFirstCardBefore));
+                            }
+                            @Test
+                            public void shouldPlaceMovedCardsToBeginningOfTheToColumn() {
+                                assertThat(toColumnAfter.getCards().get(0), equalTo(firstCardToMove));
+                            }
+                        }
+                    }
+
+                    public class andPhaseHoldsFullAmountAllowedByWipLimit {
+                        @Before
+                        public void fillTheNewPhaseToWipLimitAndDoAction() {
+                            initialGameContainer.fillDevelopmentInProgressToFullWip();
+                            moveTestGameCards(fromColumnName, toColumnName);
+                        }
+                        @Test
+                        public void shouldNotMoveAnyCardsToNewColumn() {
+                            assertThat(toColumnAfter.getCards(), not(hasItems(firstCardToMove, secondCardToMove)));
+                        }
+                        @Test
+                        public void shouldRemainCardsInOldColumnIntact() {
+                            assertThat(fromColumnAfter.getCards(), hasItems(firstCardToMove, secondCardToMove));
+                        }
+                    }
+
+                }
+
+                public class andToColumnIsNotAdjacent {
+                    @Before
+                    public void setFromAndToColumnAndMoveCards() {
+                        TestGameContainer.ColumnName fromColumnName = TestGameContainer.ColumnName.ANALYSIS_DONE;
+                        TestGameContainer.ColumnName toColumnName = TestGameContainer.ColumnName.DEVELOPMENT_DONE;
+                        moveTestGameCards(fromColumnName, toColumnName);
+                    }
+                    @Test
+                    public void shouldNotMoveAnyCardsToNewColumn() {
+                        assertThat(toColumnAfter.getCards(), not(hasItems(firstCardToMove, secondCardToMove)));
+                    }
+                    @Test
+                    public void shouldRemainCardsInOldColumnIntact() {
+                        assertThat(fromColumnAfter.getCards(), hasItems(firstCardToMove, secondCardToMove));
+                    }
+                }
+
+            }
+
+            public class whenPhaseIsNotAdjacentNextOne {
+                @Before
+                public void setFromAndToColumnAndMoveCards() {
+                    TestGameContainer.ColumnName fromColumnName = TestGameContainer.ColumnName.ANALYSIS_DONE;
+                    TestGameContainer.ColumnName toColumnName = TestGameContainer.ColumnName.TEST;
+                    moveTestGameCards(fromColumnName, toColumnName);
+                }
+
+                @Test
+                public void shouldNotMoveAnyCardsToNewColumn() {
+                    assertThat(toColumnAfter.getCards(), not(hasItems(firstCardToMove, secondCardToMove)));
+                }
+                @Test
+                public void shouldRemainCardsInOldColumnIntact() {
+                    assertThat(fromColumnAfter.getCards(), hasItems(firstCardToMove, secondCardToMove));
+                }
+            }
+
+        }
+
+        public class withMoveCardsAction {
+            public class withAllInvalidCardIds {
+
+                @Before
+                public void moveCards() {
+                    TestGameContainer.ColumnName fromColumnName = TestGameContainer.ColumnName.ANALYSIS_DONE;
+                    TestGameContainer.ColumnName toColumnName = TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS;
+
+                    Column fromColumn = initialGameContainer.getColumn(fromColumnName);
+                    Column toColumn = initialGameContainer.getColumn(toColumnName);
+
+                    addMovingCardsIntoFromColumn(fromColumn);
+                    List<MoveCardAction> moveCardActions = createMoveCardActions(fromColumn, toColumn);
+                    moveCardActions.get(0).setCardId("wrongCardId1");
+                    moveCardActions.get(1).setCardId("wrongCardId2");
+
+                    performMoveCardsAndAssignResults(fromColumnName, toColumnName, moveCardActions);
+                }
+
+                @Test
+                public void shouldNotMoveAnyCardsToNewColumn() {
+                    assertThat(toColumnAfter.getCards(), not(hasItems(firstCardToMove, secondCardToMove)));
+                }
+                @Test
+                public void shouldRemainCardsInOldColumnIntact() {
+                    assertThat(fromColumnAfter.getCards(), hasItems(firstCardToMove, secondCardToMove));
+                }
+            }
+
+            public class withSomeInvalidCardIds {
+
+                @Before
+                public void moveCards() {
+                    TestGameContainer.ColumnName fromColumnName = TestGameContainer.ColumnName.ANALYSIS_DONE;
+                    TestGameContainer.ColumnName toColumnName = TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS;
+
+                    Column fromColumn = initialGameContainer.getColumn(fromColumnName);
+                    Column toColumn = initialGameContainer.getColumn(toColumnName);
+
+                    addMovingCardsIntoFromColumn(fromColumn);
+                    List<MoveCardAction> moveCardActions = createMoveCardActions(fromColumn, toColumn);
+                    moveCardActions.get(0).setCardId("wrongCardId");
+
+                    performMoveCardsAndAssignResults(fromColumnName, toColumnName, moveCardActions);
+                }
+
+                @Test
+                public void shouldLeaveTheFirstCardInOldColumn() {
+                    assertThat(fromColumnAfter.getCards(), hasItems(firstCardToMove));
+                    assertThat(fromColumnAfter.getCards(), not(hasItems(secondCardToMove)));
+                }
+                @Test
+                public void shouldMoveTheOtherCardToNewColumn() {
+                    assertThat(toColumnAfter.getCards(), not(hasItems(firstCardToMove)));
+                    assertThat(toColumnAfter.getCards(), hasItems(secondCardToMove));
+                }
+            }
+
+            public class withSomeInvalidToColumnIds {
+
+                @Before
+                public void moveCards() {
+                    TestGameContainer.ColumnName fromColumnName = TestGameContainer.ColumnName.ANALYSIS_DONE;
+                    TestGameContainer.ColumnName toColumnName = TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS;
+
+                    Column fromColumn = initialGameContainer.getColumn(fromColumnName);
+                    Column toColumn = initialGameContainer.getColumn(toColumnName);
+
+                    addMovingCardsIntoFromColumn(fromColumn);
+                    List<MoveCardAction> moveCardActions = createMoveCardActions(fromColumn, toColumn);
+                    moveCardActions.get(0).setToColumnId("wrongColumnId");
+
+                    performMoveCardsAndAssignResults(fromColumnName, toColumnName, moveCardActions);
+                }
+
+                @Test
+                public void shouldLeaveTheFirstCardInOldColumn() {
+                    assertThat(fromColumnAfter.getCards(), hasItems(firstCardToMove));
+                    assertThat(fromColumnAfter.getCards(), not(hasItems(secondCardToMove)));
+                }
+                @Test
+                public void shouldMoveTheOtherCardToNewColumn() {
+                    assertThat(toColumnAfter.getCards(), not(hasItems(firstCardToMove)));
+                    assertThat(toColumnAfter.getCards(), hasItems(secondCardToMove));
+                }
+            }
+        }
+
+        private void moveTestGameCards(TestGameContainer.ColumnName fromColumnName,
+                                       TestGameContainer.ColumnName toColumnName) {
+            Column fromColumn = initialGameContainer.getColumn(fromColumnName);
+            Column toColumn = initialGameContainer.getColumn(toColumnName);
+
+            addMovingCardsIntoFromColumn(fromColumn);
+            List<MoveCardAction> moveCardActions = createMoveCardActions(fromColumn, toColumn);
+
+            performMoveCardsAndAssignResults(fromColumnName, toColumnName, moveCardActions);
+        }
+
+        private void performMoveCardsAndAssignResults(TestGameContainer.ColumnName fromColumnName, TestGameContainer.ColumnName toColumnName, List<MoveCardAction> moveCardActions) {
+            Game gameWithCardsMoved = moveCards(initialGameContainer.getGame(), moveCardActions);
+
+            gameWithCardsMovedContainer = TestGameContainer.withGame(gameWithCardsMoved);
+            fromColumnAfter = gameWithCardsMovedContainer.getColumn(fromColumnName);
+            toColumnAfter = gameWithCardsMovedContainer.getColumn(toColumnName);
+        }
+
+
+        private List<MoveCardAction> createMoveCardActions(Column fromColumn, Column toColumn) {
+            MoveCardAction firstMoveAction = MoveCardActionBuilder.aMoveCardAction()
+                    .withFromColumnId(fromColumn.getId()).withToColumnId(toColumn.getId())
+                    .withCardId(firstCardToMove.getId())
+                    .build();
+            MoveCardAction secondMoveAction = MoveCardActionBuilder.aMoveCardAction()
+                    .withFromColumnId(fromColumn.getId()).withToColumnId(toColumn.getId())
+                    .withCardId(secondCardToMove.getId())
+                    .build();
+            return Arrays.asList(firstMoveAction, secondMoveAction);
+        }
+
+        private void addMovingCardsIntoFromColumn(Column fromColumn) {
+            Arrays.asList(firstCardToMove, secondCardToMove).forEach(cardToMove -> {
+                if (!fromColumn.hasCard(cardToMove.getId())) {
+                    fromColumn.getCards().add(cardToMove);
+                }
+            });
+        }
+
     }
 
     public class adjustWipLimits {
@@ -66,8 +395,8 @@ public class PlayerServiceTest {
             @Before
             public void doAction() {
                 originalWipLimits = initialGameContainer.getGame().getBoard().getPhases().stream()
-                        .filter(phase -> phase.getWipLimit() != null)
-                        .mapToInt(phase -> phase.getWipLimit()).toArray();
+                    .filter(phase -> phase.getWipLimit() != null)
+                    .mapToInt(phase -> phase.getWipLimit()).toArray();
 
                 AdjustWipLimitsAction emptyWipLimitChangeAction = null;
                 wipLimitAdjustedGame = adjustWipLimits(initialGameContainer.getGame(), emptyWipLimitChangeAction);

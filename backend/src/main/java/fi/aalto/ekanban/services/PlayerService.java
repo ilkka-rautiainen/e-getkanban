@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import fi.aalto.ekanban.models.AdjustWipLimitsAction;
 import fi.aalto.ekanban.models.DrawFromBacklogAction;
+import fi.aalto.ekanban.models.MoveCardAction;
 import fi.aalto.ekanban.models.Turn;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.Game;
@@ -36,8 +37,8 @@ public class PlayerService {
         return null;
     }
 
-    public Game moveCards(Game game) {
-        return null;
+    public static Game moveCards(Game game, List<MoveCardAction> moveCardActions) {
+        return game;
     }
 
     public static Game drawFromBacklog(Game game, List<DrawFromBacklogAction> drawActions) {
