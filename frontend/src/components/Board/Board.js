@@ -19,7 +19,7 @@ class Board extends React.Component {
   }
 
   render() {
-    return <div className="Board">
+    return <div className="board">
       <Row className="phase-row">
         { Object.keys(this.phases).map(phaseId => {
           return <PhaseContainer

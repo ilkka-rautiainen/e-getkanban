@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import Card from '../Card/Card';
 
 const ColumnCards = ({ columnCardIds }) => {
-  return <div className="ColumnCards">
+  return <div className="column-cards">
     {columnCardIds.map(cardId => <Card key={cardId} id={cardId} />)}
   </div>
 };

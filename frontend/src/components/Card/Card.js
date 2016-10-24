@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 
 const Card = ({ card }) => {
-  return <div className="Card">
+  return <div className="card">
     <Paper>This is a card</Paper>
   </div>
 };

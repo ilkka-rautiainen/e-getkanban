@@ -5,7 +5,7 @@ import Game from '../Game/Game';
 
 export default () => (
   <MuiThemeProvider>
-    <div className="App">
+    <div className="app">
       <Game/>
     </div>
   </MuiThemeProvider>

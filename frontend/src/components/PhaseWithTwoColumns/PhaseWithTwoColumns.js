@@ -8,7 +8,7 @@ export default class PhaseWithTwoColumns extends React.Component {
     phase: PropTypes.shape({
       name: PropTypes.string.isRequired,
       columns: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    })
+    }).isRequired
   };
 
   constructor({ phase }) {
@@ -26,7 +26,7 @@ export default class PhaseWithTwoColumns extends React.Component {
   }
 
   render() {
-    return <div className="PhaseWithTwoColumns">
+    return <div className="phase-with-two-columns">
       <div className="phase-header" style={this.phaseHeaderStyle}>
         <div className="align-wrapper">
           <div className="phase-name">{this.phase.name}</div>
