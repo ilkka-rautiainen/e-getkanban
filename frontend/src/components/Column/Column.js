@@ -4,7 +4,7 @@ import ColumnCards from '../ColumnCards/ColumnCards';
 import './Column.scss';
 
 const Column = ({ column }) => {
-  return <div className="Column">
+  return <div className="column">
     <div className="column-header">
       <div className="name">{ column.name }</div>
     </div>
@@ -15,7 +15,7 @@ const Column = ({ column }) => {
 Column.propTypes = {
   column: PropTypes.shape({
     name: PropTypes.string.isRequired
-  })
+  }).isRequired
 };
 
 const mapStateToProps = (state, ownProps) => {

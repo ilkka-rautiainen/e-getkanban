@@ -24,7 +24,7 @@ class PhaseContainer extends React.Component {
   }
 
   get className() {
-    const baseClassNames = ['PhaseContainer', 'phase-col'];
+    const baseClassNames = ['phase-container', 'phase-col'];
     const columnAmountBasedClassName = (this.phase.columns.length === 1) ? 'single-col' : 'two-cols';
     return [...baseClassNames, columnAmountBasedClassName].join(' ');
   }

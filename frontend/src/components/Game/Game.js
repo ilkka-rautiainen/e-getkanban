@@ -4,8 +4,8 @@ import './Game.scss';
 import Board from '../Board/Board'
 
 const Game = ({ game }) => {
-  return <div className="Game">
-    <div className="playerName">Playername: {game.playerName}</div>
+  return <div className="game">
+    <div className="player-name">Playername: {game.playerName}</div>
     <Board  />
   </div>
 };

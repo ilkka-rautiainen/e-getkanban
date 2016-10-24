@@ -3,14 +3,14 @@ import ColumnCards from '../ColumnCards/ColumnCards';
 import './PhaseWithSingleColumn.scss';
 
 const PhaseWithSingleColumn = ({ phase, column }) => {
-  return <div className="PhaseWithSingleColumn">
+  return <div className="phase-with-single-column">
     <div className="phase-header">
       <div className="alignment-wrapper">
         <div className="phase-name">{phase.name}</div>
         <div className="wip-limit">WIP {phase.wipLimit}</div>
       </div>
     </div>
-    <div className="ColumnCards">
+    <div className="column-cards">
       <ColumnCards columnCardIds={column.cards} />
     </div>
   </div>
