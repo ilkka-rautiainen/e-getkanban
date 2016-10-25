@@ -7,6 +7,11 @@ const boardSchema = new Schema('boards');
 const phaseSchema = new Schema('phases');
 const columnSchema = new Schema('columns');
 const cardSchema = new Schema('cards');
+const cardPhasePointsSchema = new Schema("cardPhasePoints");
+
+cardSchema.define({
+  cardPhasePoints: arrayOf(cardPhasePointsSchema)
+});
 
 columnSchema.define({
   cards: arrayOf(cardSchema)
@@ -31,7 +36,7 @@ const initialBoard = normalizedData.entities.boards[initialGame.board];
 const initialPhases = normalizedData.entities.phases;
 const initialColumns = normalizedData.entities.columns;
 const initialCards = normalizedData.entities.cards || [];
-
+const initialPhasePoints = normalizedData.entities.cardPhasePoints || [];
 
 
 function game(state = initialGame, action) {
@@ -69,12 +74,20 @@ function cards(previousState = initialCards, action) {
   }
 }
 
+function cardPhasePoints(previousState = initialPhasePoints, action) {
+  switch (action.type) {
+    default:
+      return previousState;
+  }
+}
+
 const reducers = combineReducers({
   game,
   board,
   phases,
   columns,
   cards,
+  cardPhasePoints
 });
 
 export default reducers;
