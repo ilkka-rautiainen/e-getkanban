@@ -3,21 +3,12 @@ import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import CardPhasePoints from "../CardPhasePoints/CardPhasePoints"
 import CardInfoItem from "../CardInfoItem/CardInfoItem";
+import "./Card.scss";
 
 class Card extends React.Component {
   static propTypes = {
     card: PropTypes.object.isRequired
   };
-
-  get style() {
-    return {
-        height: 100,
-        width: '80%',
-        margin: 20,
-        textAlign: 'center',
-        display: 'inline-block'
-    }
-  }
 
   get calculateLeadTime() {
     if (this.dayDeployed != null && this.dayStarted != null)
@@ -35,8 +26,7 @@ class Card extends React.Component {
   };
 
   render() {
-    return <div className="card">
-      <Paper style={this.style} zDepth={3} >
+    return <Paper className="card" zDepth={3} >
         <div className="card-title">
           <span className="order-number">S{this.orderNumber}</span>
           <span className="value">${this.financialValue}</span>
@@ -44,12 +34,13 @@ class Card extends React.Component {
         <CardPhasePoints cardPhasePointIds={this.cardPhasePoints} />
         <div className="card-info">
           <CardInfoItem title="Day Deployed" value={this.dayDeployed}/>
+          <span className="special-char">&minus;</span>
           <CardInfoItem title="Day Started" value={this.dayStarted}/>
-          <CardInfoItem title="Lead Time" value={this.calculateLeadTime}/>
+          <span className="special-char">=</span>
+          <CardInfoItem givenClass="lead-time" title="Lead Time" value={this.calculateLeadTime}/>
           <CardInfoItem title="Subscribers" value={this.subscribers}/>
         </div>
       </Paper>
-    </div>
   };
 }
 
