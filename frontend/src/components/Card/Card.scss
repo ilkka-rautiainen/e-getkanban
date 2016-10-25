@@ -1,0 +1,46 @@
+.card {
+  height: auto;
+  width: 94%;
+  margin: 10px;
+  display: inline-block;
+  border-radius: 20px !important;
+  .card-title {
+    color: #ffffff;
+    background-color: #bc6b34;
+    display: flex;
+    justify-content: space-between;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    span {
+      margin: 5px 10px;
+      &.order-number {
+        font-size: 1.5em;
+        font-weight: 700;
+      }
+      &.value {
+        margin-top: 8px;
+        font-size: 1.2em;
+        font-weight: 500;
+      }
+    }
+  }
+  .card-info {
+    position: relative;
+    color: #ffffff;
+    background-color: #c4752e;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    .special-char {
+      position: absolute;
+      font-size: 1em;
+      font-weight: 600;
+      display: inline-block;
+      top: 24px;
+      left: 142px;
+      &:first-of-type {
+        left: 70px;
+      }
+    }
+  }
+}
+

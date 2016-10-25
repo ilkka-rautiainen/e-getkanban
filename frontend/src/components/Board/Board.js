@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Row } from 'react-flexbox-grid';
-import './Board.scss';
 import PhaseContainer from '../PhaseContainer/PhaseContainer';
+import './Board.scss';
 
 class Board extends React.Component {
   static propTypes = {

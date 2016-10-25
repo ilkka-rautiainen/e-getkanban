@@ -419,70 +419,6 @@ export default {
         "dayDeployed": null,
         "subscribers": null,
         "orderNumber": 13
-      },
-      {
-        "id": "5800843fdc707817d70750ac",
-        "cardPhasePoints": [
-          {
-            "id": "5800843fdc707817d707509c",
-            "phaseId": "5800843fdc707817d7075094",
-            "totalPoints": 5,
-            "pointsDone": null
-          },
-          {
-            "id": "5800843fdc707817d707509d",
-            "phaseId": "5800843fdc707817d7075097",
-            "totalPoints": 5,
-            "pointsDone": null
-          },
-          {
-            "id": "5800843fdc707817d707509e",
-            "phaseId": "5800843fdc707817d7075099",
-            "totalPoints": 5,
-            "pointsDone": null
-          }
-        ],
-        "financialValue": "MED",
-        "gameOptionChangesWhenDeployed": null,
-        "subscribesWhenDeployed": "1",
-        "description": null,
-        "outcome": null,
-        "dayStarted": null,
-        "dayDeployed": null,
-        "subscribers": null,
-        "orderNumber": 14
-      },
-      {
-        "id": "5800843fdc707817d70750ad",
-        "cardPhasePoints": [
-          {
-            "id": "5800843fdc707817d707509c",
-            "phaseId": "5800843fdc707817d7075094",
-            "totalPoints": 5,
-            "pointsDone": null
-          },
-          {
-            "id": "5800843fdc707817d707509d",
-            "phaseId": "5800843fdc707817d7075097",
-            "totalPoints": 5,
-            "pointsDone": null
-          },
-          {
-            "id": "5800843fdc707817d707509e",
-            "phaseId": "5800843fdc707817d7075099",
-            "totalPoints": 5,
-            "pointsDone": null
-          }
-        ],
-        "financialValue": "LOW",
-        "gameOptionChangesWhenDeployed": null,
-        "subscribesWhenDeployed": "1",
-        "description": null,
-        "outcome": null,
-        "dayStarted": null,
-        "dayDeployed": null,
-        "subscribers": null,
-        "orderNumber": 15
       }
     ],
       "eventCardDeck": null,
@@ -492,7 +428,40 @@ export default {
         "columns": [
           {
             "id": "5800843fdc707817d7075092",
-            "cards": [],
+            "cards": [
+                {
+                  "id": "5800843fdc707817d70750ad",
+                  "cardPhasePoints": [
+                    {
+                      "id": "5800843fdc707817d707509c",
+                      "phaseId": "5800843fdc707817d7075094",
+                      "totalPoints": 10,
+                      "pointsDone": 9
+                    },
+                    {
+                      "id": "5800843fdc707817d707509d",
+                      "phaseId": "5800843fdc707817d7075097",
+                      "totalPoints": 5,
+                      "pointsDone": null
+                    },
+                    {
+                      "id": "5800843fdc707817d707509e",
+                      "phaseId": "5800843fdc707817d7075099",
+                      "totalPoints": 5,
+                      "pointsDone": null
+                    }
+              ],
+              "financialValue": "LOW",
+              "gameOptionChangesWhenDeployed": null,
+              "subscribesWhenDeployed": "1",
+              "description": null,
+              "outcome": null,
+              "dayStarted": null,
+              "dayDeployed": null,
+              "subscribers": null,
+              "orderNumber": 15
+            }
+            ],
             "name": "In Progress"
           },
           {
@@ -518,7 +487,40 @@ export default {
           },
           {
             "id": "5800843fdc707817d7075096",
-            "cards": [],
+            "cards": [
+                {
+                  "id": "5800843fdc707817d70750ac",
+                  "cardPhasePoints": [
+                    {
+                      "id": "5800843fdc707817d707509a",
+                      "phaseId": "5800843fdc707817d7075094",
+                      "totalPoints": 5,
+                      "pointsDone": 2
+                    },
+                    {
+                      "id": "5800843fdc707817d707509b",
+                      "phaseId": "5800843fdc707817d7075097",
+                      "totalPoints": 5,
+                      "pointsDone": null
+                    },
+                    {
+                      "id": "5800843fdc707817d707509f",
+                      "phaseId": "5800843fdc707817d7075099",
+                      "totalPoints": 5,
+                      "pointsDone": null
+                    }
+              ],
+              "financialValue": "MED",
+              "gameOptionChangesWhenDeployed": null,
+              "subscribesWhenDeployed": "1",
+              "description": null,
+              "outcome": null,
+              "dayStarted": 1,
+              "dayDeployed": 4,
+              "subscribers": 5,
+              "orderNumber": 14
+            }
+            ],
             "name": "Done"
           }
         ],

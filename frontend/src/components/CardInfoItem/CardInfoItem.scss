@@ -1,0 +1,32 @@
+.card-info-item {
+  display: inline-block;
+  margin-right: 3px;
+  :first-of-type {
+    margin-left: 3px;
+  }
+  &.lead-time {
+    margin-left: 9px;
+  }
+  span {
+    font-size: 0.7em;
+    font-weight: 600;
+  }
+  .info-oval {
+    margin: 0 auto;
+    background-color: #ffffff;
+    height: 27px;
+    width: 54px;
+    margin-bottom: 10px;
+    border-radius: 100px / 50px;
+    span {
+      color: #000000;
+      display: block;
+      position: relative;
+      width: 10px;
+      margin: 0px auto;
+      top: 5px;
+      font-size: 1em;
+      font-weight: 600;
+    }
+  }
+}
