@@ -26,7 +26,7 @@ public class GameController {
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public Game startGame(@Size(max = 128, message = "Name should be at most 128 characters long")
-                              @RequestParam("playerName") String playerName,
+                          @RequestParam("playerName") String playerName,
                           @RequestParam("difficultyLevel") GameDifficulty gameDifficulty) {
         return gameService.startGame(playerName, gameDifficulty);
     }

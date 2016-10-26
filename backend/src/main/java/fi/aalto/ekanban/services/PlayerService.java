@@ -2,8 +2,12 @@ package fi.aalto.ekanban.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import fi.aalto.ekanban.exceptions.CardNotFoundException;
+import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
 import fi.aalto.ekanban.models.AdjustWipLimitsAction;
 import fi.aalto.ekanban.models.DrawFromBacklogAction;
 import fi.aalto.ekanban.models.MoveCardAction;
@@ -16,12 +20,14 @@ import fi.aalto.ekanban.models.db.phases.Phase;
 @Service
 public class PlayerService {
 
+    protected static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
+
     public Game playTurn(Game game, Turn turn) {
         return null;
     }
 
     public static Game adjustWipLimits(Game game, AdjustWipLimitsAction adjustWipLimitsAction) {
-        if (adjustWipLimitsAction != null && game.getBoard() != null && game.getBoard().getPhases() != null) {
+        if (game != null && game.isValid() && adjustWipLimitsAction != null) {
             game.getBoard().getPhases()
                     .forEach(phase -> {
                         String key = phase.getId();
@@ -38,6 +44,19 @@ public class PlayerService {
     }
 
     public static Game moveCards(Game game, List<MoveCardAction> moveCardActions) {
+        if (game != null && game.isValid() && moveCardActions != null) {
+            moveCardActions.forEach(moveCardAction -> {
+                try {
+                    if (!isValidMoveCardAction(moveCardAction, game)) {
+                        return;
+                    }
+                    game.performMoveCardAction(moveCardAction);
+                }
+                catch (ColumnNotFoundException|CardNotFoundException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            });
+        }
         return game;
     }
 
@@ -64,6 +83,13 @@ public class PlayerService {
         return !firstPhase.isFullWip()
                 && drawAction.getIndexToPlaceCardAt() >= 0
                 && drawAction.getIndexToPlaceCardAt() <= firstPhase.getColumns().get(0).getCards().size();
+    }
+
+    private static boolean isValidMoveCardAction(MoveCardAction moveCardAction, Game game)
+            throws ColumnNotFoundException {
+        return game.isColumnNextAdjacent(moveCardAction.getFromColumnId(), moveCardAction.getToColumnId()) &&
+                !game.doesMoveExceedWIP(moveCardAction) &&
+                game.isCardInColumn(moveCardAction.getCardId(), moveCardAction.getFromColumnId());
     }
 
 }

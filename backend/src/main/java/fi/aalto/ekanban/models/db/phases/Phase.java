@@ -1,12 +1,16 @@
 package fi.aalto.ekanban.models.db.phases;
 
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
 
 @Document
 public class Phase {
@@ -80,6 +84,27 @@ public class Phase {
         return result;
     }
 
+    public boolean containsColumnWithId(String columnId) {
+        return columns.stream().anyMatch(column -> column.getId().equals(columnId));
+    }
+
+    public boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId)
+            throws ColumnNotFoundException {
+        Column referenceColumn = getColumnById(referenceColumnId);
+        Column inspectedOtherColumn = getColumnById(inspectedOtherColumnId);
+        return columns.indexOf(referenceColumn) == columns.indexOf(inspectedOtherColumn) - 1;
+    }
+
+    public boolean isTheLastColumn(String columnId) throws ColumnNotFoundException {
+        Column column = getColumnById(columnId);
+        return columns.indexOf(column) == columns.size() - 1;
+    }
+
+    public boolean isTheFirstColumn(String columnId) throws ColumnNotFoundException {
+        Column column = getColumnById(columnId);
+        return columns.indexOf(column) == 0;
+    }
+
     @JsonIgnore
     public boolean isFullWip() {
         return getTotalAmountOfCards() >= wipLimit;
@@ -89,4 +114,18 @@ public class Phase {
         return columns.stream().collect(Collectors.summingInt(column -> column.getCards().size()));
     }
 
+    public boolean isValid() {
+        return columns != null && columns.stream().allMatch(Column::isValid);
+    }
+
+    private Column getColumnById(String columnId) throws ColumnNotFoundException {
+        Optional<Column> result = columns.stream()
+                .filter(column -> column.getId().equals(columnId))
+                .findFirst();
+        if (!result.isPresent()) {
+            throw new ColumnNotFoundException(
+                    MessageFormat.format("Phase with id {0} doesn''t have column with id {1}", getId(), columnId));
+        }
+        return result.get();
+    }
 }

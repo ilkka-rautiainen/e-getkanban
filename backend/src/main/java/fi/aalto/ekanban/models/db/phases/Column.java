@@ -1,11 +1,15 @@
 package fi.aalto.ekanban.models.db.phases;
 
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import fi.aalto.ekanban.exceptions.CardNotFoundException;
 import fi.aalto.ekanban.models.db.games.Card;
 
 @Document
@@ -67,4 +71,26 @@ public class Column {
         return result;
     }
 
+    public boolean isValid() {
+        return cards != null;
+    }
+
+    public boolean hasCard(String cardId) {
+        return cards.stream().anyMatch(card -> card.getId().equals(cardId));
+    }
+
+    public Card pullCard(String cardId) throws CardNotFoundException {
+        Optional<Card> card = cards.stream().filter(c -> c.getId().equals(cardId)).findFirst();
+        if (!card.isPresent()) {
+            throw new CardNotFoundException(MessageFormat.format(
+                    "Column with id {0} can''t pull card with id {1} because it doesn''t exist",
+                    getId(), cardId));
+        }
+        cards = cards.stream().filter(c -> !c.getId().equals(cardId)).collect(Collectors.toList());
+        return card.get();
+    }
+
+    public void pushCard(Card card) {
+        cards.add(0, card);
+    }
 }

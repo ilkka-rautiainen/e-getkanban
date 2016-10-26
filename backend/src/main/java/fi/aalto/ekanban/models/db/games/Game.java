@@ -4,6 +4,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import fi.aalto.ekanban.exceptions.CardNotFoundException;
+import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
+import fi.aalto.ekanban.models.MoveCardAction;
+import fi.aalto.ekanban.models.db.phases.Column;
+
 @Document
 public class Game {
 
@@ -71,5 +76,31 @@ public class Game {
         result = 31 * result + (board != null ? board.hashCode() : 0);
         result = 31 * result + (currentDay != null ? currentDay.hashCode() : 0);
         return result;
+    }
+
+    public boolean isValid() {
+        return this.board != null && this.board.isValid();
+    }
+
+    public Column getColumnWithId(String columnId) throws ColumnNotFoundException {
+        return this.board.getColumnWithId(columnId);
+    }
+
+    public boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId)
+            throws ColumnNotFoundException {
+        return this.board.isColumnNextAdjacent(referenceColumnId, inspectedOtherColumnId);
+    }
+
+    public void performMoveCardAction(MoveCardAction moveCardAction)
+            throws ColumnNotFoundException, CardNotFoundException {
+        board.performMoveCardAction(moveCardAction);
+    }
+
+    public boolean doesMoveExceedWIP(MoveCardAction moveCardAction) throws ColumnNotFoundException {
+        return board.doesMoveExceedWIP(moveCardAction);
+    }
+
+    public boolean isCardInColumn(String cardId, String columnId) throws ColumnNotFoundException {
+        return board.isCardInColumn(cardId, columnId);
     }
 }
