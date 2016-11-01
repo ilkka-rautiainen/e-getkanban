@@ -78,6 +78,11 @@ public class Stepdefs extends SpringSteps {
         response.body("currentDay", equalTo(currentDay));
     }
 
+    @And("^game should have difficulty of (.+)")
+    public void gameShouldHaveDifficultyOf(String difficultyLevelName) throws Throwable {
+        response.body("difficultyLevel", equalTo(difficultyLevelName));
+    }
+
     @And("^game should include a board$")
     public void game_should_include_a_board() throws Throwable {
         response.body("board", is(notNullValue()));
