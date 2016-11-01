@@ -17,11 +17,11 @@ export default class PhaseWithTwoColumns extends React.Component {
   }
 
   get phaseHeaderStyle() {
-    if (!this.phase.trackLine) {
+    if (!this.phase.color) {
       return {};
     }
     return {
-      borderBottomColor: '#' + this.phase.trackLine.color
+      borderBottomColor: '#' + this.phase.color
     };
   }
 

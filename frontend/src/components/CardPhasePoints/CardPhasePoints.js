@@ -1,29 +1,33 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import CardPhasePointRow from '../CardPhasePointRow/CardPhasePointRow'
+import _ from 'lodash';
+import CardPhasePointRow from '../CardPhasePointRow/CardPhasePointRow';
 
-const CardPhasePoints = ({ cardPhasePoints, cardPhasePointIds }) => {
-    return <div className="card-phase-points">
-        <CardPhasePointRow phaseName={"Analysis"} totalPoints={cardPhasePoints[cardPhasePointIds[0]].totalPoints}
-                           pointsDone={cardPhasePoints[cardPhasePointIds[0]].pointsDone} />
-        <CardPhasePointRow phaseName={"Development"} totalPoints={cardPhasePoints[cardPhasePointIds[1]].totalPoints}
-                           pointsDone={cardPhasePoints[cardPhasePointIds[1]].pointsDone} />
-        <CardPhasePointRow phaseName={"Test"} totalPoints={cardPhasePoints[cardPhasePointIds[2]].totalPoints}
-                           pointsDone={cardPhasePoints[cardPhasePointIds[2]].pointsDone} />
-    </div>
+const CardPhasePoints = ({ cardPhasePoints, cardPhasePointIds, workingPhases }) => {
+  let rows = [];
+  for (var i = 0; i < Object.keys(workingPhases).length; i++) {
+    rows.push(
+        <CardPhasePointRow key={i} phaseName={workingPhases[Object.keys(workingPhases)[i]].shortName}
+                           totalPoints={cardPhasePoints[cardPhasePointIds[i]].totalPoints}
+                           pointsDone={cardPhasePoints[cardPhasePointIds[i]].pointsDone}
+                           color={workingPhases[Object.keys(workingPhases)[i]].color}/>
+    );
+  }
+  return <div className="card-phase-points">{rows}</div>
 };
 
 CardPhasePoints.propTypes = {
-    cardPhasePoints: PropTypes.object.isRequired
+  cardPhasePoints: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
-    return {
-        cardPhasePoints: state.cardPhasePoints
-    }
+  return {
+    cardPhasePoints: state.cardPhasePoints,
+    workingPhases: _.pickBy(state.phases, function(value, key) {return value.isWorkingPhase;})
+  }
 };
 
 export default connect(
-    mapStateToProps
+  mapStateToProps
 )(CardPhasePoints);
 

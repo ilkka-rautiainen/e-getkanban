@@ -1,0 +1,77 @@
+@import "../../variables";
+
+@mixin phase-points-row($phase-point-bg-color, $phase-point-bg-color-odd) {
+  .phase-points {
+    .phase-point-block {
+      background-color: $phase-point-bg-color;
+      &:nth-child(2), &:nth-child(4), &:nth-child(2n+5) {
+        background-color: $phase-point-bg-color-odd;
+      }
+    }
+  }
+}
+
+.phase-point-row {
+  &:first-of-type {
+    @include phase-points-row($analysis-phase-point-bg-color, $analysis-phase-point-bg-color-odd);
+  }
+  &:last-of-type {
+    @include phase-points-row($test-phase-point-bg-color, $test-phase-point-bg-color-odd);
+  }
+  display: flex;
+  .phase-name {
+    flex: 3;
+    color: $card-text-color;
+    font-size: 0.75em;
+    font-weight: 600;
+    padding: 10px 0 10px 5px;
+    vertical-align: top;
+  }
+  .phase-points {
+    flex: 7;
+    position: relative;
+    .phase-point-block {
+      display: inline-block;
+      background-color: $development-phase-point-bg-color;
+      width: 25%;
+      &:nth-child(2), &:nth-child(4), &:nth-child(2n+5) {
+        background-color: $development-phase-point-bg-color-odd;
+      }
+    }
+    .total-points, .points-done {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      span {
+        display: inline-block;
+      }
+    }
+    .points-done {
+      span {
+        width: 12.5%;
+        line-height: 1px;
+        border: 1px solid #000000;
+        position: relative;
+        top: -4px;
+      }
+    }
+    .total-points {
+      span {
+        width: 7%;
+        line-height: 10px;
+        height: 40%;
+        background-color: $card-text-color;
+        border: 2px solid #000000;
+        border-radius: 50px;
+        margin-left: 3%;
+        &:nth-child(2n+3) {
+          margin-left: 8.5%;
+        }
+        &:nth-child(9) {
+          margin-left: 3%;
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 export default {
   "id": "5800880bdc70781dd3cc9fbd",
   "playerName": "Player",
+  "difficultyLevel": "NORMAL",
   "board": {
     "id": "5800880bdc70781dd3cc9fad",
       "backlogDeck": [
@@ -435,20 +436,20 @@ export default {
                     {
                       "id": "5800843fdc707817d707509c",
                       "phaseId": "5800843fdc707817d7075094",
-                      "totalPoints": 10,
+                      "totalPoints": 15,
                       "pointsDone": 9
                     },
                     {
                       "id": "5800843fdc707817d707509d",
                       "phaseId": "5800843fdc707817d7075097",
                       "totalPoints": 5,
-                      "pointsDone": null
+                      "pointsDone": 5
                     },
                     {
                       "id": "5800843fdc707817d707509e",
                       "phaseId": "5800843fdc707817d7075099",
                       "totalPoints": 5,
-                      "pointsDone": null
+                      "pointsDone": 1
                     }
               ],
               "financialValue": "LOW",
@@ -456,9 +457,9 @@ export default {
               "subscribesWhenDeployed": "1",
               "description": null,
               "outcome": null,
-              "dayStarted": null,
-              "dayDeployed": null,
-              "subscribers": null,
+              "dayStarted": 1,
+              "dayDeployed": 10,
+              "subscribers": 26,
               "orderNumber": 15
             }
             ],
@@ -472,10 +473,10 @@ export default {
         ],
         "wipLimit": 2,
         "name": "Analysis",
-        "trackLine": {
-          "color": "ff0000",
-          "place": "middle"
-        }
+        "shortName": "Analysis",
+        "isWorkingPhase": true,
+        "color": "ff0000",
+        "trackLinePlace": "middle"
       },
       {
         "id": "5800843fdc707817d7075097",
@@ -516,7 +517,7 @@ export default {
               "description": null,
               "outcome": null,
               "dayStarted": 1,
-              "dayDeployed": 4,
+              "dayDeployed": null,
               "subscribers": 5,
               "orderNumber": 14
             }
@@ -526,10 +527,10 @@ export default {
         ],
         "wipLimit": 4,
         "name": "Development",
-        "trackLine": {
-          "color": "0000ff",
-          "place": "middle"
-        }
+        "shortName": "Dev",
+        "isWorkingPhase": true,
+        "color": "0000ff",
+        "trackLinePlace": "middle"
       },
       {
         "id": "5800843fdc707817d7075099",
@@ -542,10 +543,10 @@ export default {
         ],
         "wipLimit": 3,
         "name": "Test",
-        "trackLine": {
-          "color": "009900",
-          "place": "right"
-        }
+        "shortName": "Test",
+        "isWorkingPhase": true,
+        "color": "009900",
+        "trackLinePlace": "right"
       },
       {
         "id": "5800843fdc707817d707509b",
@@ -558,6 +559,8 @@ export default {
         ],
         "wipLimit": null,
         "name": "Deployed",
+        "shortName": "Deployed",
+        "isWorkingPhase": false,
         "trackLine": null
       }
     ]
