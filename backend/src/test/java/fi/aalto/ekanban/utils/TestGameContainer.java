@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.services;
+package fi.aalto.ekanban.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

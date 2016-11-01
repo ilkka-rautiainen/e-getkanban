@@ -20,8 +20,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import fi.aalto.ekanban.builders.BaseCardBuilder;
-import fi.aalto.ekanban.builders.PhaseBuilder;
 import fi.aalto.ekanban.builders.GameBuilder;
 import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.models.db.games.Game;
