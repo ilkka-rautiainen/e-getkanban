@@ -1,10 +1,13 @@
 package fi.aalto.ekanban.controllers;
 
 import static io.restassured.RestAssured.given;
-import static fi.aalto.ekanban.ApplicationConstants.GAME_PATH;
 import static org.hamcrest.Matchers.*;
 
-import cucumber.api.PendingException;
+import static fi.aalto.ekanban.ApplicationConstants.GAME_PATH;
+
+import java.net.HttpURLConnection;
+import java.text.MessageFormat;
+
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -22,7 +25,7 @@ import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.repositories.GameRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
 
-public class Stepdefs extends SpringSteps {
+public class StartGameStepdefs extends SpringSteps {
 
     @Autowired
     private GameRepository gameRepository;
@@ -58,13 +61,12 @@ public class Stepdefs extends SpringSteps {
     @When("^I press start game$")
     public void i_press_start_game() throws Throwable {
         Response resp = request.when().post(GAME_PATH);
-        logger.info(resp.prettyPrint());
         response = resp.then();
     }
 
     @Then("^I should get a new game$")
     public void i_should_get_a_new_game() throws Throwable {
-        response.statusCode(200)
+        response.statusCode(HttpURLConnection.HTTP_OK)
                 .body(is(notNullValue()));
     }
 
@@ -107,8 +109,7 @@ public class Stepdefs extends SpringSteps {
     @And("^(\\d+). phase is (.+)$")
     public void phase_is(Integer phaseNumber, String phaseName) throws Throwable {
         Phase phaseWithGivenName = phaseRepository.findByName(phaseName);
-        //This gets all the phaseIds to array and then checks by index
-        response.body("board.backlogDeck.cardPhasePoints.phaseId[0]["+(phaseNumber-1)+"]",
+        response.body("board.backlogDeck[0].cardPhasePoints[" + (phaseNumber-1) + "].phaseId",
                 is(phaseWithGivenName.getId()));
     }
 
@@ -124,8 +125,8 @@ public class Stepdefs extends SpringSteps {
 
     @And("^each card should have financial value$")
     public void each_card_should_have_financial_value() throws Throwable {
-        response.body("board.backlogDeck.financialValue[0]", is(notNullValue()));
-        response.body("board.backlogDeck.financialValue[0]", is(anyOf(
+        response.body("board.backlogDeck[0].financialValue", is(notNullValue()));
+        response.body("board.backlogDeck[0].financialValue", is(anyOf(
                 equalTo(FinancialValue.LOW.toString()),
                 equalTo(FinancialValue.MED.toString()),
                 equalTo(FinancialValue.HIGH.toString()
@@ -149,17 +150,17 @@ public class Stepdefs extends SpringSteps {
 
     @And("^(\\d+). phase in board is (.+)$")
     public void phase_in_board_is(Integer phaseNumber, String phaseName) throws Throwable {
-        response.body("board.phases.name["+(phaseNumber-1)+"]", is(phaseName));
+        response.body(MessageFormat.format("board.phases.name[{0}]", phaseNumber-1), is(phaseName));
     }
 
     @And("^the phase (.+) should have (\\d+) column\\(s\\)$")
     public void analysis_should_have_two_columns(String phaseName, Integer columnCount) throws Throwable {
-        response.body("board.phases.find { it.name == '"+phaseName+"'}.columns.size()", equalTo(columnCount));
+        response.body("board.phases.find { it.name == '" + phaseName + "'}.columns.size()", equalTo(columnCount));
     }
 
     @And("^(\\d+). column in phase (.+) is (.+)$")
-    public void column_is(Integer columnNumber, String phaseName, String columnName) throws Throwable {
-        response.body("board.phases.find { it.name == '"+phaseName+"'}.columns.name["+(columnNumber-1)+"]",
+    public void column_in_phase_is(Integer columnNumber, String phaseName, String columnName) throws Throwable {
+        response.body("board.phases.find { it.name == '" + phaseName + "'}.columns[" + (columnNumber-1) + "].name",
                 equalTo(columnName));
     }
 }

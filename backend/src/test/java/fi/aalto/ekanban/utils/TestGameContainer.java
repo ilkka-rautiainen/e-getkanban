@@ -1,6 +1,11 @@
 package fi.aalto.ekanban.utils;
 
-import fi.aalto.ekanban.builders.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import fi.aalto.ekanban.builders.CardBuilder;
+import fi.aalto.ekanban.builders.GameBuilder;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Column;
 import fi.aalto.ekanban.models.db.phases.Phase;
@@ -63,22 +68,55 @@ public class TestGameContainer {
         fillDevelopmentInProgressTowardsFullWip(FULL_WIP);
     }
 
+    public void fillFirstWorkPhasesWithSomeCardsInProgress() {
+        List<Phase> firstWorkPhases = getFirstWorkPhases();
+        PhasePopulater.fillWithCards(firstWorkPhases, PhasePopulater.FillingType.IN_PROGRESS_SOME);
+    }
+
+    public void fillFirstWorkPhasesToFullWithReadyCards() {
+        List<Phase> firstWorkPhases = getFirstWorkPhases();
+        PhasePopulater.fillWithCards(firstWorkPhases, PhasePopulater.FillingType.READY_FULL);
+    }
+
+    public void fillFirstWorkPhasesWithSomeReadyCards() {
+        List<Phase> firstWorkPhases = getFirstWorkPhases();
+        PhasePopulater.fillWithCards(firstWorkPhases, PhasePopulater.FillingType.READY_SOME);
+    }
+
+    public void fillFirstWorkPhasesWithSomeAlmostReadyCards() {
+        List<Phase> firstWorkPhases = getFirstWorkPhases();
+        PhasePopulater.fillWithCards(firstWorkPhases, PhasePopulater.FillingType.ALMOST_READY_SOME);
+    }
+
+    public void fillLastWorkPhaseWithSomeCardsInProgress() {
+        Phase lastWorkPhase = getLastWorkPhase();
+        PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.IN_PROGRESS_SOME);
+    }
+
+    public void fillLastWorkPhaseToFullWithCardsInProgress() {
+        Phase lastWorkPhase = getLastWorkPhase();
+        PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.IN_PROGRESS_FULL);
+    }
+
+    public void fillLastWorkPhaseWithSomeReadyCards() {
+        Phase lastWorkPhase = getLastWorkPhase();
+        PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.READY_SOME);
+    }
+
+    public void fillLastWorkPhaseToAlmostFullWithCardsInProgress() {
+        Phase lastWorkPhase = getLastWorkPhase();
+        PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.IN_PROGRESS_ALMOST_FULL);
+    }
+
+    public void fillLastWorkPhaseWithSomeAlmostReadyCards() {
+        Phase lastWorkPhase = getLastWorkPhase();
+        PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.ALMOST_READY_SOME);
+    }
+
     public void addCardsWithMockPhasePointsToDevelopmentInProgress(Integer cardsToAdd) {
         Column developmentInProgressColumn = getColumn(ColumnName.DEVELOPMENT_IN_PROGRESS);
         for (Integer i = 0; i < cardsToAdd; i++) {
             developmentInProgressColumn.getCards().add(CardBuilder.aCard().withMockPhasePoints().build());
-        }
-    }
-
-    private void fillDevelopmentInProgressTowardsFullWip(Integer amountToLeaveUnfilled) {
-        Phase development = getDevelopmentPhase();
-        Integer cardsToAddUntilFullEnough = development.getWipLimit()
-                - development.getTotalAmountOfCards()
-                - amountToLeaveUnfilled;
-
-        Column developmentInProgressColumn = getColumn(ColumnName.DEVELOPMENT_IN_PROGRESS);
-        for (int i=0; i<cardsToAddUntilFullEnough; i++) {
-            developmentInProgressColumn.getCards().add(CardBuilder.aCard().build());
         }
     }
 
@@ -99,6 +137,33 @@ public class TestGameContainer {
         game = GameBuilder.aGame()
                 .withNormalDifficultyMockDefaults(playerName)
                 .build();
+    }
+
+    private void fillDevelopmentInProgressTowardsFullWip(Integer amountToLeaveUnfilled) {
+        Phase development = getDevelopmentPhase();
+        Integer cardsToAddUntilFullEnough = development.getWipLimit()
+                - development.getTotalAmountOfCards()
+                - amountToLeaveUnfilled;
+
+        addCardsWithMockPhasePointsToDevelopmentInProgress(cardsToAddUntilFullEnough);
+    }
+
+    private Phase getLastWorkPhase() {
+        return game.getBoard().getPhases().stream()
+                .filter(Phase::getIsWorkPhase)
+                .reduce((first, second) -> second)
+                .orElse(null);
+    }
+
+    private List<Phase> getFirstWorkPhases() {
+        List<Phase> workPhases = game.getBoard().getPhases().stream()
+                .filter(Phase::getIsWorkPhase)
+                .collect(Collectors.toList());
+        Collections.reverse(workPhases);
+        List<Phase> allButLastWorkPhase = workPhases.stream()
+                .skip(1)
+                .collect(Collectors.toList());
+        return allButLastWorkPhase;
     }
 
 }
