@@ -6,16 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import fi.aalto.ekanban.exceptions.CardNotFoundException;
-import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
-import fi.aalto.ekanban.models.AdjustWipLimitsAction;
-import fi.aalto.ekanban.models.DrawFromBacklogAction;
-import fi.aalto.ekanban.models.MoveCardAction;
-import fi.aalto.ekanban.models.Turn;
-import fi.aalto.ekanban.models.db.games.Card;
-import fi.aalto.ekanban.models.db.games.Game;
-import fi.aalto.ekanban.models.db.phases.Column;
-import fi.aalto.ekanban.models.db.phases.Phase;
+import fi.aalto.ekanban.exceptions.*;
+import fi.aalto.ekanban.models.*;
+import fi.aalto.ekanban.models.db.games.*;
+import fi.aalto.ekanban.models.db.phases.*;
 
 @Service
 public class PlayerService {
@@ -39,8 +33,21 @@ public class PlayerService {
         return game;
     }
 
-    public Game assignResources(Game game) {
-        return null;
+    public static Game assignResources(Game game, List<AssignResourcesAction> assignResourcesActions) {
+        if (game != null && game.isValid() && assignResourcesActions != null) {
+            assignResourcesActions.forEach(assignResourcesAction -> {
+                try {
+                    if (!isValidAssignResourcesAction(assignResourcesAction, game)) {
+                        return;
+                    }
+                    game.performAssignResourcesAction(assignResourcesAction);
+                }
+                catch (CardPhasePointNotFoundException|PhaseNotFoundException|CardNotFoundException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            });
+        }
+        return game;
     }
 
     public static Game moveCards(Game game, List<MoveCardAction> moveCardActions) {
@@ -61,20 +68,22 @@ public class PlayerService {
     }
 
     public static Game drawFromBacklog(Game game, List<DrawFromBacklogAction> drawActions) {
-        Phase firstPhase = game.getBoard().getPhases().get(0);
+        if (game != null && game.isValid() && drawActions != null) {
+            Phase firstPhase = game.getBoard().getPhases().get(0);
 
-        drawActions.forEach(drawAction -> {
-            if (isValidDrawFromBacklogAction(firstPhase, drawAction)) {
-                List<Card> backlogDeck = game.getBoard().getBacklogDeck();
-                Card cardToDraw = backlogDeck.get(0);
-                Boolean cardSuccessfullyRemovedFromDeck = backlogDeck.remove(cardToDraw);
-                if (cardSuccessfullyRemovedFromDeck) {
-                    Column columnWhereCardIsToBeSet = firstPhase.getColumns().get(0);
-                    columnWhereCardIsToBeSet.getCards().add(drawAction.getIndexToPlaceCardAt(), cardToDraw);
-                    cardToDraw.setDayStarted(game.getCurrentDay());
+            drawActions.forEach(drawAction -> {
+                if (isValidDrawFromBacklogAction(firstPhase, drawAction)) {
+                    List<Card> backlogDeck = game.getBoard().getBacklogDeck();
+                    Card cardToDraw = backlogDeck.get(0);
+                    Boolean cardSuccessfullyRemovedFromDeck = backlogDeck.remove(cardToDraw);
+                    if (cardSuccessfullyRemovedFromDeck) {
+                        Column columnWhereCardIsToBeSet = firstPhase.getColumns().get(0);
+                        columnWhereCardIsToBeSet.getCards().add(drawAction.getIndexToPlaceCardAt(), cardToDraw);
+                        cardToDraw.setDayStarted(game.getCurrentDay());
+                    }
                 }
-            }
-        });
+            });
+        }
 
         return game;
     }
@@ -83,6 +92,15 @@ public class PlayerService {
         return !firstPhase.isFullWip()
                 && drawAction.getIndexToPlaceCardAt() >= 0
                 && drawAction.getIndexToPlaceCardAt() <= firstPhase.getColumns().get(0).getCards().size();
+    }
+
+    private static boolean isValidAssignResourcesAction(AssignResourcesAction assignResourcesAction, Game game)
+            throws CardPhasePointNotFoundException, CardNotFoundException, PhaseNotFoundException {
+        Card card = game.getCardWithId(assignResourcesAction.getCardId());
+        CardPhasePoint cardPhasePoint = card.getCardPhasePointOfPhase(assignResourcesAction.getPhaseId());
+        Integer pointsLeft = cardPhasePoint.getTotalPoints() - cardPhasePoint.getPointsDone();
+        return assignResourcesAction.getPoints() <= pointsLeft
+                && game.isCardInFirstColumnOfPhase(card, assignResourcesAction.getPhaseId());
     }
 
     private static boolean isValidMoveCardAction(MoveCardAction moveCardAction, Game game)

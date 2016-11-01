@@ -1,12 +1,15 @@
 package fi.aalto.ekanban.models.db.gameconfigurations;
 
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Optional;
 
-import fi.aalto.ekanban.models.db.games.CardPhasePoint;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import fi.aalto.ekanban.exceptions.CardPhasePointNotFoundException;
+import fi.aalto.ekanban.models.db.games.CardPhasePoint;
 import fi.aalto.ekanban.enums.FinancialValue;
 
 @Document
@@ -124,4 +127,15 @@ public class BaseCard {
         return result;
     }
 
+    public CardPhasePoint getCardPhasePointOfPhase(String phaseId) throws CardPhasePointNotFoundException {
+        Optional<CardPhasePoint> cardPhasePointOptional = cardPhasePoints.stream()
+                .filter(cardPhasePoint -> cardPhasePoint.getPhaseId().equals(phaseId))
+                .findFirst();
+        if (!cardPhasePointOptional.isPresent()) {
+            throw new CardPhasePointNotFoundException(MessageFormat.format(
+                    "Card with id {0} doesn''t have phasepoint for phase {1}",
+                    getId(), phaseId));
+        }
+        return cardPhasePointOptional.get();
+    }
 }

@@ -8,11 +8,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import fi.aalto.ekanban.exceptions.CardNotFoundException;
-import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
+import fi.aalto.ekanban.exceptions.*;
 import fi.aalto.ekanban.models.MoveCardAction;
-import fi.aalto.ekanban.models.db.phases.Column;
-import fi.aalto.ekanban.models.db.phases.Phase;
+import fi.aalto.ekanban.models.db.phases.*;
 
 @Document
 public class Board {
@@ -128,6 +126,14 @@ public class Board {
         Column toColumn = getColumnWithId(moveCardAction.getToColumnId());
         Card cardToMove = fromColumn.pullCard(moveCardAction.getCardId());
         toColumn.pushCard(cardToMove);
+    }
+
+    public Phase getPhaseWithId(String phaseId) throws PhaseNotFoundException {
+        Optional<Phase> phaseOptional = phases.stream().filter(phase -> phase.getId().equals(phaseId)).findFirst();
+        if (!phaseOptional.isPresent()) {
+            throw new PhaseNotFoundException(MessageFormat.format("Board doesn't have phase with id {0}", phaseId));
+        }
+        return phaseOptional.get();
     }
 
     private boolean isColumnNextAdjacentInsideSamePhase(String referenceColumnId, String inspectedOtherColumnId)

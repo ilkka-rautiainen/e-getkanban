@@ -1,13 +1,14 @@
 package fi.aalto.ekanban.models.db.games;
 
+import java.util.Optional;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import fi.aalto.ekanban.exceptions.CardNotFoundException;
-import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
-import fi.aalto.ekanban.models.MoveCardAction;
-import fi.aalto.ekanban.models.db.phases.Column;
+import fi.aalto.ekanban.exceptions.*;
+import fi.aalto.ekanban.models.*;
+import fi.aalto.ekanban.models.db.phases.*;
 
 @Document
 public class Game {
@@ -102,5 +103,29 @@ public class Game {
 
     public boolean isCardInColumn(String cardId, String columnId) throws ColumnNotFoundException {
         return board.isCardInColumn(cardId, columnId);
+    }
+
+    public boolean isCardInFirstColumnOfPhase(Card card, String phaseId) throws PhaseNotFoundException {
+        Phase phase = board.getPhaseWithId(phaseId);
+        return phase.getColumns().get(0).getCards().contains(card);
+    }
+
+    public void performAssignResourcesAction(AssignResourcesAction assignResourcesAction)
+            throws CardNotFoundException, CardPhasePointNotFoundException {
+        Card card = getCardWithId(assignResourcesAction.getCardId());
+        CardPhasePoint cardPhasePoint = card.getCardPhasePointOfPhase(assignResourcesAction.getPhaseId());
+        cardPhasePoint.increasePointsDoneBy(assignResourcesAction.getPoints());
+    }
+
+    public Card getCardWithId(String cardId) throws CardNotFoundException {
+        Optional<Card> cardOptional = board.getPhases().stream()
+                .flatMap(phase -> phase.getColumns().stream())
+                .flatMap(column -> column.getCards().stream())
+                .filter(card -> card.getId().equals(cardId))
+                .findFirst();
+        if (!cardOptional.isPresent()) {
+            throw new CardNotFoundException();
+        }
+        return cardOptional.get();
     }
 }

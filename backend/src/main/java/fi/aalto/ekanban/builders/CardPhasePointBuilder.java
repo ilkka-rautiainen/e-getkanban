@@ -15,7 +15,8 @@ public final class CardPhasePointBuilder {
     }
 
     public static CardPhasePointBuilder aCardPhasePoint() {
-        return new CardPhasePointBuilder();
+        return new CardPhasePointBuilder()
+                .withPointsDone(0);
     }
 
     public CardPhasePointBuilder withId(String id) {

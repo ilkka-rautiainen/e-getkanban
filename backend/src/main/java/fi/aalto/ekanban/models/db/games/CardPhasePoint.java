@@ -41,6 +41,7 @@ public class CardPhasePoint {
 
     public void setTotalPoints(Integer totalPoints) {
         this.totalPoints = totalPoints;
+        ensurePointsDoneNotMoreThanTotalPoints();
     }
 
     public Integer getPointsDone() {
@@ -49,6 +50,24 @@ public class CardPhasePoint {
 
     public void setPointsDone(Integer pointsDone) {
         this.pointsDone = pointsDone;
+        ensurePointsDoneNotMoreThanTotalPoints();
+    }
+
+    public void increasePointsDoneBy(Integer points) {
+        if (pointsDone == null) {
+            pointsDone = points;
+        }
+        else {
+            pointsDone += points;
+        }
+        ensurePointsDoneNotMoreThanTotalPoints();
+    }
+
+    private void ensurePointsDoneNotMoreThanTotalPoints() {
+        if (pointsDone == null) {
+            return;
+        }
+        pointsDone = Math.min(pointsDone, totalPoints);
     }
 
     @Override
