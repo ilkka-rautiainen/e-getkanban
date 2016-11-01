@@ -1,5 +1,6 @@
 package fi.aalto.ekanban.builders;
 
+import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.models.db.games.Board;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
@@ -11,6 +12,7 @@ public final class GameBuilder {
     private String playerName;
     private Board board;
     private Integer currentDay;
+    private GameDifficulty difficultyLevel;
 
     private GameBuilder() {
         currentDay = 1;
@@ -37,6 +39,11 @@ public final class GameBuilder {
 
     public GameBuilder withCurrentDay(Integer currentDay) {
         this.currentDay = currentDay;
+        return this;
+    }
+
+    public GameBuilder withDifficultyLevel(GameDifficulty difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
         return this;
     }
 
@@ -68,6 +75,7 @@ public final class GameBuilder {
         game.setPlayerName(playerName);
         game.setBoard(board);
         game.setCurrentDay(currentDay);
+        game.setDifficultyLevel(difficultyLevel);
         return game;
     }
 }

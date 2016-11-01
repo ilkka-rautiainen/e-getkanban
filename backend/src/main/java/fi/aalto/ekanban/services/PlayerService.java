@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.exceptions.*;
 import fi.aalto.ekanban.models.*;
 import fi.aalto.ekanban.models.db.games.*;

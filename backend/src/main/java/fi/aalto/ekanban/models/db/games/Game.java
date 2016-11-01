@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.exceptions.*;
 import fi.aalto.ekanban.models.*;
 import fi.aalto.ekanban.models.db.phases.*;
@@ -22,6 +23,8 @@ public class Game {
     private Board board;
     @Field
     private Integer currentDay;
+    @Field
+    private GameDifficulty difficultyLevel;
 
     public Board getBoard() {
         return board;
@@ -55,6 +58,14 @@ public class Game {
         this.currentDay = currentDay;
     }
 
+    public GameDifficulty getDifficultyLevel() {
+        return difficultyLevel;
+    }
+
+    public void setDifficultyLevel(GameDifficulty difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,6 +78,7 @@ public class Game {
         if (id != null ? !id.equals(game.id) : game.id != null) return false;
         if (playerName != null ? !playerName.equals(game.playerName) : game.playerName != null) return false;
         if (currentDay != null ? !currentDay.equals(game.currentDay) : game.currentDay != null) return false;
+        if (difficultyLevel != null ? !difficultyLevel.equals(game.difficultyLevel) : game.difficultyLevel != null) return false;
         return board != null ? board.equals(game.board) : game.board == null;
 
     }
@@ -77,6 +89,7 @@ public class Game {
         result = 31 * result + (playerName != null ? playerName.hashCode() : 0);
         result = 31 * result + (board != null ? board.hashCode() : 0);
         result = 31 * result + (currentDay != null ? currentDay.hashCode() : 0);
+        result = 31 * result + (difficultyLevel != null ? difficultyLevel.hashCode() : 0);
         return result;
     }
 
