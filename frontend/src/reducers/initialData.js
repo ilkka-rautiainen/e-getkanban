@@ -1,6 +1,7 @@
 export default {
   "id": "5800880bdc70781dd3cc9fbd",
   "playerName": "Player",
+  "difficulty": "NORMAL",
   "board": {
     "id": "5800880bdc70781dd3cc9fad",
       "backlogDeck": [
@@ -435,20 +436,20 @@ export default {
                     {
                       "id": "5800843fdc707817d707509c",
                       "phaseId": "5800843fdc707817d7075094",
-                      "totalPoints": 10,
+                      "totalPoints": 15,
                       "pointsDone": 9
                     },
                     {
                       "id": "5800843fdc707817d707509d",
                       "phaseId": "5800843fdc707817d7075097",
                       "totalPoints": 5,
-                      "pointsDone": null
+                      "pointsDone": 5
                     },
                     {
                       "id": "5800843fdc707817d707509e",
                       "phaseId": "5800843fdc707817d7075099",
                       "totalPoints": 5,
-                      "pointsDone": null
+                      "pointsDone": 1
                     }
               ],
               "financialValue": "LOW",
@@ -456,9 +457,9 @@ export default {
               "subscribesWhenDeployed": "1",
               "description": null,
               "outcome": null,
-              "dayStarted": null,
-              "dayDeployed": null,
-              "subscribers": null,
+              "dayStarted": 1,
+              "dayDeployed": 10,
+              "subscribers": 26,
               "orderNumber": 15
             }
             ],

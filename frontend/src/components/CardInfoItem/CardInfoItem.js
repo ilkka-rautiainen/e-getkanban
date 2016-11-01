@@ -34,12 +34,6 @@ class CardInfoItem extends React.Component {
 
 };
 
-CardInfoItem.propTypes = {
-    title: PropTypes.string.isRequired,
-    value: PropTypes.number,
-    givenClass: PropTypes.string
-};
-
 export default CardInfoItem;
 
 

@@ -1,12 +1,14 @@
+@import "../../variables";
+
 .card {
   height: auto;
   width: 94%;
-  margin: 10px;
+  margin: 3%;
   display: inline-block;
   border-radius: 20px !important;
   .card-title {
-    color: #ffffff;
-    background-color: #bc6b34;
+    color: $card-text-color;
+    background-color: $card-title-bg-color;
     display: flex;
     justify-content: space-between;
     border-top-left-radius: 20px;
@@ -26,20 +28,17 @@
   }
   .card-info {
     position: relative;
-    color: #ffffff;
-    background-color: #c4752e;
+    color: $card-text-color;
+    background-color: $card-info-bg-color;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     .special-char {
-      position: absolute;
+      position: relative;
+      left: -2%;
       font-size: 1em;
       font-weight: 600;
       display: inline-block;
-      top: 24px;
-      left: 142px;
-      &:first-of-type {
-        left: 70px;
-      }
+      width: 0%;
     }
   }
 }
