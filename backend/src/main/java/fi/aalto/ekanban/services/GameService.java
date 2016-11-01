@@ -1,17 +1,10 @@
 package fi.aalto.ekanban.services;
 
-import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import fi.aalto.ekanban.exceptions.GameNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +59,13 @@ public class GameService {
     }
 
     public Game playTurn(String gameId, Turn turn) {
-        return null;
+        Game game = gameRepository.findOne(gameId);
+        if (game == null) {
+            throw new GameNotFoundException();
+        }
+        Game playedGame = playerService.playTurn(game, turn);
+        gameRepository.save(playedGame);
+        return playedGame;
     }
 
     private List<Phase> initNormalPhases() {

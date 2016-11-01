@@ -1,10 +1,15 @@
 package fi.aalto.ekanban.models;
 
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
 public class Turn {
 
     private AdjustWipLimitsAction adjustWipLimitsAction;
-
-    private DrawFromBacklogAction drawFromBacklogAction;
+    @NotNull
+    private List<MoveCardAction> moveCardActions;
+    @NotNull
+    private List<DrawFromBacklogAction> drawFromBacklogActions;
 
     public AdjustWipLimitsAction getAdjustWipLimitsAction() {
         return adjustWipLimitsAction;
@@ -14,11 +19,20 @@ public class Turn {
         this.adjustWipLimitsAction = adjustWipLimitsAction;
     }
 
-    public DrawFromBacklogAction getDrawFromBacklogAction() {
-        return drawFromBacklogAction;
+    public List<DrawFromBacklogAction> getDrawFromBacklogActions() {
+        return drawFromBacklogActions;
     }
 
-    public void setDrawFromBacklogAction(DrawFromBacklogAction drawFromBacklogAction) {
-        this.drawFromBacklogAction = drawFromBacklogAction;
+    public void setDrawFromBacklogActions(List<DrawFromBacklogAction> drawFromBacklogActions) {
+        this.drawFromBacklogActions = drawFromBacklogActions;
     }
+
+    public List<MoveCardAction> getMoveCardActions() {
+        return moveCardActions;
+    }
+
+    public void setMoveCardActions(List<MoveCardAction> moveCardActions) {
+        this.moveCardActions = moveCardActions;
+    }
+
 }
