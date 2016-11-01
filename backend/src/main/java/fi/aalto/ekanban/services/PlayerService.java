@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fi.aalto.ekanban.enums.GameDifficulty;
@@ -11,13 +12,31 @@ import fi.aalto.ekanban.exceptions.*;
 import fi.aalto.ekanban.models.*;
 import fi.aalto.ekanban.models.db.games.*;
 import fi.aalto.ekanban.models.db.phases.*;
+import fi.aalto.ekanban.services.MoveCardsAI.MoveCardsAIService;
 
 @Service
 public class PlayerService {
 
+    @Autowired
+    MoveCardsAIService moveCardsAIService;
+
     protected static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
     public Game playTurn(Game game, Turn turn) {
+        if (game != null && game.isValid() && turn != null) {
+            adjustWipLimits(game, turn.getAdjustWipLimitsAction());
+            if (game.getDifficultyLevel() == GameDifficulty.NORMAL) {
+                game = playTurnNormal(game);
+            }
+        }
+        return game;
+    }
+
+    private Game playTurnNormal(Game game) {
+        // TODO: assign resources
+        List<MoveCardAction> moveCardActions = moveCardsAIService.getMoveCardsActions(game);
+        game = moveCards(game, moveCardActions);
+        // TODO: draw from backlog
         return game;
     }
 

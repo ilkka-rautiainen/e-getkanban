@@ -1,5 +1,6 @@
 package fi.aalto.ekanban.models.db.games;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -93,5 +94,10 @@ public class CardPhasePoint {
         result = 31 * result + (totalPoints != null ? totalPoints.hashCode() : 0);
         result = 31 * result + (pointsDone != null ? pointsDone.hashCode() : 0);
         return result;
+    }
+
+    @JsonIgnore
+    public Boolean isReady() {
+        return getTotalPoints().equals(getPointsDone());
     }
 }

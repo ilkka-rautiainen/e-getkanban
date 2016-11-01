@@ -138,6 +138,23 @@ public class Board {
         return phaseOptional.get();
     }
 
+    public Boolean hasNextPhase(Phase inspectedPhase) throws PhaseNotFoundException {
+        if (!getPhases().contains(inspectedPhase)) {
+            throw new PhaseNotFoundException(
+                    MessageFormat.format("Board doesn't have phase with id {0}", inspectedPhase.getId()));
+        }
+        Integer lastPhaseIdx = getPhases().size() - 1;
+        return getPhases().indexOf(inspectedPhase) < lastPhaseIdx;
+    }
+
+    public Phase getNextPhase(Phase phase) throws PhaseNotFoundException {
+        if (!hasNextPhase(phase)) {
+            return null;
+        }
+        Integer phaseIdx = getPhases().indexOf(phase);
+        return getPhases().get(phaseIdx + 1);
+    }
+
     private boolean isColumnNextAdjacentInsideSamePhase(String referenceColumnId, String inspectedOtherColumnId)
             throws ColumnNotFoundException {
         if (!areColumnsInSamePhase(referenceColumnId, inspectedOtherColumnId)) {

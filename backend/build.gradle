@@ -44,6 +44,7 @@ project.ext {
     equalsVersion = '2.1.6'
     mockitoVersion = '1.+'
     cloningVersion = '1.9.2'
+    guavaVersion = '20.0'
 }
 
 dependencies {
@@ -53,6 +54,7 @@ dependencies {
     compile 'org.slf4j:jcl-over-slf4j:' + slf4jVersion
     compile 'ch.qos.logback:logback-classic:' + logbackVersion
     compile 'uk.com.robust-it:cloning:' + cloningVersion
+    compile 'com.google.guava:guava:' + guavaVersion
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'info.cukes:cucumber-java:' + cucumberVersion

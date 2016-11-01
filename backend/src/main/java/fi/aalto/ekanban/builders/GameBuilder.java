@@ -50,6 +50,7 @@ public final class GameBuilder {
     public GameBuilder withNormalDifficultyDefaults(String playerName, BaseCardRepository baseCardRepository,
                                                     PhaseRepository phaseRepository) {
         this.playerName = playerName;
+        this.difficultyLevel = GameDifficulty.NORMAL;
         this.board = BoardBuilder.aBoard()
                 .withNormalDifficultyDefaults(baseCardRepository, phaseRepository)
                 .build();
@@ -58,6 +59,7 @@ public final class GameBuilder {
 
     public GameBuilder withNormalDifficultyMockDefaults(String playerName) {
         this.playerName = playerName;
+        this.difficultyLevel = GameDifficulty.NORMAL;
         this.board = BoardBuilder.aBoard()
                 .withNormalDifficultyMockDefaults()
                 .build();

@@ -18,6 +18,7 @@ public final class PhaseBuilder {
     private List<Column> columns;
     private Integer wipLimit;
     private String name;
+    private Boolean isWorkPhase;
 
     private PhaseBuilder() {}
 
@@ -52,6 +53,7 @@ public final class PhaseBuilder {
                 ColumnBuilder.aColumn().inProgress().build(),
                 ColumnBuilder.aColumn().done().build());
         this.name = "Analysis";
+        this.isWorkPhase = true;
         return this;
     }
 
@@ -63,6 +65,7 @@ public final class PhaseBuilder {
                 ColumnBuilder.aColumn().done().build()
         );
         this.name = "Development";
+        this.isWorkPhase = true;
         return this;
     }
 
@@ -71,6 +74,7 @@ public final class PhaseBuilder {
         this.wipLimit = 3;
         this.columns = Arrays.asList(ColumnBuilder.aColumn().withCards(new ArrayList<>()).build());
         this.name = "Test";
+        this.isWorkPhase = true;
         return this;
     }
 
@@ -78,6 +82,7 @@ public final class PhaseBuilder {
         this.id = DEPLOYED_PHASE_ID;
         this.columns = Arrays.asList(ColumnBuilder.aColumn().withCards(new ArrayList<>()).build());
         this.name = "Deployed";
+        this.isWorkPhase = false;
         return this;
     }
 
@@ -98,6 +103,7 @@ public final class PhaseBuilder {
         phase.setColumns(columns);
         phase.setWipLimit(wipLimit);
         phase.setName(name);
+        phase.setIsWorkPhase(isWorkPhase);
         return phase;
     }
 }

@@ -120,7 +120,7 @@ public class Game {
         return board.isCardInColumn(cardId, columnId);
     }
 
-    public boolean isCardInFirstColumnOfPhase(Card card, String phaseId) throws PhaseNotFoundException {
+    public Boolean isCardInFirstColumnOfPhase(Card card, String phaseId) throws PhaseNotFoundException {
         Phase phase = board.getPhaseWithId(phaseId);
         return phase.getColumns().get(0).getCards().contains(card);
     }
@@ -142,5 +142,13 @@ public class Game {
             throw new CardNotFoundException();
         }
         return cardOptional.get();
+    }
+
+    public Boolean hasNextPhase(Phase phase) throws PhaseNotFoundException {
+        return board.hasNextPhase(phase);
+    }
+
+    public Phase getNextPhase(Phase phase) throws PhaseNotFoundException {
+        return board.getNextPhase(phase);
     }
 }

@@ -17,15 +17,14 @@ public class Phase {
 
     @Id
     private String id;
-
     @Field
     private List<Column> columns;
-
     @Field
     private Integer wipLimit;
-
     @Field
     private String name;
+    @Field
+    private Boolean isWorkPhase;
 
     public String getId() {
         return id;
@@ -41,6 +40,29 @@ public class Phase {
 
     public void setColumns(List<Column> columns) {
         this.columns = columns;
+    }
+
+    public Column getFirstColumn() {
+        if (getColumns() == null || getColumns().size() == 0) {
+            return null;
+        }
+        else {
+            return getColumns().get(0);
+        }
+    }
+
+    public Boolean hasSecondColumn() {
+        return getColumns() != null && getColumns().size() >= 2;
+    }
+
+    public Column getSecondColumn() {
+        if (getColumns() == null || getColumns().size() < 2) {
+            return null;
+        }
+        else {
+            Integer lastColumnIdx = getColumns().size() - 1;
+            return getColumns().get(lastColumnIdx);
+        }
     }
 
     public Integer getWipLimit() {
@@ -59,6 +81,14 @@ public class Phase {
         this.name = name;
     }
 
+    public Boolean getIsWorkPhase() {
+        return isWorkPhase;
+    }
+
+    public void setIsWorkPhase(Boolean workPhase) {
+        isWorkPhase = workPhase;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,6 +101,7 @@ public class Phase {
         if (id != null ? !id.equals(phase.id) : phase.id != null) return false;
         if (columns != null ? !columns.equals(phase.columns) : phase.columns != null) return false;
         if (wipLimit != null ? !wipLimit.equals(phase.wipLimit) : phase.wipLimit != null) return false;
+        if (isWorkPhase != null ? !isWorkPhase.equals(phase.isWorkPhase) : phase.isWorkPhase != null) return false;
         return name != null ? name.equals(phase.name) : phase.name == null;
 
     }
@@ -81,6 +112,7 @@ public class Phase {
         result = 31 * result + (columns != null ? columns.hashCode() : 0);
         result = 31 * result + (wipLimit != null ? wipLimit.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (isWorkPhase != null ? isWorkPhase.hashCode() : 0);
         return result;
     }
 

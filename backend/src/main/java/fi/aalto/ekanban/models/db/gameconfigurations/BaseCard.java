@@ -4,12 +4,14 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import fi.aalto.ekanban.exceptions.CardPhasePointNotFoundException;
 import fi.aalto.ekanban.models.db.games.CardPhasePoint;
+import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.enums.FinancialValue;
 
 @Document
@@ -137,5 +139,15 @@ public class BaseCard {
                     getId(), phaseId));
         }
         return cardPhasePointOptional.get();
+    }
+
+    @JsonIgnore
+    public Boolean isReadyWithPhase(Phase phase) {
+        try {
+            CardPhasePoint cardPhasePoint = getCardPhasePointOfPhase(phase.getId());
+            return cardPhasePoint.isReady();
+        } catch (CardPhasePointNotFoundException e) {
+            return false;
+        }
     }
 }

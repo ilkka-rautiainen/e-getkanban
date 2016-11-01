@@ -4,6 +4,7 @@ import java.util.Map;
 
 public class AdjustWipLimitsAction {
 
+    // Phase id -> new wip-limit
     private Map<String, Integer> phaseWipLimits;
 
     public Map<String, Integer> getPhaseWipLimits() {
