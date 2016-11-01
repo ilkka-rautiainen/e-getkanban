@@ -17,7 +17,7 @@ public class PlayerService {
     protected static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
     public Game playTurn(Game game, Turn turn) {
-        return null;
+        return game;
     }
 
     public static Game adjustWipLimits(Game game, AdjustWipLimitsAction adjustWipLimitsAction) {
