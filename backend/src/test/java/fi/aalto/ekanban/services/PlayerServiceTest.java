@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static fi.aalto.ekanban.services.PlayerService.adjustWipLimits;
 import static fi.aalto.ekanban.services.PlayerService.drawFromBacklog;
 import static fi.aalto.ekanban.services.PlayerService.moveCards;
+import static fi.aalto.ekanban.services.PlayerService.assignResources;
 
 import java.util.*;
 
@@ -17,17 +18,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fi.aalto.ekanban.builders.CardBuilder;
-import fi.aalto.ekanban.builders.DrawFromBacklogActionBuilder;
-import fi.aalto.ekanban.models.DrawFromBacklogAction;
-import fi.aalto.ekanban.models.db.games.Card;
-import fi.aalto.ekanban.models.db.phases.Phase;
-import fi.aalto.ekanban.builders.MoveCardActionBuilder;
-import fi.aalto.ekanban.models.MoveCardAction;
-import fi.aalto.ekanban.builders.AdjustWipLimitsActionBuilder;
-import fi.aalto.ekanban.models.AdjustWipLimitsAction;
-import fi.aalto.ekanban.models.db.games.Game;
-import fi.aalto.ekanban.models.db.phases.Column;
+import fi.aalto.ekanban.builders.*;
+import fi.aalto.ekanban.models.*;
+import fi.aalto.ekanban.models.db.games.*;
+import fi.aalto.ekanban.models.db.phases.*;
 
 @RunWith(HierarchicalContextRunner.class)
 public class PlayerServiceTest {
@@ -634,6 +628,83 @@ public class PlayerServiceTest {
             for (Integer i = 0; i < firstColumnCards.size(); i++) {
                 assertThat(cardsInFirstColumnBeforeAction.get(i), equalTo(firstColumnCards.get(i)));
             }
+        }
+    }
+
+    public class assignResources {
+        private final Integer POINTS_BEFORE_ACTION = 0;
+
+        private Phase phase;
+        private Card firstCard;
+        private Card firstCardAfter;
+
+        @Before
+        public void init() {
+            phase = initialGameContainer.getDevelopmentPhase();
+            initialGameContainer.addCardsWithResourcesToDevelopmentInProgress();
+            firstCard = initialGameContainer.getColumn(TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS)
+                    .getCards().get(0);
+        }
+
+        public class withCorrectPoints {
+            private final Integer POINTS_TO_ADD = 2;
+
+            @Before
+            public void doAction() {
+                assignResourcesAndFetchResults(POINTS_TO_ADD);
+            }
+
+            @Test
+            public void shouldIncrementTotalPointsDone() {
+                Integer pointsDone = firstCardAfter.getCardPhasePoints().stream()
+                        .filter(cardPhasePoint -> cardPhasePoint.getPhaseId().equals(phase.getId()))
+                        .findFirst().orElse(null).getPointsDone();
+                assertThat(pointsDone, equalTo(POINTS_BEFORE_ACTION + POINTS_TO_ADD));
+            }
+
+            @Test
+            public void shouldLeaveOtherPointsDoneIntact() {
+                firstCardAfter.getCardPhasePoints().stream()
+                        .filter(cardPhasePoint -> !cardPhasePoint.getPhaseId().equals(phase.getId()))
+                        .peek(cardPhasePoint -> {
+                            assertThat(cardPhasePoint.getPointsDone(), equalTo(POINTS_BEFORE_ACTION));
+                        })
+                        .toArray();
+            }
+        }
+
+        public class withTooMuchPoints {
+            private final Integer POINTS_TO_ADD = 6;
+
+            @Before
+            public void doAction() {
+                assignResourcesAndFetchResults(POINTS_TO_ADD);
+            }
+
+            @Test
+            public void shouldLeavePointsDoneIntact() {
+                CardPhasePoint cardPhasePoint = firstCardAfter.getCardPhasePoints().stream()
+                        .filter(c -> c.getPhaseId().equals(phase.getId()))
+                        .findFirst().orElse(null);
+                assertThat(cardPhasePoint.getPointsDone(), equalTo(POINTS_BEFORE_ACTION));
+            }
+        }
+
+        private void assignResourcesAndFetchResults(Integer points) {
+            List<AssignResourcesAction> actions = getActions(points);
+            Game gameWithResourcesAssigned = assignResources(initialGameContainer.getGame(), actions);
+            TestGameContainer gameWithResourcesAssignedContainer
+                    = TestGameContainer.withGame(gameWithResourcesAssigned);
+            firstCardAfter = gameWithResourcesAssignedContainer
+                    .getColumn(TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS).getCards().get(0);
+        }
+
+        private List<AssignResourcesAction> getActions(Integer points) {
+            return Arrays.asList(AssignResourcesActionBuilder.anAssignResourcesAction()
+                    .withCardId(firstCard.getId())
+                    .withPhaseId(phase.getId())
+                    .withPoints(points)
+                    .build());
         }
     }
 }
