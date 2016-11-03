@@ -1,9 +1,6 @@
 @import "../../variables";
 
-@mixin phase-points-row($phase-name-bg-color, $phase-point-bg-color, $phase-point-bg-color-odd) {
-  .phase-name {
-    background-color: $phase-name-bg-color;
-  }
+@mixin phase-points-row($phase-point-bg-color, $phase-point-bg-color-odd) {
   .phase-points {
     .phase-point-block {
       background-color: $phase-point-bg-color;
@@ -16,23 +13,22 @@
 
 .phase-point-row {
   &:first-of-type {
-    @include phase-points-row($analysis-phase-name-bg-color, $analysis-phase-point-bg-color, $analysis-phase-point-bg-color-odd);
+    @include phase-points-row($analysis-phase-point-bg-color, $analysis-phase-point-bg-color-odd);
   }
   &:last-of-type {
-    @include phase-points-row($test-phase-name-bg-color, $test-phase-point-bg-color, $test-phase-point-bg-color-odd);
+    @include phase-points-row($test-phase-point-bg-color, $test-phase-point-bg-color-odd);
   }
+  display: flex;
   .phase-name {
-    background-color: $development-phase-name-bg-color;
+    flex: 3;
     color: $card-text-color;
-    width: 30%;
     font-size: 0.75em;
     font-weight: 600;
-    line-height: 134%;
     padding: 10px 0 10px 5px;
     vertical-align: top;
   }
   .phase-points {
-    width: 70%;
+    flex: 7;
     position: relative;
     .phase-point-block {
       display: inline-block;
@@ -77,8 +73,5 @@
         }
       }
     }
-  }
-  > div {
-    display: inline-block;
   }
 }

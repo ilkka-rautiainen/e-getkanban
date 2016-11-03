@@ -8,15 +8,12 @@ $board-border-color: black;
 $phase-separator-color: black;
 $column-separator-color: lighten($phase-separator-color, 50%);
 
-$analysis-phase-name-bg-color: #ff0000;
 $analysis-phase-point-bg-color: #ff9b9b;
 $analysis-phase-point-bg-color-odd: #ffaaaa;
 
-$development-phase-name-bg-color: #008000;
 $development-phase-point-bg-color: #c5c5ff;
 $development-phase-point-bg-color-odd: #d5d5ff;
 
-$test-phase-name-bg-color: #0000ff;
 $test-phase-point-bg-color: #c5ffc5;
 $test-phase-point-bg-color-odd: #d7ffd7;
 

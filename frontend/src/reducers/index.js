@@ -35,8 +35,8 @@ const initialGame = normalizedData.entities.games[normalizedData.result];
 const initialBoard = normalizedData.entities.boards[initialGame.board];
 const initialPhases = normalizedData.entities.phases;
 const initialColumns = normalizedData.entities.columns;
-const initialCards = normalizedData.entities.cards || [];
-const initialPhasePoints = normalizedData.entities.cardPhasePoints || [];
+const initialCards = normalizedData.entities.cards;
+const initialPhasePoints = normalizedData.entities.cardPhasePoints;
 
 
 function game(state = initialGame, action) {
