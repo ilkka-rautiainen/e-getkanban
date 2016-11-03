@@ -2,8 +2,9 @@ package fi.aalto.ekanban.builders;
 
 import fi.aalto.ekanban.models.db.games.Board;
 import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.repositories.BaseCardRepository;
 import fi.aalto.ekanban.repositories.GameRepository;
-import sun.nio.cs.ext.GB18030;
+import fi.aalto.ekanban.repositories.PhaseRepository;
 
 public final class GameBuilder {
     private String id;
@@ -12,6 +13,7 @@ public final class GameBuilder {
     private Integer currentDay;
 
     private GameBuilder() {
+        currentDay = 1;
     }
 
     public static GameBuilder aGame() {
@@ -38,12 +40,25 @@ public final class GameBuilder {
         return this;
     }
 
+    public GameBuilder withNormalDifficultyDefaults(String playerName, BaseCardRepository baseCardRepository,
+                                                    PhaseRepository phaseRepository) {
+        this.playerName = playerName;
+        this.board = BoardBuilder.aBoard()
+                .withNormalDifficultyDefaults(baseCardRepository, phaseRepository)
+                .build();
+        return this;
+    }
+
+    public GameBuilder withNormalDifficultyMockDefaults(String playerName) {
+        this.playerName = playerName;
+        this.board = BoardBuilder.aBoard()
+                .withNormalDifficultyMockDefaults()
+                .build();
+        return this;
+    }
+
     public Game create(GameRepository gameRepository) {
-        Game game = new Game();
-        game.setId(id);
-        game.setPlayerName(playerName);
-        game.setBoard(board);
-        game.setCurrentDay(currentDay);
+        Game game = build();
         return gameRepository.save(game);
     }
 

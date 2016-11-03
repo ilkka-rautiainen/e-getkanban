@@ -1,9 +1,9 @@
 package fi.aalto.ekanban.builders;
 
-import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE;
+import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE_ID;
+import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE_ID;
+import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE_ID;
+import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE_ID;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,45 +45,51 @@ public final class PhaseBuilder {
         return this;
     }
 
-    public PhaseBuilder analysis() {
+    public PhaseBuilder withAnalysisDefaults() {
+        this.id = ANALYSIS_PHASE_ID;
         this.wipLimit = 2;
         this.columns = Arrays.asList(
                 ColumnBuilder.aColumn().inProgress().build(),
                 ColumnBuilder.aColumn().done().build());
-        this.name = ANALYSIS_PHASE;
+        this.name = "Analysis";
         return this;
     }
 
-    public PhaseBuilder development() {
+    public PhaseBuilder withDevelopmentDefaults() {
+        this.id = DEVELOPMENT_PHASE_ID;
         this.wipLimit = 4;
         this.columns = Arrays.asList(
                 ColumnBuilder.aColumn().inProgress().build(),
                 ColumnBuilder.aColumn().done().build()
         );
-        this.name = DEVELOPMENT_PHASE;
+        this.name = "Development";
         return this;
     }
 
-    public PhaseBuilder test() {
+    public PhaseBuilder withTestDefaults() {
+        this.id = TEST_PHASE_ID;
         this.wipLimit = 3;
         this.columns = Arrays.asList(ColumnBuilder.aColumn().withCards(new ArrayList<>()).build());
-        this.name = TEST_PHASE;
+        this.name = "Test";
         return this;
     }
 
-    public PhaseBuilder deployed() {
+    public PhaseBuilder withDeployedDefaults() {
+        this.id = DEPLOYED_PHASE_ID;
         this.columns = Arrays.asList(ColumnBuilder.aColumn().withCards(new ArrayList<>()).build());
-        this.name = DEPLOYED_PHASE;
+        this.name = "Deployed";
         return this;
     }
 
-    public Phase create(PhaseRepository repository) {
-        Phase phase = new Phase();
-        phase.setId(id);
-        phase.setColumns(columns);
-        phase.setWipLimit(wipLimit);
-        phase.setName(name);
-        return repository.save(phase);
+    public Phase createIfNotCreated(PhaseRepository repository) {
+        Phase phase = repository.findOne(id);
+        if (phase != null) {
+            return phase;
+        }
+        else {
+            phase = build();
+            return repository.save(phase);
+        }
     }
 
     public Phase build() {

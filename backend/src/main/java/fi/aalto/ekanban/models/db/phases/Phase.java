@@ -84,29 +84,32 @@ public class Phase {
         return result;
     }
 
-    public boolean containsColumnWithId(String columnId) {
+    public Boolean containsColumnWithId(String columnId) {
         return columns.stream().anyMatch(column -> column.getId().equals(columnId));
     }
 
-    public boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId)
+    public Boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId)
             throws ColumnNotFoundException {
         Column referenceColumn = getColumnById(referenceColumnId);
         Column inspectedOtherColumn = getColumnById(inspectedOtherColumnId);
         return columns.indexOf(referenceColumn) == columns.indexOf(inspectedOtherColumn) - 1;
     }
 
-    public boolean isTheLastColumn(String columnId) throws ColumnNotFoundException {
+    public Boolean isTheLastColumn(String columnId) throws ColumnNotFoundException {
         Column column = getColumnById(columnId);
         return columns.indexOf(column) == columns.size() - 1;
     }
 
-    public boolean isTheFirstColumn(String columnId) throws ColumnNotFoundException {
+    public Boolean isTheFirstColumn(String columnId) throws ColumnNotFoundException {
         Column column = getColumnById(columnId);
         return columns.indexOf(column) == 0;
     }
 
     @JsonIgnore
-    public boolean isFullWip() {
+    public Boolean isFullWip() {
+        if (wipLimit == null) {
+            return false;
+        }
         return getTotalAmountOfCards() >= wipLimit;
     }
 
@@ -114,7 +117,7 @@ public class Phase {
         return columns.stream().collect(Collectors.summingInt(column -> column.getCards().size()));
     }
 
-    public boolean isValid() {
+    public Boolean isValid() {
         return columns != null && columns.stream().allMatch(Column::isValid);
     }
 

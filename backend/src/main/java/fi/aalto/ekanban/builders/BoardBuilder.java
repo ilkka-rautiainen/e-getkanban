@@ -8,6 +8,8 @@ import fi.aalto.ekanban.models.db.games.Board;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.EventCard;
 import fi.aalto.ekanban.models.db.phases.Phase;
+import fi.aalto.ekanban.repositories.BaseCardRepository;
+import fi.aalto.ekanban.repositories.PhaseRepository;
 
 public final class BoardBuilder {
     private String id;
@@ -40,6 +42,25 @@ public final class BoardBuilder {
 
     public BoardBuilder withPhases(List<Phase> phases) {
         this.phases = phases;
+        return this;
+    }
+
+    public BoardBuilder withNormalDifficultyDefaults(BaseCardRepository baseCardRepository,
+                                                     PhaseRepository phaseRepository) {
+        this.backlogDeck = CardsBuilder.aSetOfCards()
+                .withNormalDifficultyBacklog(baseCardRepository)
+                .build();
+        this.phases = PhasesBuilder.normalDifficultyPhases(phaseRepository);
+        return this;
+    }
+
+    public BoardBuilder withNormalDifficultyMockDefaults() {
+        this.backlogDeck = CardsBuilder.aSetOfCards()
+                .withNormalDifficultyMockBacklog()
+                .build();
+        this.phases = PhasesBuilder.aSetOfPhases()
+                .withNormalDifficultyMockPhases()
+                .build();
         return this;
     }
 

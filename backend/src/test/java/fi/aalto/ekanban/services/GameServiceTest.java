@@ -3,10 +3,8 @@ package fi.aalto.ekanban.services;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE;
-import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE;
+
+import static fi.aalto.ekanban.ApplicationConstants.*;
 
 import java.util.Arrays;
 
@@ -61,20 +59,16 @@ public class GameServiceTest {
 
         GameDifficulty gameDifficulty;
         Game newGame;
+        String playerName;
 
         @Before
         public void setupContextAndCallMethod() {
             Game blankGame = GameBuilder.aGame().build();
-            String playerName = "Player";
+            playerName = "Player";
             gameDifficulty = GameDifficulty.NORMAL;
 
-            Mockito.when(gameInitService.getInitializedGame(gameDifficulty)).thenReturn(blankGame);
+            Mockito.when(gameInitService.getInitializedGame(gameDifficulty, playerName)).thenReturn(blankGame);
             Mockito.when(gameRepository.save(Mockito.any(Game.class))).thenReturn(blankGame);
-            Mockito.when(phaseRepository.findByName(ANALYSIS_PHASE)).thenReturn(PhaseBuilder.aPhase().analysis().build());
-            Mockito.when(phaseRepository.findByName(DEVELOPMENT_PHASE)).thenReturn(PhaseBuilder.aPhase().development().build());
-            Mockito.when(phaseRepository.findByName(TEST_PHASE)).thenReturn(PhaseBuilder.aPhase().test().build());
-            Mockito.when(phaseRepository.findByName(DEPLOYED_PHASE)).thenReturn(PhaseBuilder.aPhase().deployed().build());
-            Mockito.when(baseCardRepository.findAll()).thenReturn(Arrays.asList(BaseCardBuilder.aBaseCard().build()));
 
             newGame = gameService.startGame(playerName, gameDifficulty);
         }
@@ -84,10 +78,8 @@ public class GameServiceTest {
 
         @Test
         public void shouldCallOtherServices() {
-            Mockito.verify(gameInitService, Mockito.times(1)).getInitializedGame(gameDifficulty);
+            Mockito.verify(gameInitService, Mockito.times(1)).getInitializedGame(gameDifficulty, playerName);
             Mockito.verify(gameRepository, Mockito.times(1)).save(Mockito.any(Game.class));
-            Mockito.verify(phaseRepository, Mockito.times(4)).findByName(Mockito.anyString());
-            Mockito.verify(baseCardRepository, Mockito.times(1)).findAll();
         }
 
     }
