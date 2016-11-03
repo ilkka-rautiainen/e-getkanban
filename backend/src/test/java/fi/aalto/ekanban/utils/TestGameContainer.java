@@ -1,27 +1,24 @@
 package fi.aalto.ekanban.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import fi.aalto.ekanban.builders.*;
-import fi.aalto.ekanban.models.db.games.*;
-import fi.aalto.ekanban.models.db.phases.*;
+import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.models.db.phases.Column;
+import fi.aalto.ekanban.models.db.phases.Phase;
 
 public class TestGameContainer {
     private static final Integer FULL_WIP = 0;
     private static final Integer ONE_TO_FULL_WIP = 1;
-
-    private Phase analysisPhase;
-    private Phase developmentPhase;
-    private Phase testPhase;
-    private Phase deployedPhase;
-
     private Game game;
 
-    public static TestGameContainer withNormalDifficultyGame() {
+    private TestGameContainer() { }
+
+    private TestGameContainer(Game game) {
+        this.game = game;
+    }
+
+    public static TestGameContainer withNormalDifficultyMockGame() {
         TestGameContainer testGameContainer = new TestGameContainer();
-        testGameContainer.initializeWithNormalDifficultyGame();
+        testGameContainer.initializeWithNormalDifficultyMockGame();
         return testGameContainer;
     }
 
@@ -66,6 +63,13 @@ public class TestGameContainer {
         fillDevelopmentInProgressTowardsFullWip(FULL_WIP);
     }
 
+    public void addCardsWithMockPhasePointsToDevelopmentInProgress(Integer cardsToAdd) {
+        Column developmentInProgressColumn = getColumn(ColumnName.DEVELOPMENT_IN_PROGRESS);
+        for (Integer i = 0; i < cardsToAdd; i++) {
+            developmentInProgressColumn.getCards().add(CardBuilder.aCard().withMockPhasePoints().build());
+        }
+    }
+
     private void fillDevelopmentInProgressTowardsFullWip(Integer amountToLeaveUnfilled) {
         Phase development = getDevelopmentPhase();
         Integer cardsToAddUntilFullEnough = development.getWipLimit()
@@ -86,87 +90,15 @@ public class TestGameContainer {
         return getGame().getBoard().getPhases().get(1);
     }
 
-    private TestGameContainer() {
-        initPhases();
-    }
-
-    private TestGameContainer(Game game) {
-        this.game = game;
-        initPhases();
-    }
-
-    private void initPhases() {
-        analysisPhase = PhaseBuilder.aPhase().analysis().withId("1").build();
-        developmentPhase = PhaseBuilder.aPhase().development().withId("2").build();
-        testPhase = PhaseBuilder.aPhase().test().withId("3").build();
-        deployedPhase = PhaseBuilder.aPhase().deployed().withId("4").build();
-    }
-
     private Phase getTestPhase() {
         return game.getBoard().getPhases().get(2);
     }
 
-    private void initializeWithNormalDifficultyGame() {
-        List<Phase> phases = Arrays.asList(analysisPhase, developmentPhase, testPhase, deployedPhase);
-        List<Card> backlogDeck = buildBacklogDeck();
-
-        Board gameBoard = BoardBuilder.aBoard()
-                .withBacklogDeck(backlogDeck)
-                .withPhases(phases)
-                .build();
-
+    private void initializeWithNormalDifficultyMockGame() {
+        String playerName = "player";
         game = GameBuilder.aGame()
-                .withBoard(gameBoard)
-                .withPlayerName("player")
+                .withNormalDifficultyMockDefaults(playerName)
                 .build();
-    }
-
-    public void addCardsWithResourcesToDevelopmentInProgress() {
-        List<Card> cards = getColumn(ColumnName.DEVELOPMENT_IN_PROGRESS).getCards();
-        cards.add(CardBuilder.aCard()
-                .withCardPhasePoints(getCardPhasePoints())
-                .build());
-        cards.add(CardBuilder.aCard()
-                .withCardPhasePoints(getCardPhasePoints())
-                .build());
-    }
-
-    private List<Card> buildBacklogDeck() {
-        List<CardPhasePoint> cardPhasePoints = getCardPhasePoints();
-        List<Card> backlogDeck = new ArrayList<>();
-
-        for (Integer i = 0; i < 15; i=i+3) {
-            backlogDeck.add(CardBuilder.aCard()
-                    .withCardPhasePoints(cardPhasePoints)
-                    .withOrderNumber(i+1)
-                    .build());
-            backlogDeck.add(CardBuilder.aCard()
-                    .withCardPhasePoints(cardPhasePoints)
-                    .withOrderNumber(i+2)
-                    .build());
-            backlogDeck.add(CardBuilder.aCard()
-                    .withCardPhasePoints(cardPhasePoints)
-                    .withOrderNumber(i+3)
-                    .build());
-        }
-
-        return backlogDeck;
-    }
-
-    private List<CardPhasePoint> getCardPhasePoints() {
-        CardPhasePoint analysisCardPoints = CardPhasePointBuilder.aCardPhasePoint()
-                .withTotalPoints(5)
-                .withPhaseId(analysisPhase.getId())
-                .build();
-        CardPhasePoint developmentCardPoints = CardPhasePointBuilder.aCardPhasePoint()
-                .withTotalPoints(5)
-                .withPhaseId(developmentPhase.getId())
-                .build();
-        CardPhasePoint testCardPoints = CardPhasePointBuilder.aCardPhasePoint()
-                .withTotalPoints(5)
-                .withPhaseId(testPhase.getId())
-                .build();
-        return Arrays.asList(analysisCardPoints, developmentCardPoints, testCardPoints);
     }
 
 }

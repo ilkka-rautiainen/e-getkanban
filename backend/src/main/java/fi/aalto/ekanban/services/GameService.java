@@ -8,12 +8,9 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fi.aalto.ekanban.builders.*;
 import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.models.Turn;
-import fi.aalto.ekanban.models.db.gameconfigurations.BaseCard;
 import fi.aalto.ekanban.models.db.games.*;
-import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
 import fi.aalto.ekanban.repositories.GameRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
@@ -45,19 +42,12 @@ public class GameService {
 
     @Transactional
     public Game startGame(String playerName, GameDifficulty gameDifficulty) {
-        Game newGameWithDifficultyLevelOptions = gameInitService.getInitializedGame(gameDifficulty);
-        newGameWithDifficultyLevelOptions.setPlayerName(playerName);
-
-        Board gameBoard = BoardBuilder.aBoard()
-            .withBacklogDeck(initNormalCards())
-            .withPhases(initNormalPhases())
-            .build();
-
-        newGameWithDifficultyLevelOptions.setBoard(gameBoard);
-        Game createdGame = gameRepository.save(newGameWithDifficultyLevelOptions);
+        Game newGame = gameInitService.getInitializedGame(gameDifficulty, playerName);
+        Game createdGame = gameRepository.save(newGame);
         return createdGame;
     }
 
+    @Transactional
     public Game playTurn(String gameId, Turn turn) {
         Game game = gameRepository.findOne(gameId);
         if (game == null) {
@@ -66,30 +56,6 @@ public class GameService {
         Game playedGame = playerService.playTurn(game, turn);
         gameRepository.save(playedGame);
         return playedGame;
-    }
-
-    private List<Phase> initNormalPhases() {
-        Phase analysis = phaseRepository.findByName(ANALYSIS_PHASE);
-        Phase development = phaseRepository.findByName(DEVELOPMENT_PHASE);
-        Phase test = phaseRepository.findByName(TEST_PHASE);
-        Phase deployment = phaseRepository.findByName(DEPLOYED_PHASE);
-
-        return Arrays.asList(analysis, development, test, deployment);
-    }
-
-    private List<Card> initNormalCards() {
-        List<Card> backlogDeck = new ArrayList<>();
-        List<BaseCard> baseCards = baseCardRepository.findAll();
-
-        for (Integer index = 0; index < baseCards.size(); index++) {
-            BaseCard baseCard = baseCards.get(index);
-            Card cardForGameCreatedFromBaseCard = CardBuilder.aCard()
-                    .fromBaseCard(baseCard)
-                    .withOrderNumber(index+1)
-                    .build();
-            backlogDeck.add(cardForGameCreatedFromBaseCard);
-        }
-        return backlogDeck;
     }
 
 }

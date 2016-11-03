@@ -29,6 +29,9 @@ import fi.aalto.ekanban.repositories.GameRepository;
 @RunWith(HierarchicalContextRunner.class)
 public class GameControllerTest extends SpringIntegrationTest {
 
+    private static final String PLAYER_NAME_NAME = "playerName";
+    private static final String DIFFICULTY_LEVEL_NAME = "difficultyLevel";
+
     private Response response;
 
     @Autowired
@@ -54,13 +57,15 @@ public class GameControllerTest extends SpringIntegrationTest {
             @Before
             public void doRequest() {
                 response = given()
-                            .formParam("playerName", "Player")
-                            .formParam("difficultyLevel", GameDifficulty.NORMAL)
+                            .formParam(PLAYER_NAME_NAME, "Player")
+                            .formParam(DIFFICULTY_LEVEL_NAME, GameDifficulty.NORMAL)
                         .when().post(GAME_PATH);
             }
 
             @Test
-            public void shouldReturn200() { response.then().statusCode(200); }
+            public void shouldReturn200() {
+                response.then().statusCode(200);
+            }
 
             @Test
             public void shouldReturnNewGame() {
@@ -70,7 +75,9 @@ public class GameControllerTest extends SpringIntegrationTest {
 
         public class withoutPlayerName {
             @Before
-            public void doRequest() {response = given().formParam("difficultyLevel", GameDifficulty.NORMAL).when().post(GAME_PATH); }
+            public void doRequest() {
+                response = given().formParam(DIFFICULTY_LEVEL_NAME, GameDifficulty.NORMAL).when().post(GAME_PATH);
+            }
 
             @Test
             public void shouldReturn400() { response.then().statusCode(400); }
@@ -86,8 +93,8 @@ public class GameControllerTest extends SpringIntegrationTest {
             public void doRequest() {
                 String tooLongPlayerName = RandomStringUtils.randomAscii(130);
                 response = given()
-                        .formParam("playerName", tooLongPlayerName)
-                        .formParam("difficultyLevel", GameDifficulty.NORMAL)
+                        .formParam(PLAYER_NAME_NAME, tooLongPlayerName)
+                        .formParam(DIFFICULTY_LEVEL_NAME, GameDifficulty.NORMAL)
                         .when().post(GAME_PATH);
             }
 
@@ -102,7 +109,7 @@ public class GameControllerTest extends SpringIntegrationTest {
 
         public class withoutGameDifficulty {
             @Before
-            public void doRequest() { response = given().formParam("playerName", "Player").when().post(GAME_PATH); }
+            public void doRequest() { response = given().formParam(PLAYER_NAME_NAME, "Player").when().post(GAME_PATH); }
 
             @Test
             public void shouldReturn400() { response.then().statusCode(400); }
@@ -117,8 +124,8 @@ public class GameControllerTest extends SpringIntegrationTest {
             @Before
             public void doRequest() {
                 response = given()
-                        .formParam("playerName", "Player")
-                        .formParam("difficultyLevel", "thisisntagamedifficultyatall")
+                        .formParam(PLAYER_NAME_NAME, "Player")
+                        .formParam(DIFFICULTY_LEVEL_NAME, "thisisntagamedifficultyatall")
                         .when().post(GAME_PATH);
             }
 
@@ -140,7 +147,7 @@ public class GameControllerTest extends SpringIntegrationTest {
 
         @Before
         public void createInitialGame() {
-            normalDifficultyGameContainer = TestGameContainer.withNormalDifficultyGame();
+            normalDifficultyGameContainer = TestGameContainer.withNormalDifficultyMockGame();
             gameRepository.save(normalDifficultyGameContainer.getGame());
         }
 

@@ -9,8 +9,7 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import fi.aalto.ekanban.builders.BaseCardBuilder;
-import fi.aalto.ekanban.builders.PhaseBuilder;
+import fi.aalto.ekanban.builders.*;
 import fi.aalto.ekanban.enums.FinancialValue;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
@@ -65,10 +64,7 @@ public class ApplicationSeedTest extends SpringIntegrationTest {
 
             @Before
             public void doApplicationSeed() {
-                PhaseBuilder.aPhase().analysis().create(phaseRepository);
-                PhaseBuilder.aPhase().development().create(phaseRepository);
-                PhaseBuilder.aPhase().test().create(phaseRepository);
-                PhaseBuilder.aPhase().deployed().create(phaseRepository);
+                PhasesBuilder.aSetOfPhases().withPhasesForAllGameDifficulties().createIfNotCreated(phaseRepository);
                 phaseCountBeforeSeedAction = phaseRepository.count();
                 new ApplicationSeed(phaseRepository, baseCardRepository);
             }

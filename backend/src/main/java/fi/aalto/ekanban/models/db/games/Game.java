@@ -2,6 +2,7 @@ package fi.aalto.ekanban.models.db.games;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -79,7 +80,8 @@ public class Game {
         return result;
     }
 
-    public boolean isValid() {
+    @JsonIgnore
+    public Boolean isValid() {
         return this.board != null && this.board.isValid();
     }
 
@@ -87,7 +89,7 @@ public class Game {
         return this.board.getColumnWithId(columnId);
     }
 
-    public boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId)
+    public Boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId)
             throws ColumnNotFoundException {
         return this.board.isColumnNextAdjacent(referenceColumnId, inspectedOtherColumnId);
     }
@@ -97,11 +99,11 @@ public class Game {
         board.performMoveCardAction(moveCardAction);
     }
 
-    public boolean doesMoveExceedWIP(MoveCardAction moveCardAction) throws ColumnNotFoundException {
+    public Boolean doesMoveExceedWIP(MoveCardAction moveCardAction) throws ColumnNotFoundException {
         return board.doesMoveExceedWIP(moveCardAction);
     }
 
-    public boolean isCardInColumn(String cardId, String columnId) throws ColumnNotFoundException {
+    public Boolean isCardInColumn(String cardId, String columnId) throws ColumnNotFoundException {
         return board.isCardInColumn(cardId, columnId);
     }
 

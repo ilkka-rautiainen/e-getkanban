@@ -86,6 +86,13 @@ public final class CardBuilder {
         return this;
     }
 
+    public CardBuilder withMockPhasePoints() {
+        this.cardPhasePoints = CardPhasePointsBuilder.aSetOfCardPhasePoints()
+                .withNormalDifficultyMockPhasePoints()
+                .build();
+        return this;
+    }
+
     public CardBuilder fromBaseCard(BaseCard baseCard) {
         this.id = baseCard.getId();
         this.cardPhasePoints = baseCard.getCardPhasePoints();

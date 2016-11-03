@@ -1,19 +1,26 @@
 package fi.aalto.ekanban.services;
 
-import fi.aalto.ekanban.builders.GameBuilder;
-import fi.aalto.ekanban.enums.GameDifficulty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fi.aalto.ekanban.builders.GameBuilder;
+import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.repositories.*;
 
 @Service
 public class GameInitService {
 
-    public Game getInitializedGame(GameDifficulty gameDifficulty) {
-        Game blankGame = GameBuilder.aGame()
-                .withCurrentDay(1).build();
-        //modify the blankGame with different difficulty options in medium & advanced
-        return blankGame;
+    @Autowired
+    BaseCardRepository baseCardRepository;
+
+    @Autowired
+    PhaseRepository phaseRepository;
+
+    public Game getInitializedGame(GameDifficulty gameDifficulty, String playerName) {
+        return GameBuilder.aGame()
+                .withNormalDifficultyDefaults(playerName, baseCardRepository, phaseRepository)
+                .build();
     }
 
 }
