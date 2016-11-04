@@ -7,8 +7,9 @@ import static fi.aalto.ekanban.ApplicationConstants.APPLICATION_JSON_TYPE;
 import static fi.aalto.ekanban.ApplicationConstants.PLAY_TURN_PATH;
 import static fi.aalto.ekanban.ApplicationConstants.GAME_PATH;
 
+import java.net.HttpURLConnection;
+
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
-import fi.aalto.ekanban.models.db.games.Game;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -23,6 +24,7 @@ import fi.aalto.ekanban.SpringIntegrationTest;
 import fi.aalto.ekanban.builders.TurnBuilder;
 import fi.aalto.ekanban.utils.TestGameContainer;
 import fi.aalto.ekanban.models.Turn;
+import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.repositories.GameRepository;
 
@@ -64,7 +66,7 @@ public class GameControllerTest extends SpringIntegrationTest {
 
             @Test
             public void shouldReturn200() {
-                response.then().statusCode(200);
+                response.then().statusCode(HttpURLConnection.HTTP_OK);
             }
 
             @Test
@@ -80,7 +82,7 @@ public class GameControllerTest extends SpringIntegrationTest {
             }
 
             @Test
-            public void shouldReturn400() { response.then().statusCode(400); }
+            public void shouldReturn400() { response.then().statusCode(HttpURLConnection.HTTP_BAD_REQUEST); }
 
             @Test
             public void shouldReturnPlayerNameNotFoundInErrorDescription() {
@@ -99,7 +101,7 @@ public class GameControllerTest extends SpringIntegrationTest {
             }
 
             @Test
-            public void shouldReturn400() { response.then().statusCode(400); }
+            public void shouldReturn400() { response.then().statusCode(HttpURLConnection.HTTP_BAD_REQUEST); }
 
             @Test
             public void shouldReturnNameTooLong() {
@@ -112,7 +114,7 @@ public class GameControllerTest extends SpringIntegrationTest {
             public void doRequest() { response = given().formParam(PLAYER_NAME_NAME, "Player").when().post(GAME_PATH); }
 
             @Test
-            public void shouldReturn400() { response.then().statusCode(400); }
+            public void shouldReturn400() { response.then().statusCode(HttpURLConnection.HTTP_BAD_REQUEST); }
 
             @Test
             public void shouldReturnDifficultyLevelNotFoundInErrorDescription() {
@@ -130,7 +132,7 @@ public class GameControllerTest extends SpringIntegrationTest {
             }
 
             @Test
-            public void shouldReturn400() { response.then().statusCode(400); }
+            public void shouldReturn400() { response.then().statusCode(HttpURLConnection.HTTP_BAD_REQUEST); }
 
             @Test
             public void shouldReturnDifficultyLevelNotFoundInErrorDescription() {
@@ -170,7 +172,7 @@ public class GameControllerTest extends SpringIntegrationTest {
 
             @Test
             public void shouldReturn200() {
-                response.then().statusCode(200);
+                response.then().statusCode(HttpURLConnection.HTTP_OK);
             }
 
             @Test
@@ -191,7 +193,7 @@ public class GameControllerTest extends SpringIntegrationTest {
 
             @Test
             public void shouldReturn404() {
-                response.then().statusCode(404);
+                response.then().statusCode(HttpURLConnection.HTTP_NOT_FOUND);
             }
 
             @Test
@@ -213,7 +215,7 @@ public class GameControllerTest extends SpringIntegrationTest {
 
             @Test
             public void shouldReturn400() {
-                response.then().statusCode(400);
+                response.then().statusCode(HttpURLConnection.HTTP_BAD_REQUEST);
             }
         }
 
@@ -228,7 +230,7 @@ public class GameControllerTest extends SpringIntegrationTest {
 
             @Test
             public void shouldReturn400() {
-                response.then().statusCode(400);
+                response.then().statusCode(HttpURLConnection.HTTP_BAD_REQUEST);
             }
         }
 

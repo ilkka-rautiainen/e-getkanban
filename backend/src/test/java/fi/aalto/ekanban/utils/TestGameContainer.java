@@ -10,6 +10,10 @@ import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Column;
 import fi.aalto.ekanban.models.db.phases.Phase;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class TestGameContainer {
     private static final Integer FULL_WIP = 0;
     private static final Integer ONE_TO_FULL_WIP = 1;
@@ -128,7 +132,7 @@ public class TestGameContainer {
         return getGame().getBoard().getPhases().get(1);
     }
 
-    private Phase getTestPhase() {
+    public Phase getTestPhase() {
         return game.getBoard().getPhases().get(2);
     }
 

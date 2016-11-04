@@ -34,19 +34,15 @@ public class CardsBuilder {
     }
 
     public CardsBuilder withNormalDifficultyMockBacklog() {
-        List<CardPhasePoint> phasePoints = CardPhasePointsBuilder.aSetOfCardPhasePoints()
-                .withNormalDifficultyMockPhasePoints()
-                .build();
-
         IntStream.range(0, 5).map(i -> i*3).forEach(i -> {
             cardBuilders.add(CardBuilder.aCard()
-                    .withCardPhasePoints(phasePoints)
+                    .withMockPhasePoints()
                     .withOrderNumber(i+1));
             cardBuilders.add(CardBuilder.aCard()
-                    .withCardPhasePoints(phasePoints)
+                    .withMockPhasePoints()
                     .withOrderNumber(i+2));
             cardBuilders.add(CardBuilder.aCard()
-                    .withCardPhasePoints(phasePoints)
+                    .withMockPhasePoints()
                     .withOrderNumber(i+3));
         });
 
