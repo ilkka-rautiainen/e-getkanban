@@ -71,11 +71,11 @@ public class Column {
         return result;
     }
 
-    public boolean isValid() {
+    public Boolean isValid() {
         return cards != null;
     }
 
-    public boolean hasCard(String cardId) {
+    public Boolean hasCard(String cardId) {
         return cards.stream().anyMatch(card -> card.getId().equals(cardId));
     }
 

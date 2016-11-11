@@ -22,6 +22,7 @@ import fi.aalto.ekanban.builders.*;
 import fi.aalto.ekanban.models.*;
 import fi.aalto.ekanban.models.db.games.*;
 import fi.aalto.ekanban.models.db.phases.*;
+import fi.aalto.ekanban.utils.TestGameContainer;
 
 @RunWith(HierarchicalContextRunner.class)
 public class PlayerServiceTest {
@@ -37,7 +38,7 @@ public class PlayerServiceTest {
 
     @Before
     public void initGame() {
-        initialGameContainer = TestGameContainer.withNormalDifficultyGame();
+        initialGameContainer = TestGameContainer.withNormalDifficultyMockGame();
     }
 
     public class moveCards {
@@ -641,7 +642,7 @@ public class PlayerServiceTest {
         @Before
         public void init() {
             phase = initialGameContainer.getDevelopmentPhase();
-            initialGameContainer.addCardsWithResourcesToDevelopmentInProgress();
+            initialGameContainer.addCardsWithMockPhasePointsToDevelopmentInProgress(2);
             firstCard = initialGameContainer.getColumn(TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS)
                     .getCards().get(0);
         }

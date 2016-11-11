@@ -17,7 +17,7 @@ public class PlayerService {
     protected static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
     public Game playTurn(Game game, Turn turn) {
-        return null;
+        return game;
     }
 
     public static Game adjustWipLimits(Game game, AdjustWipLimitsAction adjustWipLimitsAction) {
@@ -88,7 +88,7 @@ public class PlayerService {
         return game;
     }
 
-    private static boolean isValidDrawFromBacklogAction(Phase firstPhase, DrawFromBacklogAction drawAction) {
+    private static Boolean isValidDrawFromBacklogAction(Phase firstPhase, DrawFromBacklogAction drawAction) {
         return !firstPhase.isFullWip()
                 && drawAction.getIndexToPlaceCardAt() >= 0
                 && drawAction.getIndexToPlaceCardAt() <= firstPhase.getColumns().get(0).getCards().size();
