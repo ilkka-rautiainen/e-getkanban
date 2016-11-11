@@ -26,10 +26,6 @@ public class GameService {
 
     @Autowired
     private GameRepository gameRepository;
-    @Autowired
-    private PhaseRepository phaseRepository;
-    @Autowired
-    private BaseCardRepository baseCardRepository;
 
     @Autowired
     public GameService(GameInitService gameInitService,
