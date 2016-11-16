@@ -19,6 +19,7 @@ import fi.aalto.ekanban.models.Turn;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.services.GameService;
 
+@CrossOrigin
 @RestController
 @RequestMapping(GAME_PATH)
 @Validated
