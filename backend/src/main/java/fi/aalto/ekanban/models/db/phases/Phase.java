@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import fi.aalto.ekanban.enums.TrackLinePlace;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -32,6 +33,8 @@ public class Phase {
     private Boolean isWorkPhase;
     @Field
     private String color;
+    @Field
+    private TrackLinePlace trackLinePlace;
 
     public String getId() {
         return id;
@@ -89,6 +92,14 @@ public class Phase {
         this.color = color;
     }
 
+    public TrackLinePlace getTrackLinePlace() {
+        return trackLinePlace;
+    }
+
+    public void setTrackLinePlace(TrackLinePlace trackLinePlace) {
+        this.trackLinePlace = trackLinePlace;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,7 +113,9 @@ public class Phase {
         if (columns != null ? !columns.equals(phase.columns) : phase.columns != null) return false;
         if (wipLimit != null ? !wipLimit.equals(phase.wipLimit) : phase.wipLimit != null) return false;
         if (shortName != null ? !shortName.equals(phase.shortName) : phase.shortName != null) return false;
+        if (isWorkPhase != null ? !isWorkPhase.equals(phase.isWorkPhase) : phase.isWorkPhase != null) return false;
         if (color != null ? !color.equals(phase.color) : phase.color != null) return false;
+        if (trackLinePlace != null ? !trackLinePlace.equals(phase.trackLinePlace) : phase.trackLinePlace != null) return false;
         return name != null ? name.equals(phase.name) : phase.name == null;
 
     }
@@ -114,7 +127,9 @@ public class Phase {
         result = 31 * result + (wipLimit != null ? wipLimit.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (shortName != null ? shortName.hashCode() : 0);
+        result = 31 * result + (isWorkPhase != null ? isWorkPhase.hashCode() : 0);
         result = 31 * result + (color != null ? color.hashCode() : 0);
+        result = 31 * result + (trackLinePlace != null ? trackLinePlace.hashCode() : 0);
         return result;
     }
 
