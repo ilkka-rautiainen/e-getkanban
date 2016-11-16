@@ -20,6 +20,7 @@ public final class PhaseBuilder {
     private String name;
     private String shortName;
     private Boolean isWorkPhase;
+    private String color;
 
     private PhaseBuilder() {}
 
@@ -52,6 +53,11 @@ public final class PhaseBuilder {
         return this;
     }
 
+    public PhaseBuilder withColor(String color) {
+        this.color = color;
+        return this;
+    }
+
     public PhaseBuilder withAnalysisDefaults(Phase nextPhase) {
         this.id = ANALYSIS_PHASE_ID;
         this.wipLimit = 2;
@@ -61,6 +67,7 @@ public final class PhaseBuilder {
         this.name = "Analysis";
         this.shortName = "An";
         this.isWorkPhase = true;
+        this.color = "ff0000";
         return this;
     }
 
@@ -74,6 +81,7 @@ public final class PhaseBuilder {
         this.name = "Development";
         this.shortName = "Dev";
         this.isWorkPhase = true;
+        this.color = "0000ff";
         return this;
     }
 
@@ -84,6 +92,7 @@ public final class PhaseBuilder {
         this.name = "Test";
         this.shortName = "Test";
         this.isWorkPhase = true;
+        this.color = "00ff00";
         return this;
     }
 
@@ -93,6 +102,7 @@ public final class PhaseBuilder {
         this.name = "Deployed";
         this.shortName = "Depl";
         this.isWorkPhase = false;
+        this.color = "000000";
         return this;
     }
 
@@ -115,6 +125,7 @@ public final class PhaseBuilder {
         phase.setName(name);
         phase.setShortName(shortName);
         phase.setIsWorkPhase(isWorkPhase);
+        phase.setColor(color);
         return phase;
     }
 }

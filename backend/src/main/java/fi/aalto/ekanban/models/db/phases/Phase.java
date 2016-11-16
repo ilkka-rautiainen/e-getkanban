@@ -30,6 +30,8 @@ public class Phase {
     private String shortName;
     @Field
     private Boolean isWorkPhase;
+    @Field
+    private String color;
 
     public String getId() {
         return id;
@@ -79,6 +81,14 @@ public class Phase {
         isWorkPhase = workPhase;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,6 +102,7 @@ public class Phase {
         if (columns != null ? !columns.equals(phase.columns) : phase.columns != null) return false;
         if (wipLimit != null ? !wipLimit.equals(phase.wipLimit) : phase.wipLimit != null) return false;
         if (shortName != null ? !shortName.equals(phase.shortName) : phase.shortName != null) return false;
+        if (color != null ? !color.equals(phase.color) : phase.color != null) return false;
         return name != null ? name.equals(phase.name) : phase.name == null;
 
     }
@@ -103,6 +114,7 @@ public class Phase {
         result = 31 * result + (wipLimit != null ? wipLimit.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (shortName != null ? shortName.hashCode() : 0);
+        result = 31 * result + (color != null ? color.hashCode() : 0);
         return result;
     }
 
