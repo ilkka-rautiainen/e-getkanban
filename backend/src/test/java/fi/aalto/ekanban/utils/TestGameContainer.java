@@ -1,7 +1,5 @@
 package fi.aalto.ekanban.utils;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import fi.aalto.ekanban.builders.CardBuilder;
@@ -12,7 +10,6 @@ import fi.aalto.ekanban.models.db.phases.Phase;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TestGameContainer {
     private static final Integer FULL_WIP = 0;
@@ -102,6 +99,11 @@ public class TestGameContainer {
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.IN_PROGRESS_FULL);
     }
 
+    public void fillLastWorkPhaseToFullWithReadyCards() {
+        Phase lastWorkPhase = getLastWorkPhase();
+        PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.READY_FULL);
+    }
+
     public void fillLastWorkPhaseWithSomeReadyCards() {
         Phase lastWorkPhase = getLastWorkPhase();
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.READY_SOME);
@@ -134,6 +136,10 @@ public class TestGameContainer {
 
     public Phase getTestPhase() {
         return game.getBoard().getPhases().get(2);
+    }
+
+    public Phase getDeployedPhase() {
+        return game.getBoard().getPhases().get(3);
     }
 
     private void initializeWithNormalDifficultyMockGame() {
