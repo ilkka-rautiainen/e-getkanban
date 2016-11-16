@@ -26,6 +26,10 @@ public class Phase {
 
     @Field
     private String name;
+    @Field
+    private String shortName;
+    @Field
+    private Boolean isWorkPhase;
 
     public String getId() {
         return id;
@@ -59,6 +63,22 @@ public class Phase {
         this.name = name;
     }
 
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
+    public Boolean getIsWorkPhase() {
+        return isWorkPhase;
+    }
+
+    public void setIsWorkPhase(Boolean workPhase) {
+        isWorkPhase = workPhase;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,6 +91,7 @@ public class Phase {
         if (id != null ? !id.equals(phase.id) : phase.id != null) return false;
         if (columns != null ? !columns.equals(phase.columns) : phase.columns != null) return false;
         if (wipLimit != null ? !wipLimit.equals(phase.wipLimit) : phase.wipLimit != null) return false;
+        if (shortName != null ? !shortName.equals(phase.shortName) : phase.shortName != null) return false;
         return name != null ? name.equals(phase.name) : phase.name == null;
 
     }
@@ -81,6 +102,7 @@ public class Phase {
         result = 31 * result + (columns != null ? columns.hashCode() : 0);
         result = 31 * result + (wipLimit != null ? wipLimit.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (shortName != null ? shortName.hashCode() : 0);
         return result;
     }
 
