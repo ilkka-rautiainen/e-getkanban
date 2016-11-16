@@ -23,7 +23,7 @@ import fi.aalto.ekanban.services.MoveCardsAI.MoveCardsAIService;
 import fi.aalto.ekanban.utils.TestGameContainer;
 
 @RunWith(HierarchicalContextRunner.class)
-public class MoveCardsAIIntegrationTest {
+public class MoveCardsAIServiceIntegrationTest {
 
     private static MoveCardsAIService moveCardsAIService;
 
@@ -38,7 +38,6 @@ public class MoveCardsAIIntegrationTest {
     @Before
     public void init() {
         initialGameContainer = TestGameContainer.withNormalDifficultyMockGame();
-        moveCardsAIService = new MoveCardsAIService();
     }
 
     public class withLastWorkPhaseWithCardsInProgress {

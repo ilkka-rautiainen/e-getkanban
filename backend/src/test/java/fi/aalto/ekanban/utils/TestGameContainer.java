@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import fi.aalto.ekanban.builders.CardBuilder;
 import fi.aalto.ekanban.builders.GameBuilder;
+import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Column;
 import fi.aalto.ekanban.models.db.phases.Phase;
@@ -117,6 +118,11 @@ public class TestGameContainer {
     public void fillLastWorkPhaseWithSomeAlmostReadyCards() {
         Phase lastWorkPhase = getLastWorkPhase();
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.ALMOST_READY_SOME);
+    }
+
+    public void removeAllButOneCardFromBacklog() {
+        List<Card> backlogDeck = game.getBoard().getBacklogDeck();
+        backlogDeck.removeAll(backlogDeck.subList(1, backlogDeck.size()));
     }
 
     public void addCardsWithMockPhasePointsToDevelopmentInProgress(Integer cardsToAdd) {
