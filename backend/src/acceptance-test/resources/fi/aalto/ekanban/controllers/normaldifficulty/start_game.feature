@@ -26,11 +26,11 @@ Feature: Start Game
           And 1. phase in board is Analysis
             And the phase Analysis should have 2 column(s)
               And 1. column in phase Analysis is In Progress
-              And 2. column in phase Analysis is Done
+              And 2. column in phase Analysis is Waiting for Development
           And 2. phase in board is Development
             And the phase Development should have 2 column(s)
               And 1. column in phase Development is In Progress
-              And 2. column in phase Development is Done
+              And 2. column in phase Development is Waiting for Test
           And 3. phase in board is Test
             And the phase Test should have 1 column(s)
           And 4. phase in board is Deployed
