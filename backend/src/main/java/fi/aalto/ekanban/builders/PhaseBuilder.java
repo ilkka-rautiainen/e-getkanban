@@ -46,23 +46,23 @@ public final class PhaseBuilder {
         return this;
     }
 
-    public PhaseBuilder withAnalysisDefaults() {
+    public PhaseBuilder withAnalysisDefaults(Phase nextPhase) {
         this.id = ANALYSIS_PHASE_ID;
         this.wipLimit = 2;
         this.columns = Arrays.asList(
                 ColumnBuilder.aColumn().inProgress().build(),
-                ColumnBuilder.aColumn().done().build());
+                ColumnBuilder.aColumn().waitingForNext(nextPhase).build());
         this.name = "Analysis";
         this.isWorkPhase = true;
         return this;
     }
 
-    public PhaseBuilder withDevelopmentDefaults() {
+    public PhaseBuilder withDevelopmentDefaults(Phase nextPhase) {
         this.id = DEVELOPMENT_PHASE_ID;
         this.wipLimit = 4;
         this.columns = Arrays.asList(
                 ColumnBuilder.aColumn().inProgress().build(),
-                ColumnBuilder.aColumn().done().build()
+                ColumnBuilder.aColumn().waitingForNext(nextPhase).build()
         );
         this.name = "Development";
         this.isWorkPhase = true;

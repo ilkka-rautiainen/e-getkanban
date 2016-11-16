@@ -29,18 +29,28 @@ public class PhasesBuilder {
     }
 
     public PhasesBuilder withPhasesForAllGameDifficulties() {
-        phaseBuilders.add(PhaseBuilder.aPhase().withAnalysisDefaults());
-        phaseBuilders.add(PhaseBuilder.aPhase().withDevelopmentDefaults());
-        phaseBuilders.add(PhaseBuilder.aPhase().withTestDefaults());
-        phaseBuilders.add(PhaseBuilder.aPhase().withDeployedDefaults());
+        PhaseBuilder deployedBuilder = PhaseBuilder.aPhase().withDeployedDefaults();
+        PhaseBuilder testBuilder = PhaseBuilder.aPhase().withTestDefaults();
+        PhaseBuilder developmentBuilder = PhaseBuilder.aPhase().withDevelopmentDefaults(testBuilder.build());
+        PhaseBuilder analysisBuilder = PhaseBuilder.aPhase().withAnalysisDefaults(developmentBuilder.build());
+
+        phaseBuilders.add(analysisBuilder);
+        phaseBuilders.add(developmentBuilder);
+        phaseBuilders.add(testBuilder);
+        phaseBuilders.add(deployedBuilder);
         return this;
     }
 
     public PhasesBuilder withNormalDifficultyMockPhases() {
-        phaseBuilders.add(PhaseBuilder.aPhase().withAnalysisDefaults());
-        phaseBuilders.add(PhaseBuilder.aPhase().withDevelopmentDefaults());
-        phaseBuilders.add(PhaseBuilder.aPhase().withTestDefaults());
-        phaseBuilders.add(PhaseBuilder.aPhase().withDeployedDefaults());
+        PhaseBuilder deployedBuilder = PhaseBuilder.aPhase().withDeployedDefaults();
+        PhaseBuilder testBuilder = PhaseBuilder.aPhase().withTestDefaults();
+        PhaseBuilder developmentBuilder = PhaseBuilder.aPhase().withDevelopmentDefaults(testBuilder.build());
+        PhaseBuilder analysisBuilder = PhaseBuilder.aPhase().withAnalysisDefaults(developmentBuilder.build());
+
+        phaseBuilders.add(analysisBuilder);
+        phaseBuilders.add(developmentBuilder);
+        phaseBuilders.add(testBuilder);
+        phaseBuilders.add(deployedBuilder);
         return this;
     }
 

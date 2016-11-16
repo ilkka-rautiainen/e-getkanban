@@ -1,11 +1,12 @@
 package fi.aalto.ekanban.builders;
 
 import static fi.aalto.ekanban.ApplicationConstants.IN_PROGRESS_COLUMN;
-import static fi.aalto.ekanban.ApplicationConstants.DONE_COLUMN;
+import static fi.aalto.ekanban.ApplicationConstants.WAITING_FOR_NEXT_TEMPLATE;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import fi.aalto.ekanban.models.db.phases.Phase;
 import org.bson.types.ObjectId;
 
 import fi.aalto.ekanban.models.db.games.Card;
@@ -45,10 +46,14 @@ public final class ColumnBuilder {
         return this;
     }
 
-    public ColumnBuilder done() {
-        this.name = DONE_COLUMN;
+    public ColumnBuilder waitingForNext(Phase nextPhase) {
+        this.name = generateWaitingForNextName(nextPhase);
         this.cards = new ArrayList<>();
         return this;
+    }
+
+    private String generateWaitingForNextName(Phase nextPhase) {
+        return WAITING_FOR_NEXT_TEMPLATE + nextPhase.getName();
     }
 
     public Column build() {

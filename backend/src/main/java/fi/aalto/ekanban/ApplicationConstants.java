@@ -12,6 +12,6 @@ public class ApplicationConstants {
     public static final String DEPLOYED_PHASE_ID = "DEPLOYED";
 
     public static final String IN_PROGRESS_COLUMN = "In Progress";
-    public static final String DONE_COLUMN = "Done";
+    public static final String WAITING_FOR_NEXT_TEMPLATE = "Waiting for ";
 
 }
