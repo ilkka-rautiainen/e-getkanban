@@ -18,6 +18,7 @@ public final class PhaseBuilder {
     private List<Column> columns;
     private Integer wipLimit;
     private String name;
+    private String shortName;
     private Boolean isWorkPhase;
 
     private PhaseBuilder() {}
@@ -46,6 +47,11 @@ public final class PhaseBuilder {
         return this;
     }
 
+    public PhaseBuilder withShortName(String shortName) {
+        this.shortName = shortName;
+        return this;
+    }
+
     public PhaseBuilder withAnalysisDefaults(Phase nextPhase) {
         this.id = ANALYSIS_PHASE_ID;
         this.wipLimit = 2;
@@ -53,6 +59,7 @@ public final class PhaseBuilder {
                 ColumnBuilder.aColumn().inProgress().build(),
                 ColumnBuilder.aColumn().waitingForNext(nextPhase).build());
         this.name = "Analysis";
+        this.shortName = "An";
         this.isWorkPhase = true;
         return this;
     }
@@ -65,6 +72,7 @@ public final class PhaseBuilder {
                 ColumnBuilder.aColumn().waitingForNext(nextPhase).build()
         );
         this.name = "Development";
+        this.shortName = "Dev";
         this.isWorkPhase = true;
         return this;
     }
@@ -74,6 +82,7 @@ public final class PhaseBuilder {
         this.wipLimit = 3;
         this.columns = Arrays.asList(ColumnBuilder.aColumn().withCards(new ArrayList<>()).build());
         this.name = "Test";
+        this.shortName = "Test";
         this.isWorkPhase = true;
         return this;
     }
@@ -82,6 +91,7 @@ public final class PhaseBuilder {
         this.id = DEPLOYED_PHASE_ID;
         this.columns = Arrays.asList(ColumnBuilder.aColumn().withCards(new ArrayList<>()).build());
         this.name = "Deployed";
+        this.shortName = "Depl";
         this.isWorkPhase = false;
         return this;
     }
@@ -103,6 +113,7 @@ public final class PhaseBuilder {
         phase.setColumns(columns);
         phase.setWipLimit(wipLimit);
         phase.setName(name);
+        phase.setShortName(shortName);
         phase.setIsWorkPhase(isWorkPhase);
         return phase;
     }
