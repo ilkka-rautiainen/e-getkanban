@@ -20,6 +20,9 @@ public class PlayerService {
     @Autowired
     MoveCardsAIService moveCardsAIService;
 
+    @Autowired
+    DrawFromBacklogAIService drawFromBacklogAIService;
+
     protected static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
     public Game playTurn(Game game, Turn turn) {
@@ -34,10 +37,19 @@ public class PlayerService {
 
     private Game playTurnNormal(Game game) {
         // TODO: assign resources
-        List<MoveCardAction> moveCardActions = moveCardsAIService.getMoveCardsActions(game);
-        game = moveCards(game, moveCardActions);
-        // TODO: draw from backlog
+        game = moveCardsWithAI(game);
+        game = drawFromBacklogWithAI(game);
         return game;
+    }
+
+    private Game moveCardsWithAI(Game game) {
+        List<MoveCardAction> moveCardActions = moveCardsAIService.getMoveCardsActions(game);
+        return moveCards(game, moveCardActions);
+    }
+
+    private Game drawFromBacklogWithAI(Game game) {
+        List<DrawFromBacklogAction> drawFromBacklogActions = drawFromBacklogAIService.getDrawFromBacklogActions(game);
+        return drawFromBacklog(game, drawFromBacklogActions);
     }
 
     public static Game adjustWipLimits(Game game, AdjustWipLimitsAction adjustWipLimitsAction) {
