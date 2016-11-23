@@ -69,7 +69,9 @@
     "react-flexbox-grid": "^0.10.2",
     "react-redux": "^4.4.5",
     "react-tap-event-plugin": "^1.0.0",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "redux-observable": "^0.12.1",
+    "rxjs": "^5.0.0-rc.2"
   },
   "scripts": {
     "start": "node scripts/start.js",

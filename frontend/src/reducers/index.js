@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import { normalize, Schema, arrayOf } from 'normalizr';
-import initialData from './initialData';
+import { Schema, arrayOf } from 'normalizr';
+import { SET_GAME_DATA } from '../actionTypes';
 
-const gameSchema = new Schema('games');
+export const gameSchema = new Schema('games');
 const boardSchema = new Schema('boards');
 const phaseSchema = new Schema('phases');
 const columnSchema = new Schema('columns');
@@ -29,55 +29,60 @@ gameSchema.define({
   board: boardSchema
 });
 
-const normalizedData = normalize(initialData, gameSchema);
-
-const initialGame = normalizedData.entities.games[normalizedData.result];
-const initialBoard = normalizedData.entities.boards[initialGame.board];
-const initialPhases = normalizedData.entities.phases;
-const initialColumns = normalizedData.entities.columns;
-const initialCards = normalizedData.entities.cards;
-const initialPhasePoints = normalizedData.entities.cardPhasePoints;
-
-
-function game(state = initialGame, action) {
+function game(state = null, action) {
   switch (action.type) {
+    case SET_GAME_DATA:
+      return action.payload.game;
+    default:
+      return state;
+  }
+}
+
+function board(state = null, action) {
+  switch (action.type) {
+    case SET_GAME_DATA:
+      return action.payload.board;
     default:
       return state
   }
 }
 
-function board(previousState = initialBoard, action) {
+function phases(state = null, action) {
   switch (action.type) {
+    case SET_GAME_DATA:
+      return action.payload.phases;
     default:
-      return previousState
+      return state
   }
 }
 
-function phases(previousState = initialPhases, action) {
+function columns(state = null, action) {
   switch (action.type) {
+    case SET_GAME_DATA:
+      return action.payload.columns;
     default:
-      return previousState
+      return state
   }
 }
 
-function columns(previousState = initialColumns, action) {
+function cards(state = null, action) {
   switch (action.type) {
+    case SET_GAME_DATA:
+      return action.payload.cards;
     default:
-      return previousState
+      return state;
   }
 }
 
-function cards(previousState = initialCards, action) {
+function cardPhasePoints(state = null, action) {
   switch (action.type) {
+    case SET_GAME_DATA:
+      if (action.payload.phasePoints !== undefined)
+        return action.payload.phasePoints;
+      else
+        return state;
     default:
-      return previousState;
-  }
-}
-
-function cardPhasePoints(previousState = initialPhasePoints, action) {
-  switch (action.type) {
-    default:
-      return previousState;
+      return state;
   }
 }
 

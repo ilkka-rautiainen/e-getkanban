@@ -4,36 +4,25 @@ import { Row } from 'react-flexbox-grid';
 import PhaseContainer from '../PhaseContainer/PhaseContainer';
 import './Board.scss';
 
-class Board extends React.Component {
-  static propTypes = {
-    phases: PropTypes.objectOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      columns: PropTypes.array.isRequired
-    }).isRequired).isRequired
-  };
-
-  constructor({ phases, totalColumns }) {
-    super();
-    this.phases = phases;
-    this.totalColumns = totalColumns;
-  }
-
-  render() {
-    return <div className="board">
+const Board = ({ phases }) => {
+  return <div className="board">
       <Row className="phase-row">
-        { Object.keys(this.phases).map(phaseId => {
+        { phases.map(phaseId => {
           return <PhaseContainer
             key={phaseId}
             id={phaseId} />
         })}
       </Row>
-    </div>
-  }
-}
+  </div>
+};
+
+Board.propTypes = {
+  phases: PropTypes.arrayOf(PropTypes.string).isRequired
+};
 
 const mapStateToProps = (state) => {
   return {
-    phases: state.phases,
+    phases: state.board.phases,
     totalColumns: state.columns.length
   }
 };

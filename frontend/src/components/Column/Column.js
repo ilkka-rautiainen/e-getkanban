@@ -4,12 +4,16 @@ import ColumnCards from '../ColumnCards/ColumnCards';
 import './Column.scss';
 
 const Column = ({ column }) => {
-  return <div className="column">
-    <div className="column-header">
-      <div className="name">{ column.name }</div>
+  if (column) {
+    return <div className="column">
+      <div className="column-header">
+        <div className="name">{ column.name }</div>
+      </div>
+      <ColumnCards columnCardIds={column.cards} />
     </div>
-    <ColumnCards columnCardIds={column.cards} />
-  </div>
+  } else {
+    return null;
+  }
 };
 
 Column.propTypes = {

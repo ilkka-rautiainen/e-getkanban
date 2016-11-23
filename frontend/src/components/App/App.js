@@ -1,12 +1,13 @@
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import GameContainer from '../GameContainer/GameContainer';
 import './App.scss';
-import Game from '../Game/Game';
 
 export default () => (
   <MuiThemeProvider>
     <div className="app">
-      <Game/>
+      <GameContainer/>
     </div>
   </MuiThemeProvider>
 );
+
