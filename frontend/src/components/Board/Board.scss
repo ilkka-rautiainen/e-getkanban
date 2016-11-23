@@ -2,9 +2,11 @@
 
 .board {
   flex: 1;
-  border: 2px solid $board-border-color;
+  border: 5px outset $board-border-color;
   border-radius: 5px;
   min-width: $board-min-width;
+  background-color: #E8E8E8;
+  box-shadow: 5px 5px 5px #888888;
 
   .phase-row {
     height: 100%;

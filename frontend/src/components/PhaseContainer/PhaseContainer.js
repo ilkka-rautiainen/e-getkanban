@@ -30,19 +30,24 @@ class PhaseContainer extends React.Component {
   }
 
   render() {
-    return <Col xs className={this.className}>
-      {this.phase.columns.length === 1 ?
-        <PhaseWithSingleColumn phase={this.phase} column={this.firstColumn} /> :
-        <PhaseWithTwoColumns phase={this.phase} />}
-    </Col>
+    if (this.phase) {
+      return <Col xs className={this.className}>
+        {this.phase.columns.length === 1 ?
+          <PhaseWithSingleColumn phase={this.phase} column={this.firstColumn} /> :
+          <PhaseWithTwoColumns phase={this.phase} />}
+      </Col>
+    } else {
+      return null;
+    }
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   const phase = state.phases[ownProps.id];
+  const firstColumn = phase === undefined ? null : state.columns[phase.columns[0]]
   return {
     phase: phase,
-    firstColumn: state.columns[phase.columns[0]]
+    firstColumn: firstColumn
   };
 };
 

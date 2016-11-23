@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Board from '../Board/Board';
 import './Game.scss';
-import Board from '../Board/Board'
 
-const Game = ({ game }) => {
+const Game = ({ game}) => {
   return <div className="game">
     <div className="player-name">Playername: {game.playerName}</div>
-    <Board  />
+    { <Board  /> }
   </div>
 };
 
@@ -19,7 +19,7 @@ Game.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    game: state.game
+    game: state.game,
   }
 };
 
