@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Row, Col } from 'react-flexbox-grid';
 import Column from '../Column/Column';
+import PhaseHeader from '../PhaseHeader/PhaseHeader';
 import './PhaseWithTwoColumns.scss';
 
 export default class PhaseWithTwoColumns extends React.Component {
@@ -27,12 +28,12 @@ export default class PhaseWithTwoColumns extends React.Component {
 
   render() {
     return <div className="phase-with-two-columns">
-      <div className="phase-header" style={this.phaseHeaderStyle}>
-        <div className="align-wrapper">
-          <div className="phase-name">{this.phase.name}</div>
-          <div className="wip-limit">WIP {this.phase.wipLimit}</div>
-        </div>
-      </div>
+      <PhaseHeader
+        id={ this.phase.id }
+        name={ this.phase.name }
+        wipLimit={ this.phase.wipLimit }
+        style={ this.phaseHeaderStyle }
+      />
       <Row className="column-row">
         {this.phase.columns.map(columnId =>
           <Col xs key={ columnId } className="column-col">
