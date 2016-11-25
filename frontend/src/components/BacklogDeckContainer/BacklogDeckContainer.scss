@@ -1,0 +1,35 @@
+.backlog-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  width: 25%;
+  min-width: 380px;
+  margin: 0 auto;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 0 30px;
+
+  background-color: orange;
+
+  border: 5px solid black;
+  border-radius: 50px;
+  border-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  &.closed {
+    top: -285px;
+  }
+  h2 {
+    flex: 0 1 28%;
+    color: #fff;
+    font-size: 1.5em;
+    text-shadow: 3px 3px gray;
+  }
+  button {
+    flex: 0 1 100%;
+  }
+}
