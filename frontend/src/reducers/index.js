@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { Schema, arrayOf } from 'normalizr';
-import { SET_GAME_DATA } from '../actions/actionTypes';
+import { CHANGE_WIP, SET_GAME_DATA } from '../actionTypes';
 
 export const gameSchema = new Schema('games');
 const boardSchema = new Schema('boards');
@@ -98,6 +98,17 @@ function backlogDeck(state = null, action) {
 }
 
 
+function wipLimits(state = null, action) {
+  switch (action.type) {
+    case CHANGE_WIP:
+      return Object.assign({}, state, {
+        [action.phase]: action.wipLimit
+      });
+    default:
+      return state;
+  }
+}
+
 const reducers = combineReducers({
   game,
   board,
@@ -105,7 +116,8 @@ const reducers = combineReducers({
   columns,
   cards,
   cardPhasePoints,
-  backlogDeck
+  backlogDeck,
+  wipLimits
 });
 
 export default reducers;

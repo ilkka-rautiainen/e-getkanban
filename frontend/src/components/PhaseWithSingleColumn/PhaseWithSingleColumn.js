@@ -1,15 +1,15 @@
 import React, { PropTypes } from 'react';
 import ColumnCards from '../ColumnCards/ColumnCards';
+import PhaseHeader from '../PhaseHeader/PhaseHeader';
 import './PhaseWithSingleColumn.scss';
 
 const PhaseWithSingleColumn = ({ phase, column }) => {
   return <div className="phase-with-single-column">
-    <div className="phase-header">
-      <div className="alignment-wrapper">
-        <div className="phase-name">{phase.name}</div>
-        <div className="wip-limit">WIP {phase.wipLimit}</div>
-      </div>
-    </div>
+    <PhaseHeader
+      id={ phase.id }
+      name={ phase.name }
+      wipLimit={ phase.wipLimit }
+    />
     <div className="column-cards">
       <ColumnCards columnCardIds={column.cards} />
     </div>
