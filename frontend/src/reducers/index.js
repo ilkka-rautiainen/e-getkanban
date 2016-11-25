@@ -22,7 +22,8 @@ phaseSchema.define({
 });
 
 boardSchema.define({
-  phases: arrayOf(phaseSchema)
+  phases: arrayOf(phaseSchema),
+  backlogDeck: arrayOf(cardSchema)
 });
 
 gameSchema.define({
@@ -86,13 +87,24 @@ function cardPhasePoints(state = null, action) {
   }
 }
 
+function backlogDeck(state = null, action) {
+  switch (action.type) {
+    case SET_GAME_DATA:
+      return action.payload.board.backlogDeck;
+    default:
+      return state;
+  }
+}
+
+
 const reducers = combineReducers({
   game,
   board,
   phases,
   columns,
   cards,
-  cardPhasePoints
+  cardPhasePoints,
+  backlogDeck
 });
 
 export default reducers;
