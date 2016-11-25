@@ -62,9 +62,10 @@ class Card extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
+  const gameDifficulty = state.game.difficultyLevel ? state.game.difficultyLevel : "NORMAL";
   return {
     card: state.cards[ownProps.id],
-    gameDifficulty: state.game.difficultyLevel
+    gameDifficulty: gameDifficulty
   }
 };
 
