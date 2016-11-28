@@ -9,8 +9,6 @@ import static fi.aalto.ekanban.ApplicationConstants.*;
 
 import java.net.HttpURLConnection;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import cucumber.api.PendingException;
 import cucumber.api.java.After;
@@ -49,6 +47,8 @@ public class PlayTurnStepdefs extends SpringSteps {
     private Card cardInAnalysisBefore;
     private Card cardInDevelopmentBefore;
     private Card cardInTestBefore;
+    private Integer cardsInBacklogDeckBefore;
+    private Integer wipLimitOfFirstPhase;
 
     @Before
     public void setUp() {
@@ -85,7 +85,7 @@ public class PlayTurnStepdefs extends SpringSteps {
         initialGameContainer.fillFirstWorkPhasesWithSomeAlmostReadyCards();
         initialGameContainer.fillLastWorkPhaseWithSomeAlmostReadyCards();
         gameRepository.save(initialGameContainer.getGame());
-        initCards();
+        saveSituationBefore();
     }
 
     @And("^game has one ready card in first columns of the work phases$")
@@ -93,13 +93,15 @@ public class PlayTurnStepdefs extends SpringSteps {
         initialGameContainer.fillFirstWorkPhasesWithSomeReadyCards();
         initialGameContainer.fillLastWorkPhaseWithSomeReadyCards();
         gameRepository.save(initialGameContainer.getGame());
-        initCards();
+        saveSituationBefore();
     }
 
-    private void initCards() {
+    private void saveSituationBefore() {
         cardInAnalysisBefore = initialGameContainer.getAnalysisPhase().getFirstColumn().getCards().get(0);
         cardInDevelopmentBefore = initialGameContainer.getDevelopmentPhase().getFirstColumn().getCards().get(0);
         cardInTestBefore = initialGameContainer.getTestPhase().getFirstColumn().getCards().get(0);
+        cardsInBacklogDeckBefore = initialGameContainer.getGame().getBoard().getBacklogDeck().size();
+        wipLimitOfFirstPhase = initialGameContainer.getAnalysisPhase().getWipLimit();
     }
 
     @When("^I change WIP limit of phase (.+) to (\\d+)$")
@@ -171,14 +173,9 @@ public class PlayTurnStepdefs extends SpringSteps {
 
     @And("^the card in each work phase's first column has been moved to next column$")
     public void the_card_in_each_work_phases_first_column_has_been_moved_to_next_column() throws Throwable {
-        assertAnalysisEmpty();
         assertAnalysisCardInDevelopment();
         assertDevelopmentCardInTest();
         assertTestCardInDeployed();
-    }
-
-    private void assertAnalysisEmpty() {
-        response.body("board.phases.find { it.id == '" + ANALYSIS_PHASE_ID + "' }.columns[0].cards.size()", equalTo(0));
     }
 
     private void assertAnalysisCardInDevelopment() {
@@ -202,8 +199,10 @@ public class PlayTurnStepdefs extends SpringSteps {
                 equalTo(cardInTestBefore.getId()));
     }
 
-    @And("^new card is drawn from backlog to the first column$")
-    public void new_card_is_drawn_from_backlog_to_the_first_column() throws Throwable {
-        throw new PendingException();
+    @And("^new cards are drawn from backlog to the first column$")
+    public void new_cards_are_drawn_from_backlog_to_the_first_column() throws Throwable {
+        response.body("board.backlogDeck.size()", equalTo(cardsInBacklogDeckBefore - wipLimitOfFirstPhase));
+        response.body("board.phases.find { it.id == '" + ANALYSIS_PHASE_ID + "' }.columns[0].cards.size()",
+                equalTo(wipLimitOfFirstPhase));
     }
 }

@@ -18,7 +18,7 @@ Feature: Play Turn
       And game should have phase Test with WIP limit 1
 #      And the card in each work phase's first column has been worked on
       And the card in each work phase's first column hasn't been moved to next column
-#      And new card is drawn from backlog to the first column
+#      And new cards are drawn from backlog to the first column
 
 
   Scenario: Player plays the turn with ready cards
@@ -29,3 +29,4 @@ Feature: Play Turn
 
     Then I should get a game with a turn played
       And the card in each work phase's first column has been moved to next column
+      And new cards are drawn from backlog to the first column
