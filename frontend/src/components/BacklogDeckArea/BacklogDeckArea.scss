@@ -1,3 +1,5 @@
+@import "../../variables";
+
 .backlog-container {
   display: flex;
   flex-direction: row;
@@ -13,7 +15,7 @@
   right: 0;
   padding: 0 30px;
 
-  background-color: orange;
+  background-color: $minor-color;
 
   border: 5px solid black;
   border-radius: 50px;
