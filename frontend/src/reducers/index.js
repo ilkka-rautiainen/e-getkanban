@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { Schema, arrayOf } from 'normalizr';
-import { SET_GAME_DATA } from '../actionTypes';
+import { SET_GAME_DATA } from '../actions/actionTypes';
 
 export const gameSchema = new Schema('games');
 const boardSchema = new Schema('boards');
@@ -77,10 +77,11 @@ function cards(state = null, action) {
 function cardPhasePoints(state = null, action) {
   switch (action.type) {
     case SET_GAME_DATA:
-      if (action.payload.phasePoints !== undefined)
+      if (action.payload.phasePoints !== undefined) {
         return action.payload.phasePoints;
-      else
+      } else {
         return state;
+      }
     default:
       return state;
   }

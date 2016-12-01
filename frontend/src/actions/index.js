@@ -1,4 +1,4 @@
-import { CHANGE_WIP, START_GAME, SET_GAME_DATA } from '../actionTypes';
+import { CHANGE_WIP, START_GAME, SET_GAME_DATA } from './actionTypes';
 
 /*
  * action creators

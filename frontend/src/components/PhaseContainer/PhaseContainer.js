@@ -30,15 +30,16 @@ class PhaseContainer extends React.Component {
   }
 
   render() {
-    if (this.phase) {
-      return <Col xs className={this.className}>
-        {this.phase.columns.length === 1 ?
-          <PhaseWithSingleColumn phase={this.phase} column={this.firstColumn} /> :
-          <PhaseWithTwoColumns phase={this.phase} />}
-      </Col>
-    } else {
+    if (!this.phase) {
       return null;
     }
+    return (
+      <Col xs className={this.className}>
+          {this.phase.columns.length === 1 ?
+            <PhaseWithSingleColumn phase={this.phase} column={this.firstColumn} /> :
+            <PhaseWithTwoColumns phase={this.phase} />}
+      </Col>
+    )
   }
 }
 
