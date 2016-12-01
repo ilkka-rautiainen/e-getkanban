@@ -1,10 +1,11 @@
 @import "../../variables";
 
-.backlog-container {
+.backlog-area {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  z-index: 1;
 
   width: 25%;
   min-width: 380px;
