@@ -3,9 +3,9 @@ import IconButton from 'material-ui/IconButton';
 import ExpandMore from 'material-ui/svg-icons/navigation/expand-more';
 import ExpandLess from 'material-ui/svg-icons/navigation/expand-less';
 import BacklogDeck from "../BacklogDeck/BacklogDeck";
-import "./BacklogDeckContainer.scss";
+import "./BacklogDeckArea.scss";
 
-class BacklogDeckContainer extends React.Component {
+class BacklogDeckArea extends React.Component {
 
   constructor() {
     super();
@@ -42,4 +42,4 @@ class BacklogDeckContainer extends React.Component {
 
 };
 
-export default BacklogDeckContainer;
+export default BacklogDeckArea;

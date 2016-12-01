@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import CardPhasePoints from "../CardPhasePoints/CardPhasePoints"
 import CardInfoItem from "../CardInfoItem/CardInfoItem";
+import constants from "../../constants";
 import "./Card.scss";
 
 class Card extends React.Component {
@@ -53,7 +54,7 @@ class Card extends React.Component {
         <CardInfoItem title="Day Started" value={this.card.dayStarted}/>
         <span className="special-char">=</span>
         <CardInfoItem givenClass="lead-time" title="Lead Time" value={this.calculateLeadTime}/>
-        { this.gameDifficulty !== "NORMAL" &&
+        { this.gameDifficulty !== constants.GAME_DIFFICULTY_NORMAL &&
           <CardInfoItem title="Subscribers" value={this.card.subscribers}/>
         }
       </div>
