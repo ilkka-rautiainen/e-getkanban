@@ -2,7 +2,7 @@ import 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { normalize } from 'normalizr';
 import { gameSchema } from '../reducers';
-import { START_GAME } from "../actionTypes";
+import { START_GAME } from "../actions/actionTypes";
 import { setGameData } from "../actions";
 
 export default function startGame(action$) {

@@ -6,7 +6,7 @@ import './Game.scss';
 const Game = ({ game}) => {
   return <div className="game">
     <div className="player-name">Playername: {game.playerName}</div>
-    { <Board  /> }
+    <Board  />
   </div>
 };
 
@@ -19,7 +19,7 @@ Game.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    game: state.game,
+    game: state.game
   }
 };
 
