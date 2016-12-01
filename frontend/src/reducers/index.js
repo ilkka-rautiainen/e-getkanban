@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { Schema, arrayOf } from 'normalizr';
-import { CHANGE_WIP, SET_GAME_DATA } from '../actionTypes';
+import { CHANGE_WIP, SET_GAME_DATA } from '../actions/actionTypes';
 
 export const gameSchema = new Schema('games');
 const boardSchema = new Schema('boards');

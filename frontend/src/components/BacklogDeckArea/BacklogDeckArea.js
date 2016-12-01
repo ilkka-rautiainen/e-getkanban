@@ -21,7 +21,7 @@ class BacklogDeckArea extends React.Component {
   }
 
   get containerClass() {
-     return this.state.isVisible ? "backlog-container" : "backlog-container closed";
+     return this.state.isVisible ? "backlog-area" : "backlog-area closed";
   }
 
   render() {
