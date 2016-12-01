@@ -4,6 +4,11 @@ import TextField from 'material-ui/TextField';
 import { changeWip } from '../../actions';
 
 class PhaseHeader extends React.Component {
+  static propTypes = {
+    name: PropTypes.string.isRequired,
+    wipLimit: PropTypes.number,
+    style: PropTypes.object
+  };
 
   constructor({ id, name, wipLimit, style }) {
     super();
@@ -19,12 +24,13 @@ class PhaseHeader extends React.Component {
   handleChange(event) {
     this.setState({value: event.target.value});
     const newWipLimit = event.target.value;
-    if (newWipLimit !== '')
+    if (newWipLimit !== '') {
       this.props.dispatch(changeWip(this.id, event.target.value));
+    }
   }
 
-  render() {
-    const inputStyles = {
+  get inputStyles() {
+    return {
       mainElem: {
         width: 50,
         height: 35,
@@ -41,32 +47,33 @@ class PhaseHeader extends React.Component {
         left: 8
       }
     };
-    return <div className="phase-header" style={this.style}>
-      <div className="align-wrapper">
-        <div className="phase-name">{this.name}</div>
-        { !this.wipLimit && <div className="wip-limit">No WIP limit</div> }
-        { this.wipLimit &&
-        <form>
-          <label>WIP Limit</label>
-          <TextField
-            hintText="WIP"
-            value={this.state.value} onChange={this.handleChange}
-            style={inputStyles.mainElem}
-            inputStyle={inputStyles.textField}
-            hintStyle={inputStyles.hint}
-          />
-        </form>
-        }
+  }
+
+  render() {
+    return (
+      <div className="phase-header" style={this.style}>
+        <div className="align-wrapper">
+          <div className="phase-name">{this.name}</div>
+          { !this.wipLimit && <div className="wip-limit">No WIP limit</div> }
+          { this.wipLimit &&
+          <form>
+            <label>WIP Limit</label>
+            <TextField
+              name={this.name}
+              underlineShow={false}
+              hintText="WIP"
+              value={this.state.value} onChange={this.handleChange}
+              style={this.inputStyles.mainElem}
+              inputStyle={this.inputStyles.textField}
+              hintStyle={this.inputStyles.hint}
+            />
+          </form>
+          }
+        </div>
       </div>
-    </div>
+    )
   }
 
 }
-
-PhaseHeader.propTypes = {
-  name: PropTypes.string.isRequired,
-  wipLimit: PropTypes.number,
-  styles: PropTypes.object
-};
 
 export default connect()(PhaseHeader);
