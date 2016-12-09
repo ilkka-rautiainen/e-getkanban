@@ -1,17 +1,19 @@
 package fi.aalto.ekanban.models.db.phases;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import fi.aalto.ekanban.enums.TrackLinePlace;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import fi.aalto.ekanban.enums.TrackLinePlace;
 import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
+import fi.aalto.ekanban.models.db.games.Card;
 
 @Document
 public class Phase {
@@ -32,6 +34,8 @@ public class Phase {
     private String color;
     @Field
     private TrackLinePlace trackLinePlace;
+    @Field
+    private Integer diceAmount;
 
     public String getId() {
         return id;
@@ -120,6 +124,14 @@ public class Phase {
         this.trackLinePlace = trackLinePlace;
     }
 
+    public Integer getDiceAmount() {
+        return diceAmount;
+    }
+
+    public void setDiceAmount(Integer diceAmount) {
+        this.diceAmount = diceAmount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -137,6 +149,7 @@ public class Phase {
         if (isWorkPhase != null ? !isWorkPhase.equals(phase.isWorkPhase) : phase.isWorkPhase != null) return false;
         if (color != null ? !color.equals(phase.color) : phase.color != null) return false;
         if (trackLinePlace != null ? !trackLinePlace.equals(phase.trackLinePlace) : phase.trackLinePlace != null) return false;
+        if (diceAmount != null ? !diceAmount.equals(phase.diceAmount) : phase.diceAmount != null) return false;
         return name != null ? name.equals(phase.name) : phase.name == null;
 
     }
@@ -152,6 +165,7 @@ public class Phase {
         result = 31 * result + (isWorkPhase != null ? isWorkPhase.hashCode() : 0);
         result = 31 * result + (color != null ? color.hashCode() : 0);
         result = 31 * result + (trackLinePlace != null ? trackLinePlace.hashCode() : 0);
+        result = 31 * result + (diceAmount != null ? diceAmount.hashCode() : 0);
         return result;
     }
 
@@ -190,6 +204,16 @@ public class Phase {
 
     public Boolean isValid() {
         return columns != null && columns.stream().allMatch(Column::isValid);
+    }
+
+    @JsonIgnore
+    public List<Card> getAllCards() {
+        List<Card> allCards = new ArrayList<>();
+        allCards.addAll(getFirstColumn().getCards());
+        if (hasSecondColumn()) {
+            allCards.addAll(getSecondColumn().getCards());
+        }
+        return allCards;
     }
 
     private Column getColumnById(String columnId) throws ColumnNotFoundException {

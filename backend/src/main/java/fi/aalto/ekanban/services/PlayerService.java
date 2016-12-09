@@ -27,7 +27,7 @@ public class PlayerService {
     @Autowired
     DrawFromBacklogAIService drawFromBacklogAIService;
 
-    protected static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
+    private static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
     public Game playTurn(Game game, Turn turn) {
         if (game != null && game.isValid() && turn != null) {
@@ -136,7 +136,7 @@ public class PlayerService {
     }
 
     private static boolean isValidAssignResourcesAction(AssignResourcesAction assignResourcesAction, Game game)
-            throws CardPhasePointNotFoundException, CardNotFoundException, PhaseNotFoundException {
+            throws CardNotFoundException, PhaseNotFoundException {
         Card card = game.getCardWithId(assignResourcesAction.getCardId());
         CardPhasePoint cardPhasePoint = card.getCardPhasePointOfPhase(assignResourcesAction.getPhaseId());
         Integer pointsLeft = cardPhasePoint.getTotalPoints() - cardPhasePoint.getPointsDone();

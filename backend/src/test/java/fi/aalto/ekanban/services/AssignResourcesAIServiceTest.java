@@ -32,7 +32,7 @@ import fi.aalto.ekanban.utils.TestGameContainer;
 @RunWith(HierarchicalContextRunner.class)
 public class AssignResourcesAIServiceTest {
 
-    private static final Integer DICE_VALUE = 10;
+    private static final Integer DICE_VALUE = 5;
 
     private static AssignResourcesAIService assignResourcesAIService;
 
@@ -102,7 +102,7 @@ public class AssignResourcesAIServiceTest {
 
         /*
          * analysis has 2 cards, each of them 5 points left -> 10 points left
-         * dice value mocked to 10 and analysis has 1 dice -> 10 points generated
+         * dice value mocked to 5 and analysis has 2 dice -> 10 points generated
          */
         @Test
         public void shouldFillAllCardsInAnalysis() {
@@ -114,35 +114,36 @@ public class AssignResourcesAIServiceTest {
 
         /*
          * development has 4 cards, each of them 5 points left -> 20 points left
-         * dice value mocked to 10 and development has 2 dice -> 20 points generated
+         * dice value mocked to 5 and development has 3 dice -> 15 points generated
          */
         @Test
-        public void shouldFillAllCardsInDevelopment() {
+        public void shouldPartlyFillCardsInDevelopment() {
             List<Card> developmentCards = cardsByPhaseId.get(DEVELOPMENT_PHASE_ID);
-            for (Card card : developmentCards) {
-                assertPointsFilledInCardForPhase(card, DEVELOPMENT_PHASE_ID);
-            }
+            shouldFillCard(developmentCards.get(3), DEVELOPMENT_PHASE_ID);
+            shouldFillCard(developmentCards.get(2), DEVELOPMENT_PHASE_ID);
+            shouldFillCard(developmentCards.get(1), DEVELOPMENT_PHASE_ID);
+            shouldNotFillCardAtAll(developmentCards.get(0), DEVELOPMENT_PHASE_ID);
         }
 
         /*
          * test-phase has 3 cards, each of them 5 points left -> 15 points left
-         * dice value mocked to 10 and test-phase has 1 dice -> 10 points generated
+         * dice value mocked to 5 and test-phase has 2 dice -> 10 points generated
          */
         @Test
         public void shouldPartlyFillCardsInTest() {
             List<Card> testCards = cardsByPhaseId.get(TEST_PHASE_ID);
-            shouldFillCardInTest(testCards.get(2));
-            shouldFillCardInTest(testCards.get(1));
-            shouldNotFillCardInTestAtAll(testCards.get(0));
+            shouldFillCard(testCards.get(2), TEST_PHASE_ID);
+            shouldFillCard(testCards.get(1), TEST_PHASE_ID);
+            shouldNotFillCardAtAll(testCards.get(0), TEST_PHASE_ID);
         }
 
-        private void shouldFillCardInTest(Card card) {
-            AssignResourcesAction action = getActionForCardInPhase(card, TEST_PHASE_ID);
-            assertThat(action.getPoints(), equalTo(card.getCardPhasePointOfPhase(TEST_PHASE_ID).pointsUntilDone()));
+        private void shouldFillCard(Card card, String phaseId) {
+            AssignResourcesAction action = getActionForCardInPhase(card, phaseId);
+            assertThat(action.getPoints(), equalTo(card.getCardPhasePointOfPhase(phaseId).pointsUntilDone()));
         }
 
-        private void shouldNotFillCardInTestAtAll(Card card) {
-            AssignResourcesAction action = getActionForCardInPhase(card, TEST_PHASE_ID);
+        private void shouldNotFillCardAtAll(Card card, String phaseId) {
+            AssignResourcesAction action = getActionForCardInPhase(card, phaseId);
             assertThat(action, is(nullValue()));
         }
     }

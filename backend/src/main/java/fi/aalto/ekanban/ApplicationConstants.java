@@ -14,4 +14,7 @@ public class ApplicationConstants {
     public static final String IN_PROGRESS_COLUMN = "In Progress";
     public static final String WAITING_FOR_NEXT_TEMPLATE = "Waiting for ";
 
+    public static final Integer RESOURCE_DICE_MIN = 3;
+    public static final Integer RESOURCE_DICE_MAX = 6;
+
 }

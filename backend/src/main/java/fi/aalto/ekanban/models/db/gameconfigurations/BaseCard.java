@@ -129,7 +129,7 @@ public class BaseCard {
         return result;
     }
 
-    public CardPhasePoint getCardPhasePointOfPhase(String phaseId) throws CardPhasePointNotFoundException {
+    public CardPhasePoint getCardPhasePointOfPhase(String phaseId) {
         Optional<CardPhasePoint> cardPhasePointOptional = cardPhasePoints.stream()
                 .filter(cardPhasePoint -> cardPhasePoint.getPhaseId().equals(phaseId))
                 .findFirst();

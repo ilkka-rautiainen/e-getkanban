@@ -23,6 +23,7 @@ public final class PhaseBuilder {
     private Boolean isWorkPhase;
     private String color;
     private TrackLinePlace trackLinePlace;
+    private Integer diceAmount;
 
     private PhaseBuilder() {}
 
@@ -65,6 +66,11 @@ public final class PhaseBuilder {
         return this;
     }
 
+    public PhaseBuilder withDiceAmount(Integer diceAmount) {
+        this.diceAmount = diceAmount;
+        return this;
+    }
+
     public PhaseBuilder withAnalysisDefaults(Phase nextPhase) {
         this.id = ANALYSIS_PHASE_ID;
         this.wipLimit = 2;
@@ -76,6 +82,7 @@ public final class PhaseBuilder {
         this.isWorkPhase = true;
         this.color = "ff0000";
         this.trackLinePlace = TrackLinePlace.MIDDLE;
+        this.diceAmount = 2;
         return this;
     }
 
@@ -91,6 +98,7 @@ public final class PhaseBuilder {
         this.isWorkPhase = true;
         this.color = "0000ff";
         this.trackLinePlace = TrackLinePlace.MIDDLE;
+        this.diceAmount = 3;
         return this;
     }
 
@@ -103,6 +111,7 @@ public final class PhaseBuilder {
         this.isWorkPhase = true;
         this.color = "00ff00";
         this.trackLinePlace = TrackLinePlace.RIGHT;
+        this.diceAmount = 2;
         return this;
     }
 
@@ -138,6 +147,7 @@ public final class PhaseBuilder {
         phase.setIsWorkPhase(isWorkPhase);
         phase.setColor(color);
         phase.setTrackLinePlace(trackLinePlace);
+        phase.setDiceAmount(diceAmount);
         return phase;
     }
 }

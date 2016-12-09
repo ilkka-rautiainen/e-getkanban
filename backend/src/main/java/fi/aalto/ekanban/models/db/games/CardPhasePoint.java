@@ -64,11 +64,13 @@ public class CardPhasePoint {
         ensurePointsDoneNotMoreThanTotalPoints();
     }
 
-    private void ensurePointsDoneNotMoreThanTotalPoints() {
-        if (pointsDone == null) {
-            return;
-        }
-        pointsDone = Math.min(pointsDone, totalPoints);
+    public Integer pointsUntilDone() {
+        return getTotalPoints() - getPointsDone();
+    }
+
+    @JsonIgnore
+    public Boolean isReady() {
+        return getTotalPoints().equals(getPointsDone());
     }
 
     @Override
@@ -96,8 +98,10 @@ public class CardPhasePoint {
         return result;
     }
 
-    @JsonIgnore
-    public Boolean isReady() {
-        return getTotalPoints().equals(getPointsDone());
+    private void ensurePointsDoneNotMoreThanTotalPoints() {
+        if (pointsDone == null) {
+            return;
+        }
+        pointsDone = Math.min(pointsDone, totalPoints);
     }
 }

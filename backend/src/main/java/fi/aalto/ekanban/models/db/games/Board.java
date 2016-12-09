@@ -3,6 +3,7 @@ package fi.aalto.ekanban.models.db.games;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
@@ -54,6 +55,11 @@ public class Board {
 
     public List<Phase> getPhases() {
         return phases;
+    }
+
+    @JsonIgnore
+    public List<Phase> getWorkPhases() {
+        return phases.stream().filter(Phase::getIsWorkPhase).collect(Collectors.toList());
     }
 
     public void setPhases(List<Phase> phases) {
