@@ -14,7 +14,7 @@ public class PhasePopulater {
 
     public enum FillingType {
         IN_PROGRESS_SOME, IN_PROGRESS_ALMOST_FULL, IN_PROGRESS_FULL,
-        ALMOST_READY_SOME,
+        ALMOST_READY_SOME, ALMOST_READY_FULL,
         READY_SOME, READY_FULL
     }
 
@@ -53,6 +53,9 @@ public class PhasePopulater {
             case IN_PROGRESS_FULL:
                 fillInProgressFull(phase);
                 break;
+            case ALMOST_READY_FULL:
+                fillAlmostReadyFull(phase);
+                break;
             case READY_FULL:
                 fillReadyFull(phase);
                 break;
@@ -80,6 +83,12 @@ public class PhasePopulater {
     private static void fillInProgressFull(Phase phase) {
         List<Column> columns = phase.getColumns();
         List<Card> cards = getCardsToFill(phase, Fullness.FULL, Readiness.IN_PROGRESS);
+        cards.forEach(card -> columns.get(0).getCards().add(card));
+    }
+
+    private static void fillAlmostReadyFull(Phase phase) {
+        List<Column> columns = phase.getColumns();
+        List<Card> cards = getCardsToFill(phase, Fullness.FULL, Readiness.ALMOST_READY);
         cards.forEach(card -> columns.get(0).getCards().add(card));
     }
 
@@ -135,11 +144,11 @@ public class PhasePopulater {
     private static void setPhasePointToCardState(CardPhasePoint phasePoint, Readiness readiness) {
         Integer totalPoints = 10;
         Integer almostReadyPoints = 9;
-        Integer halfPoints = 5;
+        Integer inProgressPoints = 5;
         Integer pointsDone;
         switch (readiness) {
             case IN_PROGRESS:
-                pointsDone = halfPoints;
+                pointsDone = inProgressPoints;
                 break;
             case ALMOST_READY:
                 pointsDone = almostReadyPoints;

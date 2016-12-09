@@ -90,6 +90,16 @@ public class TestGameContainer {
         PhasePopulater.fillWithCards(firstWorkPhases, PhasePopulater.FillingType.ALMOST_READY_SOME);
     }
 
+    public void fillFirstWorkPhasesToFullWithAlmostReadyCards() {
+        List<Phase> firstWorkPhases = getFirstWorkPhases();
+        PhasePopulater.fillWithCards(firstWorkPhases, PhasePopulater.FillingType.ALMOST_READY_FULL);
+    }
+
+    public void fillFirstWorkPhasesToFullWithCardsInProgress() {
+        List<Phase> firstWorkPhases = getFirstWorkPhases();
+        PhasePopulater.fillWithCards(firstWorkPhases, PhasePopulater.FillingType.IN_PROGRESS_FULL);
+    }
+
     public void fillLastWorkPhaseWithSomeCardsInProgress() {
         Phase lastWorkPhase = getLastWorkPhase();
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.IN_PROGRESS_SOME);
@@ -118,6 +128,11 @@ public class TestGameContainer {
     public void fillLastWorkPhaseWithSomeAlmostReadyCards() {
         Phase lastWorkPhase = getLastWorkPhase();
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.ALMOST_READY_SOME);
+    }
+
+    public void fillLastWorkPhaseToFullWithAlmostReadyCards() {
+        Phase lastWorkPhase = getLastWorkPhase();
+        PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.ALMOST_READY_FULL);
     }
 
     public void removeAllButOneCardFromBacklog() {
