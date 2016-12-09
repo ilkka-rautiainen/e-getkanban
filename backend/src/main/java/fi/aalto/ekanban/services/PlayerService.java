@@ -12,10 +12,14 @@ import fi.aalto.ekanban.exceptions.*;
 import fi.aalto.ekanban.models.*;
 import fi.aalto.ekanban.models.db.games.*;
 import fi.aalto.ekanban.models.db.phases.*;
+import fi.aalto.ekanban.services.AssignResourcesAI.AssignResourcesAIService;
 import fi.aalto.ekanban.services.MoveCardsAI.MoveCardsAIService;
 
 @Service
 public class PlayerService {
+
+    @Autowired
+    AssignResourcesAIService assignResourcesAIService;
 
     @Autowired
     MoveCardsAIService moveCardsAIService;
@@ -36,10 +40,15 @@ public class PlayerService {
     }
 
     private Game playTurnNormal(Game game) {
-        // TODO: assign resources
+        game = assignResourcesWithAI(game);
         game = moveCardsWithAI(game);
         game = drawFromBacklogWithAI(game);
         return game;
+    }
+
+    private Game assignResourcesWithAI(Game game) {
+        List<AssignResourcesAction> assignResourcesActions = assignResourcesAIService.getAssignResourcesActions(game);
+        return assignResources(game, assignResourcesActions);
     }
 
     private Game moveCardsWithAI(Game game) {
