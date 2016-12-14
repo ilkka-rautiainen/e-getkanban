@@ -6,14 +6,17 @@
   flex-direction: column;
   padding: 0 10px 10px 10px;
   background-color: $background-color;
-
-  .game-details {
+  .game-toolbar {
     display: flex;
-    .game-info {
-      padding: 20px;
-      color: #fff;
-      font-size: 1.5em;
-      text-shadow: 3px 3px gray;
+    .game-details {
+      display: flex;
+      .game-info {
+        padding: 20px;
+        color: #fff;
+        font-size: 1.5em;
+        text-shadow: 3px 3px gray;
+      }
     }
   }
+
 }

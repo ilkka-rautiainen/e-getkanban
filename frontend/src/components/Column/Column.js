@@ -3,14 +3,20 @@ import { connect } from 'react-redux';
 import ColumnCards from '../ColumnCards/ColumnCards';
 import './Column.scss';
 
-const Column = ({ column }) => {
+const Column = ({ column, borderRight, style }) => {
   if (column) {
-    return <div className="column">
-      <div className="column-header">
-        <div className="name">{ column.name }</div>
+    let borderRightStyle = {};
+    if (borderRight) {
+      borderRightStyle = style.borderRight;
+    }
+    return (
+      <div className="column" style={borderRightStyle} >
+        <div className="column-header">
+          <div className="name" style={style.title} >{ column.name }</div>
+        </div>
+        <ColumnCards columnCardIds={column.cards} />
       </div>
-      <ColumnCards columnCardIds={column.cards} />
-    </div>
+    )
   } else {
     return null;
   }

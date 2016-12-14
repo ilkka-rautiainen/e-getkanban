@@ -17,12 +17,20 @@ export default class PhaseWithTwoColumns extends React.Component {
     this.phase = phase;
   }
 
-  get phaseHeaderStyle() {
+  get childStyle() {
     if (!this.phase.color) {
       return {};
     }
     return {
-      borderBottomColor: '#' + this.phase.color
+      border: {
+        borderBottomColor: '#' + this.phase.color
+      },
+      title: {
+        color: '#' + this.phase.color
+      },
+      borderRight: {
+        borderRightColor: '#' + this.phase.color
+      }
     };
   }
 
@@ -32,12 +40,12 @@ export default class PhaseWithTwoColumns extends React.Component {
         id={ this.phase.id }
         name={ this.phase.name }
         wipLimit={ this.phase.wipLimit }
-        style={ this.phaseHeaderStyle }
+        style={ this.childStyle }
       />
       <Row className="column-row">
-        {this.phase.columns.map(columnId =>
+        {this.phase.columns.map((columnId, index) =>
           <Col xs key={ columnId } className="column-col">
-            <Column id={ columnId }/>
+            <Column id={ columnId } borderRight={index===0} style={ this.childStyle } />
           </Col>
         )}
       </Row>

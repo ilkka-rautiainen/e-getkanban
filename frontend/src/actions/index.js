@@ -1,4 +1,4 @@
-import { CHANGE_WIP, START_GAME, SET_GAME_DATA } from './actionTypes';
+import { CHANGE_WIP, START_GAME, PLAY_TURN, SET_GAME_DATA } from './actionTypes';
 
 /*
  * action creators
@@ -16,6 +16,20 @@ export function startGame(playerName, difficultyLevel) {
       difficultyLevel
     }
   };
+}
+
+export function playTurn(gameId, newWipLimits) {
+  return {
+    type: PLAY_TURN,
+    gameId: gameId,
+    turn: {
+      adjustWipLimitsAction: {
+        phaseWipLimits: newWipLimits
+      },
+      moveCardActions: [],
+      drawFromBacklogActions: []
+    }
+  }
 }
 
 export function setGameData(normalizedData) {
