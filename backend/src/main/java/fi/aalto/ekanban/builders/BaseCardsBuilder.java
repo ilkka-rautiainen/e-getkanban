@@ -1,11 +1,6 @@
 package fi.aalto.ekanban.builders;
 
-import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE_ID;
-import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE_ID;
-import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE_ID;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,21 +20,18 @@ public class BaseCardsBuilder {
 
     public BaseCardsBuilder withAllBaseCardsWithMockPoints() {
         // TODO: implement with real points
-        List<CardPhasePoint> mockPoints = CardPhasePointsBuilder.aSetOfCardPhasePoints()
-                .withNormalDifficultyMockPhasePoints()
-                .build();
         for (Integer i = 0; i < 5; i++) {
             baseCardBuilders.add(BaseCardBuilder.aBaseCard()
                     .withFinancialValue(FinancialValue.HIGH)
-                    .withCardPhasePoints(mockPoints)
+                    .withCardPhasePoints(getMockPoints())
                     .withSubscribesWhenDeployed("1"));
             baseCardBuilders.add(BaseCardBuilder.aBaseCard()
                     .withFinancialValue(FinancialValue.MED)
-                    .withCardPhasePoints(mockPoints)
+                    .withCardPhasePoints(getMockPoints())
                     .withSubscribesWhenDeployed("1"));
             baseCardBuilders.add(BaseCardBuilder.aBaseCard()
                     .withFinancialValue(FinancialValue.LOW)
-                    .withCardPhasePoints(mockPoints)
+                    .withCardPhasePoints(getMockPoints())
                     .withSubscribesWhenDeployed("1"));
         }
         return this;
@@ -59,6 +51,12 @@ public class BaseCardsBuilder {
                 .map(baseCardBuilder -> baseCardBuilder.create(baseCardRepository))
                 .collect(Collectors.toList());
         return createdBaseCards;
+    }
+
+    private List<CardPhasePoint> getMockPoints() {
+        return CardPhasePointsBuilder.aSetOfCardPhasePoints()
+                    .withNormalDifficultyMockPhasePoints()
+                    .build();
     }
 
 }
