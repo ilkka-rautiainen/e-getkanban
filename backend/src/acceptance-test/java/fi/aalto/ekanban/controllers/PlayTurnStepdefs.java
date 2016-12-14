@@ -10,7 +10,6 @@ import static fi.aalto.ekanban.ApplicationConstants.*;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -48,7 +47,7 @@ public class PlayTurnStepdefs extends SpringSteps {
     private Card cardInDevelopmentBefore;
     private Card cardInTestBefore;
     private Integer cardsInBacklogDeckBefore;
-    private Integer wipLimitOfFirstPhase;
+    private Integer wipLimitOfAnalysisAfter;
 
     @Before
     public void setUp() {
@@ -101,13 +100,17 @@ public class PlayTurnStepdefs extends SpringSteps {
         cardInDevelopmentBefore = initialGameContainer.getDevelopmentPhase().getFirstColumn().getCards().get(0);
         cardInTestBefore = initialGameContainer.getTestPhase().getFirstColumn().getCards().get(0);
         cardsInBacklogDeckBefore = initialGameContainer.getGame().getBoard().getBacklogDeck().size();
-        wipLimitOfFirstPhase = initialGameContainer.getAnalysisPhase().getWipLimit();
+        // In case it's not changed
+        wipLimitOfAnalysisAfter = initialGameContainer.getAnalysisPhase().getWipLimit();
     }
 
     @When("^I change WIP limit of phase (.+) to (\\d+)$")
     public void i_change_wip_limit_of_phase_to(String phaseName, Integer wipLimit) throws Throwable {
         Phase phase = phaseRepository.findByName(phaseName);
         adjustWipLimitsAction.getPhaseWipLimits().put(phase.getId(), wipLimit);
+        if (phase.getId().equals(ANALYSIS_PHASE_ID)) {
+            wipLimitOfAnalysisAfter = wipLimit;
+        }
     }
 
     @And("^I press the next round button$")
@@ -135,44 +138,25 @@ public class PlayTurnStepdefs extends SpringSteps {
 
     @And("^the card in each work phase's first column has been worked on$")
     public void the_card_in_each_work_phases_first_column_has_been_worked_on() throws Throwable {
-        throw new PendingException();
-    }
-
-    @And("^the card in each work phase's first column hasn't been moved to next column$")
-    public void the_card_in_each_work_phases_first_column_hasnt_been_moved_to_next_column() throws Throwable {
-        assertAnalysisCardIntact();
-        assertDevelopmentCardIntact();
-        assertTestCardIntact();
-        assertDeployedEmpty();
-    }
-
-    private void assertAnalysisCardIntact() {
-        response.body("board.phases.find { it.id == '" + ANALYSIS_PHASE_ID + "' }.columns[0].cards.size()",
-                equalTo(1));
-        response.body("board.phases.find { it.id == '" + ANALYSIS_PHASE_ID + "' }.columns[0].cards[0].id",
-                equalTo(cardInAnalysisBefore.getId()));
-    }
-
-    private void assertDevelopmentCardIntact() {
         response.body("board.phases.find { it.id == '" + DEVELOPMENT_PHASE_ID + "' }.columns[0].cards.size()",
                 equalTo(1));
-        response.body("board.phases.find { it.id == '" + DEVELOPMENT_PHASE_ID + "' }.columns[0].cards[0].id",
-                equalTo(cardInDevelopmentBefore.getId()));
-    }
-
-    private void assertTestCardIntact() {
+        response.body("board.phases.find { it.id == '" + DEVELOPMENT_PHASE_ID + "' }.columns[0].cards[0]"
+                        + ".cardPhasePoints.find { it.phaseId == '" + ANALYSIS_PHASE_ID + "' }.pointsDone",
+                equalTo(10));
         response.body("board.phases.find { it.id == '" + TEST_PHASE_ID + "' }.columns[0].cards.size()",
                 equalTo(1));
-        response.body("board.phases.find { it.id == '" + TEST_PHASE_ID + "' }.columns[0].cards[0].id",
-                equalTo(cardInTestBefore.getId()));
+        response.body("board.phases.find { it.id == '" + TEST_PHASE_ID + "' }.columns[0].cards[0]"
+                        + ".cardPhasePoints.find { it.phaseId == '" + DEVELOPMENT_PHASE_ID + "' }.pointsDone",
+                equalTo(10));
+        response.body("board.phases.find { it.id == '" + DEPLOYED_PHASE_ID + "' }.columns[0].cards.size()",
+                equalTo(1));
+        response.body("board.phases.find { it.id == '" + DEPLOYED_PHASE_ID + "' }.columns[0].cards[0]"
+                        + ".cardPhasePoints.find { it.phaseId == '" + TEST_PHASE_ID + "' }.pointsDone",
+                equalTo(10));
     }
 
-    private void assertDeployedEmpty() {
-        response.body("board.phases.find { it.id == '" + DEPLOYED_PHASE_ID + "' }.columns[0].cards.size()", equalTo(0));
-    }
-
-    @And("^the card in each work phase's first column has been moved to next column$")
-    public void the_card_in_each_work_phases_first_column_has_been_moved_to_next_column() throws Throwable {
+    @And("^the card in each work phase's first column has been moved to next phase$")
+    public void the_card_in_each_work_phases_first_column_has_been_moved_to_next_phase() throws Throwable {
         assertAnalysisCardInDevelopment();
         assertDevelopmentCardInTest();
         assertTestCardInDeployed();
@@ -201,8 +185,11 @@ public class PlayTurnStepdefs extends SpringSteps {
 
     @And("^new cards are drawn from backlog to the first column$")
     public void new_cards_are_drawn_from_backlog_to_the_first_column() throws Throwable {
-        response.body("board.backlogDeck.size()", equalTo(cardsInBacklogDeckBefore - wipLimitOfFirstPhase));
+        response.body("board.backlogDeck.size()", equalTo(cardsInBacklogDeckBefore - wipLimitOfAnalysisAfter));
         response.body("board.phases.find { it.id == '" + ANALYSIS_PHASE_ID + "' }.columns[0].cards.size()",
-                equalTo(wipLimitOfFirstPhase));
+                equalTo(wipLimitOfAnalysisAfter));
+        response.body("board.phases.find { it.id == '" + ANALYSIS_PHASE_ID + "' }.columns[0].cards[0]"
+                        + ".cardPhasePoints.find { it.phaseId == '" + ANALYSIS_PHASE_ID + "' }.pointsDone",
+                equalTo(0));
     }
 }

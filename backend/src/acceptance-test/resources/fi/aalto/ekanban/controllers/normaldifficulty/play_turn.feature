@@ -16,9 +16,9 @@ Feature: Play Turn
       And game should have phase Analysis with WIP limit 1
       And game should have phase Development with WIP limit 1
       And game should have phase Test with WIP limit 1
-#      And the card in each work phase's first column has been worked on
-      And the card in each work phase's first column hasn't been moved to next column
-#      And new cards are drawn from backlog to the first column
+      And the card in each work phase's first column has been worked on
+      And the card in each work phase's first column has been moved to next phase
+      And new cards are drawn from backlog to the first column
 
 
   Scenario: Player plays the turn with ready cards
@@ -28,5 +28,5 @@ Feature: Play Turn
     When I press the next round button
 
     Then I should get a game with a turn played
-      And the card in each work phase's first column has been moved to next column
+      And the card in each work phase's first column has been moved to next phase
       And new cards are drawn from backlog to the first column
