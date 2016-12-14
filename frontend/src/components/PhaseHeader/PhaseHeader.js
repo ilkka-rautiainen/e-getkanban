@@ -49,11 +49,27 @@ class PhaseHeader extends React.Component {
     };
   }
 
+  get borderStyle() {
+    let style = {};
+    if (this.style && this.style.border) {
+      style = this.style.border;
+    }
+    return style;
+  }
+
+  get titleStyle() {
+    let style = {};
+    if (this.style && this.style.title) {
+      style = this.style.title;
+    }
+    return style;
+  }
+
   render() {
     return (
-      <div className="phase-header" style={this.style}>
+      <div className="phase-header" style={this.borderStyle}>
         <div className="align-wrapper">
-          <div className="phase-name">{this.name}</div>
+          <div className="phase-name" style={this.titleStyle}>{this.name}</div>
           { !this.wipLimit && <div className="wip-limit">No WIP limit</div> }
           { this.wipLimit &&
           <form>
