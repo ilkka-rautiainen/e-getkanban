@@ -104,6 +104,8 @@ function wipLimits(state = null, action) {
       return Object.assign({}, state, {
         [action.phase]: action.wipLimit
       });
+    case SET_GAME_DATA:
+      return action.payload.wipLimits;
     default:
       return state;
   }

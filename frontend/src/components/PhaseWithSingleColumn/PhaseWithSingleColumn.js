@@ -1,25 +1,23 @@
-import React, { PropTypes } from 'react';
+import React, {PropTypes } from 'react';
 import ColumnCards from '../ColumnCards/ColumnCards';
 import PhaseHeader from '../PhaseHeader/PhaseHeader';
 import './PhaseWithSingleColumn.scss';
 
-const PhaseWithSingleColumn = ({ phase, column }) => {
+const PhaseWithSingleColumn = ({phase, column}) => {
 
   let phaseHeaderStyle = {};
   if (phase.color) {
     phaseHeaderStyle = {
-      title: {
-        color: '#' + phase.color
-      }
+      color: '#' + phase.color
     };
   }
 
   return <div className="phase-with-single-column">
     <PhaseHeader
-      id={ phase.id }
-      name={ phase.name }
-      wipLimit={ phase.wipLimit }
-      style={ phaseHeaderStyle }
+      id={phase.id}
+      name={phase.name}
+      wipLimit={phase.wipLimit}
+      titleStyle={phaseHeaderStyle}
     />
     <div className="column-cards">
       <ColumnCards columnCardIds={column.cards} />

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { CHANGE_WIP, START_GAME, PLAY_TURN, SET_GAME_DATA } from './actionTypes';
 
 /*
@@ -33,6 +34,11 @@ export function playTurn(gameId, newWipLimits) {
 }
 
 export function setGameData(normalizedData) {
+  const workingPhases = _.pickBy(normalizedData.entities.phases, function(value, key) {return value.isWorkPhase;});
+  let wipLimits = {};
+  Object.keys(workingPhases).forEach(function(key) {
+    wipLimits[key] = workingPhases[key].wipLimit.toString()
+  });
   return {
     type: SET_GAME_DATA,
     payload: {
@@ -41,7 +47,8 @@ export function setGameData(normalizedData) {
       phases: normalizedData.entities.phases,
       columns: normalizedData.entities.columns,
       cards: normalizedData.entities.cards !== undefined ? normalizedData.entities.cards : [],
-      phasePoints: normalizedData.entities.cardPhasePoints
+      phasePoints: normalizedData.entities.cardPhasePoints,
+      wipLimits: wipLimits
     }
   }
 }

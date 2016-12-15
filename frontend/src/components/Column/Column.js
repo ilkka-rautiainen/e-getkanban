@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import ColumnCards from '../ColumnCards/ColumnCards';
 import './Column.scss';
 
-const Column = ({ column, borderRight, style }) => {
+const Column = ({ column, showBorderRight, titleStyle, borderRightStyle }) => {
   if (column) {
-    let borderRightStyle = {};
-    if (borderRight) {
-      borderRightStyle = style.borderRight;
+    let borderStyle = {};
+    if (showBorderRight) {
+      borderStyle = borderRightStyle;
     }
     return (
-      <div className="column" style={borderRightStyle} >
+      <div className="column" style={borderStyle} >
         <div className="column-header">
-          <div className="name" style={style.title} >{ column.name }</div>
+          <div className="name" style={titleStyle} >{column.name}</div>
         </div>
         <ColumnCards columnCardIds={column.cards} />
       </div>

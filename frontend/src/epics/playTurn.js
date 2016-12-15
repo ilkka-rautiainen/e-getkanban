@@ -4,6 +4,7 @@ import { normalize } from 'normalizr';
 import { gameSchema } from '../reducers';
 import { PLAY_TURN } from "../actions/actionTypes";
 import { setGameData } from "../actions";
+import constants from "../constants";
 
 export default function playTurn(action$) {
   const headers = {
@@ -12,7 +13,7 @@ export default function playTurn(action$) {
   };
   return action$.ofType(PLAY_TURN)
     .mergeMap(action =>
-      Observable.ajax.put("http://localhost:8080/games/"+action.gameId, action.turn, headers)
+      Observable.ajax.put(constants.BACKEND_HOST+constants.GAMES_PATH+action.gameId, action.turn, headers)
         .map(data => normalize(data.response, gameSchema))
         .map(normalizedData => setGameData(normalizedData))
         .catch(error => Observable.of(

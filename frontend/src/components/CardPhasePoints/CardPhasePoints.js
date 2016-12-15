@@ -6,19 +6,11 @@ import CardPhasePointRow from '../CardPhasePointRow/CardPhasePointRow';
 const CardPhasePoints = ({ cardPhasePoints, cardPhasePointIds, workingPhases }) => {
   let rows = [];
   for (var i = 0; i < Object.keys(workingPhases).length; i++) {
-    //Switch back to this when backend updated
-    /*
     rows.push(
         <CardPhasePointRow key={i} phaseName={workingPhases[Object.keys(workingPhases)[i]].shortName}
                            totalPoints={cardPhasePoints[cardPhasePointIds[i]].totalPoints}
                            pointsDone={cardPhasePoints[cardPhasePointIds[i]].pointsDone}
                            color={workingPhases[Object.keys(workingPhases)[i]].color}/>
-    );*/
-    rows.push(
-      <CardPhasePointRow key={i} phaseName={workingPhases[Object.keys(workingPhases)[i]].name}
-                         totalPoints={cardPhasePoints[cardPhasePointIds[i]].totalPoints}
-                         pointsDone={cardPhasePoints[cardPhasePointIds[i]].pointsDone}
-                         color={'00BCD4'}/>
     );
   }
   return <div className="card-phase-points">{rows}</div>
@@ -29,9 +21,7 @@ CardPhasePoints.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  //take this into use when backend is updated
-  //const workingPhases = _.pickBy(state.phases, function(value, key) {return value.isWorkingPhase;});
-  const workingPhases = _.pickBy(state.phases, function(value, key) {return value.wipLimit !== null;});
+  const workingPhases = _.pickBy(state.phases, function(value, key) {return value.isWorkPhase;});
   return {
     cardPhasePoints: state.cardPhasePoints,
     workingPhases: workingPhases

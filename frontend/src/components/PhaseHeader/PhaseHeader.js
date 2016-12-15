@@ -10,11 +10,12 @@ class PhaseHeader extends React.Component {
     style: PropTypes.object
   };
 
-  constructor({ id, name, wipLimit, style }) {
+  constructor({ id, name, wipLimit, titleStyle, borderBottomStyle }) {
     super();
     this.state = {value: wipLimit};
     this.id = id;
-    this.style = style;
+    this.titleStyle = titleStyle;
+    this.borderBottomStyle = borderBottomStyle;
     this.name = name;
     this.wipLimit = wipLimit;
 
@@ -49,25 +50,9 @@ class PhaseHeader extends React.Component {
     };
   }
 
-  get borderStyle() {
-    let style = {};
-    if (this.style && this.style.border) {
-      style = this.style.border;
-    }
-    return style;
-  }
-
-  get titleStyle() {
-    let style = {};
-    if (this.style && this.style.title) {
-      style = this.style.title;
-    }
-    return style;
-  }
-
   render() {
     return (
-      <div className="phase-header" style={this.borderStyle}>
+      <div className="phase-header" style={this.borderBottomStyle}>
         <div className="align-wrapper">
           <div className="phase-name" style={this.titleStyle}>{this.name}</div>
           { !this.wipLimit && <div className="wip-limit">No WIP limit</div> }
