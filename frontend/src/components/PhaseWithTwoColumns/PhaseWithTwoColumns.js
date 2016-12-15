@@ -17,35 +17,50 @@ export default class PhaseWithTwoColumns extends React.Component {
     this.phase = phase;
   }
 
-  get childStyle() {
+  get titleStyle() {
     if (!this.phase.color) {
       return {};
     }
     return {
-      border: {
-        borderBottomColor: '#' + this.phase.color
-      },
-      title: {
-        color: '#' + this.phase.color
-      },
-      borderRight: {
-        borderRightColor: '#' + this.phase.color
-      }
+      color: '#' + this.phase.color
+    };
+  }
+
+  get borderBottomStyle() {
+    if (!this.phase.color) {
+      return {};
+    }
+    return {
+      borderBottomColor: '#' + this.phase.color
+    };
+  }
+
+  get borderRightStyle() {
+    if (!this.phase.color) {
+      return {};
+    }
+    return {
+      borderRightColor: '#' + this.phase.color
     };
   }
 
   render() {
     return <div className="phase-with-two-columns">
       <PhaseHeader
-        id={ this.phase.id }
-        name={ this.phase.name }
-        wipLimit={ this.phase.wipLimit }
-        style={ this.childStyle }
+        id={this.phase.id}
+        name={this.phase.name}
+        wipLimit={this.phase.wipLimit}
+        titleStyle={this.titleStyle}
+        borderBottomStyle={this.borderBottomStyle}
       />
       <Row className="column-row">
         {this.phase.columns.map((columnId, index) =>
-          <Col xs key={ columnId } className="column-col">
-            <Column id={ columnId } borderRight={index===0} style={ this.childStyle } />
+          <Col xs key={columnId} className="column-col">
+            <Column id={columnId}
+                    showBorderRight={index===0}
+                    titleStyle={this.titleStyle}
+                    borderRightStyle={this.borderRightStyle}
+            />
           </Col>
         )}
       </Row>
