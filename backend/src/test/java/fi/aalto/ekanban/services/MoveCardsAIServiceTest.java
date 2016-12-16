@@ -2,11 +2,13 @@ package fi.aalto.ekanban.services;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,7 +86,7 @@ public class MoveCardsAIServiceTest {
 
         private void shouldMoveOneCardTo(Phase phase) {
             String toColumnId = phase.getFirstColumn().getId();
-            assertThat(generatedActions, hasItem(hasProperty("toColumnId", is(toColumnId))));
+            assertThat(generatedActions, hasItem(hasProperty("toColumnId", equalTo(toColumnId))));
         }
     }
 
@@ -126,6 +128,118 @@ public class MoveCardsAIServiceTest {
             Integer cardsFromDevInProgressThatWentThroughDevReady = 1;
             Integer allCardsFromDevReady = cardsFromDevReady + cardsFromDevInProgressThatWentThroughDevReady;
             assertThat(cardsFromDevelopmentReady, equalTo(allCardsFromDevReady));
+        }
+    }
+
+    public class situationsIllustratingHowCardsMove {
+        public class withCardsThatCantMoveToNextPhaseButCanMoveToNextColumn {
+            @Before
+            public void initAndDoAction() {
+                initialGameContainer.fillDevelopmentWithSomeReadyCards();
+                initialGameContainer.fillTestingToFullWithCardsInProgress();
+                getMoveCardActions();
+            }
+
+            @Test
+            public void shouldMoveCardsToDevelopmentSecondColumn() {
+                String developmentSecondColumnId = initialGameContainer.getDevelopmentPhase().getSecondColumn().getId();
+                assertThat(generatedActions, hasItem(
+                        hasProperty("toColumnId", equalTo(developmentSecondColumnId))));
+            }
+
+            @Test
+            public void shouldNotMoveAnyOtherCardsThanDevelopmentFirstColumnCards() {
+                String developmentFirstColumnId = initialGameContainer.getDevelopmentPhase().getFirstColumn().getId();
+                List<MoveCardAction> actionsFromOtherColumnsThanDevelopmentFirstColumn = generatedActions.stream()
+                        .filter(action -> !action.getFromColumnId().equals(developmentFirstColumnId))
+                        .collect(Collectors.toList());
+                assertThat(actionsFromOtherColumnsThanDevelopmentFirstColumn.size(), equalTo(0));
+            }
+
+            @Test
+            public void shouldNotMoveToAnyOtherPlacesThanToDevelopmentSecondColumn() {
+                String developmentSecondColumnId = initialGameContainer.getDevelopmentPhase().getSecondColumn().getId();
+                List<MoveCardAction> actionsToOtherColumnsThanDevelopmentSecondColumn = generatedActions.stream()
+                        .filter(action -> !action.getToColumnId().equals(developmentSecondColumnId))
+                        .collect(Collectors.toList());
+                assertThat(actionsToOtherColumnsThanDevelopmentSecondColumn.size(), equalTo(0));
+            }
+        }
+
+        public class withCardsThatCanMoveDirectlyToTheNextPhase {
+            private List<String> distinctCardIdsThatHaveMoved;
+
+            @Before
+            public void initAndDoAction() {
+                initialGameContainer.fillDevelopmentToFullWithReadyCards();
+                moveDevelopmentCardsToFirstColumn();
+                ensureAllCardsFitIntoTesting();
+                getMoveCardActions();
+                setDistinctCardIdsWithActions();
+            }
+
+            private void setDistinctCardIdsWithActions() {
+                distinctCardIdsThatHaveMoved = generatedActions.stream()
+                        .map(MoveCardAction::getCardId)
+                        .distinct()
+                        .collect(Collectors.toList());
+            }
+
+            private void moveDevelopmentCardsToFirstColumn() {
+                List<Card> allDevelopmentCards = initialGameContainer.getDevelopmentPhase().getAllCards();
+                initialGameContainer.getDevelopmentPhase().getFirstColumn().setCards(allDevelopmentCards);
+                initialGameContainer.getDevelopmentPhase().getSecondColumn().setCards(new ArrayList<>());
+            }
+
+            private void ensureAllCardsFitIntoTesting() {
+                Integer developmentWipLimit = initialGameContainer.getDevelopmentPhase().getWipLimit();
+                initialGameContainer.getTestPhase().setWipLimit(developmentWipLimit);
+            }
+
+            @Test
+            public void shouldMoveAllCardsFromDevelopment() {
+                assertThat(distinctCardIdsThatHaveMoved.size(), equalTo(initialGameContainer.getDevelopmentPhase().getWipLimit()));
+            }
+
+            @Test
+            public void shouldMoveCardsFromDevelopmentFirstColumnThroughSecondColumnToTesting() {
+                distinctCardIdsThatHaveMoved.forEach(this::shouldHaveMovedFromDevelopmentFirstColumnThroughSecondColumnToTesting);
+            }
+
+            private void shouldHaveMovedFromDevelopmentFirstColumnThroughSecondColumnToTesting(String cardId) {
+                shouldHaveTwoActions(cardId);
+                shouldHaveActionFromDevelopmentFirstColumnToSecond(cardId);
+                shouldHaveActionFromDevelopmentSecondColumnToTesting(cardId);
+            }
+
+            private void shouldHaveTwoActions(String cardId) {
+                Integer amountOfActions = (int)generatedActions.stream()
+                        .filter(action -> action.getCardId().equals(cardId))
+                        .count();
+                assertThat(amountOfActions, equalTo(2));
+            }
+
+            private void shouldHaveActionFromDevelopmentFirstColumnToSecond(String cardId) {
+                String developmentFirstColumn = initialGameContainer.getDevelopmentPhase().getFirstColumn().getId();
+                String developmentSecondColumn = initialGameContainer.getDevelopmentPhase().getSecondColumn().getId();
+                Integer amountOfActions = (int)generatedActions.stream()
+                        .filter(action -> action.getCardId().equals(cardId))
+                        .filter(action -> action.getFromColumnId().equals(developmentFirstColumn))
+                        .filter(action -> action.getToColumnId().equals(developmentSecondColumn))
+                        .count();
+                assertThat(amountOfActions, equalTo(1));
+            }
+
+            private void shouldHaveActionFromDevelopmentSecondColumnToTesting(String cardId) {
+                String developmentSecondColumn = initialGameContainer.getDevelopmentPhase().getSecondColumn().getId();
+                String testingFirstColumn = initialGameContainer.getTestPhase().getFirstColumn().getId();
+                Integer amountOfActions = (int)generatedActions.stream()
+                        .filter(action -> action.getCardId().equals(cardId))
+                        .filter(action -> action.getFromColumnId().equals(developmentSecondColumn))
+                        .filter(action -> action.getToColumnId().equals(testingFirstColumn))
+                        .count();
+                assertThat(amountOfActions, equalTo(1));
+            }
         }
     }
 
