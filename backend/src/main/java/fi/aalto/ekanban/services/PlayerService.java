@@ -23,6 +23,7 @@ public class PlayerService {
         if (game != null && game.isValid() && turn != null) {
             TurnPlayer turnPlayer = getTurnPlayer(game);
             game = turnPlayer.playTurn(game, turn);
+            game.setCurrentDay(game.getCurrentDay() + 1);
         }
         return game;
     }
