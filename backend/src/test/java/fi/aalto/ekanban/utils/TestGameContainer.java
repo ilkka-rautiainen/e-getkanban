@@ -1,6 +1,6 @@
 package fi.aalto.ekanban.utils;
 
-import java.util.stream.Collectors;
+import java.util.Arrays;
 
 import fi.aalto.ekanban.builders.CardBuilder;
 import fi.aalto.ekanban.builders.GameBuilder;
@@ -9,7 +9,6 @@ import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Column;
 import fi.aalto.ekanban.models.db.phases.Phase;
 
-import java.util.Collections;
 import java.util.List;
 
 public class TestGameContainer {
@@ -100,38 +99,56 @@ public class TestGameContainer {
         PhasePopulater.fillWithCards(firstWorkPhases, PhasePopulater.FillingType.IN_PROGRESS_FULL);
     }
 
+    public void fillDevelopmentWithSomeReadyCards() {
+        Phase developmentPhase = getDevelopmentPhase();
+        PhasePopulater.fillWithCards(developmentPhase, PhasePopulater.FillingType.READY_SOME);
+    }
+
+    public void fillDevelopmentToFullWithReadyCards() {
+        Phase developmentPhase = getDevelopmentPhase();
+        PhasePopulater.fillWithCards(developmentPhase, PhasePopulater.FillingType.READY_FULL);
+    }
+
     public void fillLastWorkPhaseWithSomeCardsInProgress() {
-        Phase lastWorkPhase = getLastWorkPhase();
+        Phase lastWorkPhase = getTestPhase();
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.IN_PROGRESS_SOME);
     }
 
+    public void fillTestingToFullWithCardsInProgress() {
+        fillLastWorkPhaseToFullWithCardsInProgress();
+    }
+
     public void fillLastWorkPhaseToFullWithCardsInProgress() {
-        Phase lastWorkPhase = getLastWorkPhase();
+        Phase lastWorkPhase = getTestPhase();
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.IN_PROGRESS_FULL);
     }
 
     public void fillLastWorkPhaseToFullWithReadyCards() {
-        Phase lastWorkPhase = getLastWorkPhase();
+        Phase lastWorkPhase = getTestPhase();
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.READY_FULL);
     }
 
+    public void fillTestingWithSomeReadyCards() {
+        fillLastWorkPhaseWithSomeReadyCards();
+    }
+
     public void fillLastWorkPhaseWithSomeReadyCards() {
-        Phase lastWorkPhase = getLastWorkPhase();
+        Phase lastWorkPhase = getTestPhase();
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.READY_SOME);
     }
 
     public void fillLastWorkPhaseToAlmostFullWithCardsInProgress() {
-        Phase lastWorkPhase = getLastWorkPhase();
+        Phase lastWorkPhase = getTestPhase();
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.IN_PROGRESS_ALMOST_FULL);
     }
 
     public void fillLastWorkPhaseWithSomeAlmostReadyCards() {
-        Phase lastWorkPhase = getLastWorkPhase();
+        Phase lastWorkPhase = getTestPhase();
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.ALMOST_READY_SOME);
     }
 
     public void fillLastWorkPhaseToFullWithAlmostReadyCards() {
-        Phase lastWorkPhase = getLastWorkPhase();
+        Phase lastWorkPhase = getTestPhase();
         PhasePopulater.fillWithCards(lastWorkPhase, PhasePopulater.FillingType.ALMOST_READY_FULL);
     }
 
@@ -179,22 +196,8 @@ public class TestGameContainer {
         addCardsWithMockPhasePointsToDevelopmentInProgress(cardsToAddUntilFullEnough);
     }
 
-    private Phase getLastWorkPhase() {
-        return game.getBoard().getPhases().stream()
-                .filter(Phase::getIsWorkPhase)
-                .reduce((first, second) -> second)
-                .orElse(null);
-    }
-
     private List<Phase> getFirstWorkPhases() {
-        List<Phase> workPhases = game.getBoard().getPhases().stream()
-                .filter(Phase::getIsWorkPhase)
-                .collect(Collectors.toList());
-        Collections.reverse(workPhases);
-        List<Phase> allButLastWorkPhase = workPhases.stream()
-                .skip(1)
-                .collect(Collectors.toList());
-        return allButLastWorkPhase;
+        return Arrays.asList(getAnalysisPhase(), getDevelopmentPhase());
     }
 
 }
