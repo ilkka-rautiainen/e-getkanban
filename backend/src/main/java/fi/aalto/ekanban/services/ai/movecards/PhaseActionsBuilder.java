@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.services.MoveCardsAI;
+package fi.aalto.ekanban.services.ai.movecards;
 
 import fi.aalto.ekanban.models.MoveCardAction;
 

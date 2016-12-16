@@ -25,8 +25,8 @@ import fi.aalto.ekanban.models.AssignResourcesAction;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.CardPhasePoint;
 import fi.aalto.ekanban.models.db.phases.Phase;
-import fi.aalto.ekanban.services.AssignResourcesAI.AssignResourcesAIService;
-import fi.aalto.ekanban.services.AssignResourcesAI.DiceService;
+import fi.aalto.ekanban.services.ai.assignresources.AssignResourcesAIService;
+import fi.aalto.ekanban.services.ai.assignresources.DiceService;
 import fi.aalto.ekanban.utils.TestGameContainer;
 
 @RunWith(HierarchicalContextRunner.class)

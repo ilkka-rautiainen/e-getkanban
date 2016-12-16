@@ -1,12 +1,14 @@
 package fi.aalto.ekanban.services;
 
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.not;
 
-import static fi.aalto.ekanban.services.PlayerService.adjustWipLimits;
-import static fi.aalto.ekanban.services.PlayerService.drawFromBacklog;
-import static fi.aalto.ekanban.services.PlayerService.moveCards;
-import static fi.aalto.ekanban.services.PlayerService.assignResources;
+import static fi.aalto.ekanban.services.ActionExecutorService.adjustWipLimits;
+import static fi.aalto.ekanban.services.ActionExecutorService.assignResources;
+import static fi.aalto.ekanban.services.ActionExecutorService.moveCards;
+import static fi.aalto.ekanban.services.ActionExecutorService.drawFromBacklog;
 
 import java.util.*;
 
@@ -14,27 +16,25 @@ import com.rits.cloning.Cloner;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import fi.aalto.ekanban.builders.*;
-import fi.aalto.ekanban.models.*;
-import fi.aalto.ekanban.models.db.games.*;
-import fi.aalto.ekanban.models.db.phases.*;
+import fi.aalto.ekanban.models.AdjustWipLimitsAction;
+import fi.aalto.ekanban.models.AssignResourcesAction;
+import fi.aalto.ekanban.models.DrawFromBacklogAction;
+import fi.aalto.ekanban.models.MoveCardAction;
+import fi.aalto.ekanban.models.db.games.Card;
+import fi.aalto.ekanban.models.db.games.CardPhasePoint;
+import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.models.db.phases.Column;
+import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.utils.TestGameContainer;
 
 @RunWith(HierarchicalContextRunner.class)
-public class PlayerServiceTest {
-
-    private static PlayerService playerService;
+public class ActionExecutorServiceTest {
 
     private TestGameContainer initialGameContainer;
-
-    @BeforeClass
-    public static void setUpPlayerService() {
-        playerService = new PlayerService();
-    }
 
     @Before
     public void initGame() {
@@ -390,8 +390,8 @@ public class PlayerServiceTest {
             @Before
             public void doAction() {
                 originalWipLimits = initialGameContainer.getGame().getBoard().getPhases().stream()
-                    .filter(phase -> phase.getWipLimit() != null)
-                    .mapToInt(phase -> phase.getWipLimit()).toArray();
+                        .filter(phase -> phase.getWipLimit() != null)
+                        .mapToInt(phase -> phase.getWipLimit()).toArray();
 
                 AdjustWipLimitsAction emptyWipLimitChangeAction = null;
                 wipLimitAdjustedGame = adjustWipLimits(initialGameContainer.getGame(), emptyWipLimitChangeAction);
@@ -708,4 +708,5 @@ public class PlayerServiceTest {
                     .build());
         }
     }
+
 }

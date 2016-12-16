@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.services;
+package fi.aalto.ekanban.services.ai.drawfrombacklog;
 
 import java.util.List;
 import java.util.stream.Collectors;

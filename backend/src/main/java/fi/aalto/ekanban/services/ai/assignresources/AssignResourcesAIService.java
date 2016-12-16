@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.services.AssignResourcesAI;
+package fi.aalto.ekanban.services.ai.assignresources;
 
 import static fi.aalto.ekanban.ApplicationConstants.RESOURCE_DICE_MAX;
 import static fi.aalto.ekanban.ApplicationConstants.RESOURCE_DICE_MIN;

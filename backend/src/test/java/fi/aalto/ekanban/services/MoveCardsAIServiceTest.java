@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.models.MoveCardAction;
 import fi.aalto.ekanban.utils.TestGameContainer;
-import fi.aalto.ekanban.services.MoveCardsAI.MoveCardsAIService;
+import fi.aalto.ekanban.services.ai.movecards.MoveCardsAIService;
 
 @RunWith(HierarchicalContextRunner.class)
 public class MoveCardsAIServiceTest {

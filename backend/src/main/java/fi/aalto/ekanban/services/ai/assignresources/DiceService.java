@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.services.AssignResourcesAI;
+package fi.aalto.ekanban.services.ai.assignresources;
 
 import java.util.Random;
 

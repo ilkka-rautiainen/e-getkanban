@@ -1,9 +1,7 @@
 package fi.aalto.ekanban.services;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.util.List;
 
@@ -18,6 +16,7 @@ import fi.aalto.ekanban.models.DrawFromBacklogAction;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.utils.TestGameContainer;
+import fi.aalto.ekanban.services.ai.drawfrombacklog.DrawFromBacklogAIService;
 
 @RunWith(HierarchicalContextRunner.class)
 public class DrawFromBacklogAIServiceIntegrationTest {
@@ -107,7 +106,9 @@ public class DrawFromBacklogAIServiceIntegrationTest {
         public void shouldAddTheCardsInRightOrder() {
             List<Card> cardsInFirstColumn = drawnCardsGameContainer.getAnalysisPhase().getFirstColumn().getCards();
 
-            for (Integer backlogCardIdxBefore = 0; backlogCardIdxBefore < placesInFirstPhaseBefore; backlogCardIdxBefore++) {
+            for (Integer backlogCardIdxBefore = 0;
+                 backlogCardIdxBefore < placesInFirstPhaseBefore;
+                 backlogCardIdxBefore++) {
                 Card cardInBacklog = firstCardsInBacklogBefore.get(backlogCardIdxBefore);
                 Card cardInFirstColumn = cardsInFirstColumn.get(getCardInFirstColumnIdx(backlogCardIdxBefore));
                 assertThat(cardInBacklog.getId(), equalTo(cardInFirstColumn.getId()));
@@ -157,7 +158,7 @@ public class DrawFromBacklogAIServiceIntegrationTest {
     private void performDrawFromBacklog() {
         List<DrawFromBacklogAction> actions = drawFromBacklogAIService
                 .getDrawFromBacklogActions(initialGameContainer.getGame());
-        Game gameWithCardsDrawn = PlayerService.drawFromBacklog(initialGameContainer.getGame(), actions);
+        Game gameWithCardsDrawn = ActionExecutorService.drawFromBacklog(initialGameContainer.getGame(), actions);
         drawnCardsGameContainer = TestGameContainer.withGame(gameWithCardsDrawn);
         setResults();
     }
