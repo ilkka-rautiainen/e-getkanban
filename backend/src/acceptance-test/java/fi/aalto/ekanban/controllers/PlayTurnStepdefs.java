@@ -1,6 +1,7 @@
 package fi.aalto.ekanban.controllers;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -9,6 +10,7 @@ import static fi.aalto.ekanban.ApplicationConstants.*;
 
 import java.net.HttpURLConnection;
 import java.util.HashMap;
+import java.util.List;
 
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -16,6 +18,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import fi.aalto.ekanban.models.db.games.Game;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +46,9 @@ public class PlayTurnStepdefs extends SpringSteps {
     private AdjustWipLimitsAction adjustWipLimitsAction;
 
     private ValidatableResponse response;
-    private Card cardInAnalysisBefore;
-    private Card cardInDevelopmentBefore;
-    private Card cardInTestBefore;
+    private Card firstCardInAnalysisBefore;
+    private Card firstCardInDevelopmentBefore;
+    private Card firstCardInTestBefore;
     private Integer cardsInBacklogDeckBefore;
     private Integer wipLimitOfAnalysisAfter;
 
@@ -95,12 +98,41 @@ public class PlayTurnStepdefs extends SpringSteps {
         saveSituationBefore();
     }
 
+    @And("^it has wip limit of (\\d+) in phase (.+)")
+    public void it_has_wip_limit_in_phase(Integer wipLimit, String phaseName) throws Throwable {
+        if (phaseName.equals("Analysis")) {
+            initialGameContainer.getAnalysisPhase().setWipLimit(wipLimit);
+            gameRepository.save(initialGameContainer.getGame());
+            saveSituationBefore();
+        }
+        else {
+            throw new UnsupportedOperationException("That phase not implemented yet");
+        }
+    }
+
+    @And("^one turn has already been played$")
+    public void one_turn_has_already_been_played() throws Throwable {
+        i_press_the_next_round_button();
+        String gameId = initialGameContainer.getGame().getId();
+        Game updatedGame = gameRepository.findOne(gameId);
+        initialGameContainer = TestGameContainer.withGame(updatedGame);
+        saveSituationBefore();
+    }
+
     private void saveSituationBefore() {
-        cardInAnalysisBefore = initialGameContainer.getAnalysisPhase().getFirstColumn().getCards().get(0);
-        cardInDevelopmentBefore = initialGameContainer.getDevelopmentPhase().getFirstColumn().getCards().get(0);
-        cardInTestBefore = initialGameContainer.getTestPhase().getFirstColumn().getCards().get(0);
+        if (initialGameContainer.getAnalysisPhase().getFirstColumn().getCards().size() >= 1) {
+            firstCardInAnalysisBefore = initialGameContainer.getAnalysisPhase().getFirstColumn().getCards().get(0);
+        }
+        if (initialGameContainer.getDevelopmentPhase().getFirstColumn().getCards().size() >= 1) {
+            firstCardInDevelopmentBefore = initialGameContainer.getDevelopmentPhase()
+                    .getFirstColumn().getCards().get(0);
+        }
+        if (initialGameContainer.getTestPhase().getFirstColumn().getCards().size() >= 1) {
+            firstCardInTestBefore = initialGameContainer.getTestPhase().getFirstColumn().getCards().get(0);
+        }
         cardsInBacklogDeckBefore = initialGameContainer.getGame().getBoard().getBacklogDeck().size();
-        // In case it's not changed
+
+        // saving this already in case it's not being changed by a when-action
         wipLimitOfAnalysisAfter = initialGameContainer.getAnalysisPhase().getWipLimit();
     }
 
@@ -166,21 +198,21 @@ public class PlayTurnStepdefs extends SpringSteps {
         response.body("board.phases.find { it.id == '" + DEVELOPMENT_PHASE_ID + "' }.columns[0].cards.size()",
                 equalTo(1));
         response.body("board.phases.find { it.id == '" + DEVELOPMENT_PHASE_ID + "' }.columns[0].cards[0].id",
-                equalTo(cardInAnalysisBefore.getId()));
+                equalTo(firstCardInAnalysisBefore.getId()));
     }
 
     private void assertDevelopmentCardInTest() {
         response.body("board.phases.find { it.id == '" + TEST_PHASE_ID + "' }.columns[0].cards.size()",
                 equalTo(1));
         response.body("board.phases.find { it.id == '" + TEST_PHASE_ID + "' }.columns[0].cards[0].id",
-                equalTo(cardInDevelopmentBefore.getId()));
+                equalTo(firstCardInDevelopmentBefore.getId()));
     }
 
     private void assertTestCardInDeployed() {
         response.body("board.phases.find { it.id == '" + DEPLOYED_PHASE_ID + "' }.columns[0].cards.size()",
                 equalTo(1));
         response.body("board.phases.find { it.id == '" + DEPLOYED_PHASE_ID + "' }.columns[0].cards[0].id",
-                equalTo(cardInTestBefore.getId()));
+                equalTo(firstCardInTestBefore.getId()));
     }
 
     @And("^new cards are drawn from backlog to the first column$")
@@ -191,5 +223,17 @@ public class PlayTurnStepdefs extends SpringSteps {
         response.body("board.phases.find { it.id == '" + ANALYSIS_PHASE_ID + "' }.columns[0].cards[0]"
                         + ".cardPhasePoints.find { it.phaseId == '" + ANALYSIS_PHASE_ID + "' }.pointsDone",
                 equalTo(0));
+    }
+
+    @And("^the phase (.+) should have some cards in its first column$")
+    public void the_phase_should_have_some_cards_in_its_first_column(String phaseName) throws Throwable {
+        response.body("board.phases.find { it.name == '" + phaseName + "' }.columns[0].cards.size()",
+                greaterThan(0));
+    }
+
+    @And("^the phase (.+) should still have more cards than it's WIP limit$")
+    public void the_phase_should_still_have_more_cards_than_its_wip_limit(String phaseName) throws Throwable {
+        response.body("board.phases.find { it.name == '" + phaseName + "' }.columns[0].cards.size()",
+                greaterThan(wipLimitOfAnalysisAfter));
     }
 }
