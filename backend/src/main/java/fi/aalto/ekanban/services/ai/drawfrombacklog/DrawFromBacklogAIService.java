@@ -33,6 +33,6 @@ public class DrawFromBacklogAIService {
 
     private Integer getPlacesInFirstPhase(Game game) {
         Phase firstPhase = game.getBoard().getPhases().get(0);
-        return firstPhase.getWipLimit() - firstPhase.getTotalAmountOfCards();
+        return Math.max(0, firstPhase.getWipLimit() - firstPhase.getTotalAmountOfCards());
     }
 }
