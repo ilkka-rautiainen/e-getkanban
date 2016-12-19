@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.controllers;
+package fi.aalto.ekanban.difficulty.normal.stepdefs;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import fi.aalto.ekanban.enums.FinancialValue;
 import fi.aalto.ekanban.enums.GameDifficulty;
+import fi.aalto.ekanban.SpringSteps;
 import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.repositories.GameRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
@@ -82,7 +83,7 @@ public class StartGameStepdefs extends SpringSteps {
 
     @And("^game should have difficulty of (.+)")
     public void gameShouldHaveDifficultyOf(String difficultyLevelName) throws Throwable {
-        response.body("difficultyLevel", equalTo(difficultyLevelName));
+        response.body("difficultyLevel", equalTo(difficultyLevelName.toUpperCase()));
     }
 
     @And("^game should include a board$")

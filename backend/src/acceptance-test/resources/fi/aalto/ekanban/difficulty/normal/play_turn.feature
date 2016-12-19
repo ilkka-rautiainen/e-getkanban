@@ -1,7 +1,7 @@
 Feature: Play Turn
   As a game player
   I want to play a turn after possibly adjusting wip limits
-  So that I can see the result of different AI actions
+  So that I can see the result of different AI actions (assign&use resources, move cards and draw from backlog AIs) and the Cumulative Flow Diagram (CFD-diagram)
 
 
   Scenario: Player changes the wip limits and plays the turn with almost done cards

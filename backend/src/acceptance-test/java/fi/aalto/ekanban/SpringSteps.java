@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.controllers;
+package fi.aalto.ekanban;
 
 import io.restassured.RestAssured;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.controllers;
+package fi.aalto.ekanban.difficulty.normal.stepdefs;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.greaterThan;
@@ -18,6 +18,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import fi.aalto.ekanban.SpringSteps;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
