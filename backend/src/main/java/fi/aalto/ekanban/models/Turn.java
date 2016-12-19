@@ -1,10 +1,13 @@
 package fi.aalto.ekanban.models;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class Turn {
 
+    @Valid
     private AdjustWipLimitsAction adjustWipLimitsAction;
     @NotNull
     private List<MoveCardAction> moveCardActions;
