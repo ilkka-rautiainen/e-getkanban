@@ -56,3 +56,13 @@ Feature: Play Turn
       And it has wip limit of 1 in phase Analysis
       And the phase Development should have some cards in its first column
       And the phase Analysis should still have more cards than it's WIP limit
+
+
+  Scenario: Player tries to give a negative wip-limit value
+    Given I have a game with difficulty of Normal
+      And game has one ready card in first columns of the work phases
+
+    When I change WIP limit of phase Analysis to -1
+      And I press the next round button
+
+    Then I should get an error
