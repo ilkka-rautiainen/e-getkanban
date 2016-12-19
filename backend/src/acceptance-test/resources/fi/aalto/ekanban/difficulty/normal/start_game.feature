@@ -5,14 +5,14 @@ Feature: Start Game
 
   Scenario: Player starts the game with normal difficulty
     Given I enter player name as Player
-    Given I choose normal difficulty
+      And I choose Normal difficulty
 
     When I press start game
 
     Then I should get a new game
       And game should have player name as Player
       And game should have current day of 1
-      And game should have difficulty of NORMAL
+      And game should have difficulty of Normal
       And game should include a board
         And board should include 1 backlog deck
           And backlog deck should have 15 cards
