@@ -2,6 +2,7 @@ package fi.aalto.ekanban.controllers;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -135,7 +136,7 @@ public class PlayTurnStepdefs extends SpringSteps {
         wipLimitOfAnalysisAfter = initialGameContainer.getAnalysisPhase().getWipLimit();
     }
 
-    @When("^I change WIP limit of phase (.+) to (\\d+)$")
+    @When("^I change WIP limit of phase (.+) to (-?\\d+)$")
     public void i_change_wip_limit_of_phase_to(String phaseName, Integer wipLimit) throws Throwable {
         Phase phase = phaseRepository.findByName(phaseName);
         adjustWipLimitsAction.getPhaseWipLimits().put(phase.getId(), wipLimit);
@@ -159,7 +160,11 @@ public class PlayTurnStepdefs extends SpringSteps {
     public void i_should_get_a_game_with_a_turn_played() throws Throwable {
         response.statusCode(HttpURLConnection.HTTP_OK)
                 .body(is(notNullValue()));
-        response.extract().path("board.phases");
+    }
+
+    @Then("^I should get an error$")
+    public void i_should_get_an_error() throws Throwable {
+        response.statusCode(not(HttpURLConnection.HTTP_OK));
     }
 
     @And("^game should have phase (.+) with WIP limit (\\d+)$")
