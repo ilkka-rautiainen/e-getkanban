@@ -120,6 +120,13 @@ public class PlayTurnStepdefs extends SpringSteps {
         saveSituationBefore();
     }
 
+    @And("^the current day of the game is (\\d+)$")
+    public void the_current_day_of_the_game_is(Integer currentDay) throws Throwable {
+        initialGameContainer.getGame().setCurrentDay(currentDay);
+        gameRepository.save(initialGameContainer.getGame());
+        saveSituationBefore();
+    }
+
     private void saveSituationBefore() {
         if (initialGameContainer.getAnalysisPhase().getFirstColumn().getCards().size() >= 1) {
             firstCardInAnalysisBefore = initialGameContainer.getAnalysisPhase().getFirstColumn().getCards().get(0);

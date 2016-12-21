@@ -1,4 +1,4 @@
-Feature: Start Game
+Feature: Start Game on Normal level
   As a game player
   I want to start a fresh game when entering site
   So that I can practice for board version of kanban game
@@ -35,5 +35,13 @@ Feature: Start Game
             And the phase Test should have 1 column(s)
           And 4. phase in board is Deployed
             And the phase Deployed should have 1 column(s)
-
-
+        And board should include colored track lines
+          And there should be a track line for the cards entered the board
+          And there should be a track line for the cards passed the phase Analysis
+          And there should be a track line for the cards passed the phase Development
+          And there should be a track line for the cards that have been deployed
+      And game should include a CFD-diagram
+        And the CFD-diagram should include a line for the cards entered the board
+        And the CFD-diagram should include a line for the cards passed the phase Analysis
+        And the CFD-diagram should include a line for the cards passed the phase Development
+        And the CFD-diagram should include a line for the cards that have been deployed
