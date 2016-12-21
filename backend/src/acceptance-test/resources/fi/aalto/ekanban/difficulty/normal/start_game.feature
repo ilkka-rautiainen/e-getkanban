@@ -11,7 +11,7 @@ Feature: Start Game on Normal level
 
     Then I should get a new game
       And game should have player name as Player
-      And game should have current day of 1
+      And game should have current day of 0
       And game should have difficulty of Normal
       And game should include a board
         And board should include 1 backlog deck

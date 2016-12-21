@@ -131,6 +131,7 @@ public class PhasePopulater {
 
     private static Card getCardWithPhasePoints(Phase phase, Readiness readiness) {
         Card card = CardBuilder.aCard()
+                .withDayStarted(1)
                 .withMockPhasePoints()
                 .build();
         CardPhasePoint phasePoint = card.getCardPhasePoints().stream()

@@ -12,7 +12,7 @@ Feature: Start Game on Advanced level
 
     Then I should get a new game
       And game should have player name as Kekkosen Urkki
-      And game should have current day of 1
+      And game should have current day of 0
       And game should have difficulty of Advanced
       And game should include a financial summary chart
       And game should include a board

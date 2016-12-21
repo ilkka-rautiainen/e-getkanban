@@ -15,7 +15,7 @@ public final class GameBuilder {
     private GameDifficulty difficultyLevel;
 
     private GameBuilder() {
-        currentDay = 1;
+        currentDay = 0;
     }
 
     public static GameBuilder aGame() {
