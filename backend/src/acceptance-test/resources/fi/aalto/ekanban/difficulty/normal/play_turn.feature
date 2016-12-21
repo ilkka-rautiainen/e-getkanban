@@ -1,4 +1,4 @@
-Feature: Play Turn
+Feature: Play Turn on Normal level
   As a game player
   I want to play a turn after possibly adjusting wip limits
   So that I can see the result of different AI actions (assign&use resources, move cards and draw from backlog AIs) and the Cumulative Flow Diagram (CFD-diagram)
@@ -66,3 +66,43 @@ Feature: Play Turn
       And I press the next round button
 
     Then I should get an error
+
+
+  Scenario: Player wants to see the CFD diagram after the first turn
+    Given I have a game with difficulty of Normal
+
+    When I press the next round button
+
+    Then I should get a game with a turn played
+      And the first column should have some cards drawn from backlog
+      And game should include a CFD-diagram
+        And the newest records in the CFD-diagram are for day 2
+        And the CFD-diagram should show the line of cards entered to the board increased by the amount of cards that entered to the board
+
+
+  Scenario: Player wants to see the CFD diagram update in the middle of the game
+    Given I have a game with difficulty of Normal
+      And game has one ready card in first columns of the work phases
+      And the current day of the game is 5
+
+    When I press the next round button
+
+    Then I should get a game with a turn played
+      And game should include a CFD-diagram
+        And the newest records in the CFD-diagram are for day 6
+        And the CFD-diagram should increase the line of cards entered the board by 1
+        And the CFD-diagram should increase the line of cards passed the phase Analysis by 1
+        And the CFD-diagram should increase the line of cards passed the phase Development by 1
+        And the CFD-diagram should increase the line of cards deployed by 1
+
+
+  Scenario: Player wants to see the lead time of the cards
+    Given I have a game with difficulty of Normal
+      And game has one ready card in first columns of the work phases
+      And the current day of the game is 5
+
+    When I press the next round button
+
+    Then I should get a game with a turn played
+      And one card should have been deployed
+      And the card that was deployed should have a lead time calculated on it and it's 5
