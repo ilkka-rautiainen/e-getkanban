@@ -5,17 +5,19 @@ import "./BacklogDeck.scss";
 
 const BacklogDeck = ({ topMostBacklogCardId }) => {
   return <div className="backlog">
-      <Card key={topMostBacklogCardId} id={topMostBacklogCardId} />
+    { topMostBacklogCardId && <Card key={topMostBacklogCardId} id={topMostBacklogCardId} /> }
+    { !topMostBacklogCardId && <div className="empty">&nbsp;</div> }
   </div>
 };
 
 BacklogDeck.propTypes = {
-  topMostBacklogCardId: PropTypes.string.isRequired
+  topMostBacklogCardId: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
+  const topMostCardId = state.backlogDeck ? state.backlogDeck[0] : null;
   return {
-    topMostBacklogCardId: state.backlogDeck[0]
+    topMostBacklogCardId: topMostCardId
   }
 };
 
