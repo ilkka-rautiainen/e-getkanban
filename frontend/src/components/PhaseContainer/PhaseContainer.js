@@ -20,7 +20,6 @@ class PhaseContainer extends React.Component {
   constructor({ phase, firstColumn }) {
     super();
     this.phase = phase;
-    this.firstColumn = firstColumn;
   }
 
   get className() {
@@ -36,7 +35,7 @@ class PhaseContainer extends React.Component {
     return (
       <Col xs className={this.className}>
           {this.phase.columns.length === 1 ?
-            <PhaseWithSingleColumn phase={this.phase} column={this.firstColumn} /> :
+            <PhaseWithSingleColumn phase={this.phase} column={this.props.firstColumn} /> :
             <PhaseWithTwoColumns phase={this.phase} />}
       </Col>
     )
@@ -45,7 +44,7 @@ class PhaseContainer extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   const phase = state.phases[ownProps.id];
-  const firstColumn = phase === undefined ? null : state.columns[phase.columns[0]]
+  const firstColumn = phase === undefined ? null : state.columns[phase.columns[0]];
   return {
     phase: phase,
     firstColumn: firstColumn
