@@ -20,6 +20,7 @@ public final class CardBuilder {
     private String outcome;
     private Integer dayStarted;
     private Integer dayDeployed;
+    private Integer leadTimeInDays;
     private Integer subscribers;
     private Integer orderNumber;
 
@@ -43,6 +44,11 @@ public final class CardBuilder {
 
     public CardBuilder withSubscribers(Integer subscribers) {
         this.subscribers = subscribers;
+        return this;
+    }
+
+    public CardBuilder withLeadTimeInDays(Integer leadTimeInDays) {
+        this.leadTimeInDays = leadTimeInDays;
         return this;
     }
 
@@ -108,6 +114,7 @@ public final class CardBuilder {
         Card card = new Card();
         card.setDayStarted(dayStarted);
         card.setDayDeployed(dayDeployed);
+        card.setLeadTimeInDays(leadTimeInDays);
         card.setSubscribers(subscribers);
         card.setId(id);
         card.setOrderNumber(orderNumber);
