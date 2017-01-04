@@ -8,7 +8,6 @@ import constants from "../constants";
 
 export default function startGame(action$) {
   return action$.ofType(START_GAME)
-    .delay(1000)
     .mergeMap(action =>
       Observable.ajax.post(constants.BACKEND_HOST+constants.GAMES_PATH, action.payload)
         .map(data => normalize(data.response, gameSchema))
