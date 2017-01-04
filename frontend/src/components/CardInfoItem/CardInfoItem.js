@@ -28,7 +28,7 @@ class CardInfoItem extends React.Component {
     return <div className={this.className}>
       <span>{this.title}</span>
       <div className="info-oval">
-        <span>{this.value ? this.value : "\u00a0"}</span>
+        <span>{this.value !== null ? this.value : "\u00a0"}</span>
       </div>
     </div>
   }
