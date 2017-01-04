@@ -18,15 +18,11 @@ class Card extends React.Component {
       outcome: PropTypes.string,
       dayStarted: PropTypes.number,
       dayDeployed: PropTypes.number,
+      leadTimeInDays: PropTypes.number,
       subscribers: PropTypes.number,
       orderNumber: PropTypes.number.isRequired
     }).isRequired
   };
-
-  get calculateLeadTime() {
-    if (this.card.dayDeployed != null && this.card.dayStarted != null)
-      return this.card.dayDeployed - this.card.dayStarted;
-  }
 
   get cardInfoClass() {
     let baseClassName = "card-info ";
@@ -53,7 +49,7 @@ class Card extends React.Component {
         <span className="special-char">&minus;</span>
         <CardInfoItem title="Day Started" value={this.card.dayStarted}/>
         <span className="special-char">=</span>
-        <CardInfoItem givenClass="lead-time" title="Lead Time" value={this.calculateLeadTime}/>
+        <CardInfoItem givenClass="lead-time" title="Lead Time" value={this.card.leadTimeInDays}/>
         { this.gameDifficulty !== constants.GAME_DIFFICULTY_NORMAL &&
           <CardInfoItem title="Subscribers" value={this.card.subscribers}/>
         }
