@@ -79,7 +79,7 @@ public class Column {
         return cards.stream().anyMatch(card -> card.getId().equals(cardId));
     }
 
-    public Card pullCard(String cardId) throws CardNotFoundException {
+    public Card pullCard(String cardId) {
         Optional<Card> card = cards.stream().filter(c -> c.getId().equals(cardId)).findFirst();
         if (!card.isPresent()) {
             throw new CardNotFoundException(MessageFormat.format(

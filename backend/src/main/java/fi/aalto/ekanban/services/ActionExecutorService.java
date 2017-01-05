@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import fi.aalto.ekanban.exceptions.CardNotFoundException;
 import fi.aalto.ekanban.exceptions.CardPhasePointNotFoundException;
 import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
 import fi.aalto.ekanban.exceptions.PhaseNotFoundException;
@@ -47,7 +46,7 @@ public class ActionExecutorService {
                     }
                     game.performAssignResourcesAction(assignResourcesAction);
                 }
-                catch (CardPhasePointNotFoundException |PhaseNotFoundException |CardNotFoundException e) {
+                catch (CardPhasePointNotFoundException|PhaseNotFoundException e) {
                     logger.error(e.getMessage(), e);
                 }
             });
@@ -64,7 +63,7 @@ public class ActionExecutorService {
                     }
                     game.performMoveCardAction(moveCardAction);
                 }
-                catch (ColumnNotFoundException |CardNotFoundException e) {
+                catch (ColumnNotFoundException e) {
                     logger.error(e.getMessage(), e);
                 }
             });
@@ -99,8 +98,7 @@ public class ActionExecutorService {
                 && drawAction.getIndexToPlaceCardAt() <= firstPhase.getColumns().get(0).getCards().size();
     }
 
-    private static boolean isValidAssignResourcesAction(AssignResourcesAction assignResourcesAction, Game game)
-            throws CardNotFoundException, PhaseNotFoundException {
+    private static boolean isValidAssignResourcesAction(AssignResourcesAction assignResourcesAction, Game game) {
         Card card = game.getCardWithId(assignResourcesAction.getCardId());
         CardPhasePoint cardPhasePoint = card.getCardPhasePointOfPhase(assignResourcesAction.getPhaseId());
         Integer pointsLeft = cardPhasePoint.getTotalPoints() - cardPhasePoint.getPointsDone();
