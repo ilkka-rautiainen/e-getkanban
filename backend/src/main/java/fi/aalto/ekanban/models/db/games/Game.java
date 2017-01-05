@@ -122,7 +122,7 @@ public class Game {
     }
 
     public void performMoveCardAction(MoveCardAction moveCardAction)
-            throws ColumnNotFoundException, CardNotFoundException {
+            throws ColumnNotFoundException {
         Column fromColumn = getColumnWithId(moveCardAction.getFromColumnId());
         Column toColumn = getColumnWithId(moveCardAction.getToColumnId());
         Card cardToMove = fromColumn.pullCard(moveCardAction.getCardId());
@@ -145,14 +145,13 @@ public class Game {
         return phase.getColumns().get(0).getCards().contains(card);
     }
 
-    public void performAssignResourcesAction(AssignResourcesAction assignResourcesAction)
-            throws CardNotFoundException {
+    public void performAssignResourcesAction(AssignResourcesAction assignResourcesAction) {
         Card card = getCardWithId(assignResourcesAction.getCardId());
         CardPhasePoint cardPhasePoint = card.getCardPhasePointOfPhase(assignResourcesAction.getPhaseId());
         cardPhasePoint.increasePointsDoneBy(assignResourcesAction.getPoints());
     }
 
-    public Card getCardWithId(String cardId) throws CardNotFoundException {
+    public Card getCardWithId(String cardId) {
         Optional<Card> cardOptional = board.getPhases().stream()
                 .flatMap(phase -> phase.getColumns().stream())
                 .flatMap(column -> column.getCards().stream())
