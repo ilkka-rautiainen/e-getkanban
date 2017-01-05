@@ -227,8 +227,8 @@ public class PlayTurnStepdefs extends SpringSteps {
                 equalTo(firstCardInTestBefore.getId()));
     }
 
-    @And("^new cards are drawn from backlog to the first column$")
-    public void new_cards_are_drawn_from_backlog_to_the_first_column() throws Throwable {
+    @And("^new cards should have been drawn from backlog to the first column$")
+    public void new_cards_should_have_been_drawn_from_backlog_to_the_first_column() throws Throwable {
         response.body("board.backlogDeck.size()", equalTo(cardsInBacklogDeckBefore - wipLimitOfAnalysisAfter));
         response.body("board.phases.find { it.id == '" + ANALYSIS_PHASE_ID + "' }.columns[0].cards.size()",
                 equalTo(wipLimitOfAnalysisAfter));
