@@ -1,5 +1,7 @@
 package fi.aalto.ekanban.models.db.games;
 
+import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE_ID;
+
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -109,7 +111,13 @@ public class Game {
 
     public void performMoveCardAction(MoveCardAction moveCardAction)
             throws ColumnNotFoundException, CardNotFoundException {
-        board.performMoveCardAction(moveCardAction);
+        Column fromColumn = getColumnWithId(moveCardAction.getFromColumnId());
+        Column toColumn = getColumnWithId(moveCardAction.getToColumnId());
+        Card cardToMove = fromColumn.pullCard(moveCardAction.getCardId());
+        toColumn.pushCard(cardToMove);
+        if (isDeployedPhaseFirstColumn(toColumn)) {
+            deployCard(cardToMove);
+        }
     }
 
     public Boolean doesMoveExceedWIP(MoveCardAction moveCardAction) throws ColumnNotFoundException {
@@ -150,5 +158,19 @@ public class Game {
 
     public Phase getNextPhase(Phase phase) {
         return board.getNextPhase(phase);
+    }
+
+    private void deployCard(Card cardDeployed) {
+        cardDeployed.setDayDeployed(getCurrentDay());
+        updateLeadTime(cardDeployed);
+    }
+
+    private void updateLeadTime(Card cardDeployed) {
+        Integer leadTimeInDays = getCurrentDay() - cardDeployed.getDayStarted();
+        cardDeployed.setLeadTimeInDays(leadTimeInDays);
+    }
+
+    private boolean isDeployedPhaseFirstColumn(Column column) {
+        return getBoard().getPhaseWithId(DEPLOYED_PHASE_ID).getFirstColumn().equals(column);
     }
 }

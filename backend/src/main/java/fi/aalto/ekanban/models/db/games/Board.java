@@ -128,14 +128,6 @@ public class Board {
         return column.hasCard(cardId);
     }
 
-    public void performMoveCardAction(MoveCardAction moveCardAction)
-            throws ColumnNotFoundException, CardNotFoundException {
-        Column fromColumn = getColumnWithId(moveCardAction.getFromColumnId());
-        Column toColumn = getColumnWithId(moveCardAction.getToColumnId());
-        Card cardToMove = fromColumn.pullCard(moveCardAction.getCardId());
-        toColumn.pushCard(cardToMove);
-    }
-
     public Phase getPhaseWithId(String phaseId) {
         Optional<Phase> phaseOptional = phases.stream().filter(phase -> phase.getId().equals(phaseId)).findFirst();
         if (!phaseOptional.isPresent()) {
