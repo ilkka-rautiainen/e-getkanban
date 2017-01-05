@@ -1,5 +1,7 @@
 package fi.aalto.ekanban.models.db.games;
 
+import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE_ID;
+
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
@@ -151,6 +153,18 @@ public class Board {
         }
         Integer phaseIdx = getPhases().indexOf(phase);
         return getPhases().get(phaseIdx + 1);
+    }
+
+    public boolean backlogDeckEmpty() {
+        return getBacklogDeck().isEmpty();
+    }
+
+    public boolean allCardsDeployed() {
+        return getPhases().stream()
+                .filter(phase -> !phase.getId().equals(DEPLOYED_PHASE_ID))
+                .flatMap(phase -> phase.getAllCards().stream())
+                .collect(Collectors.toList())
+                .isEmpty();
     }
 
     private boolean isColumnNextAdjacentInsideSamePhase(String referenceColumnId, String inspectedOtherColumnId)

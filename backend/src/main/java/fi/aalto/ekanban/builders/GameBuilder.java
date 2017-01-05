@@ -13,9 +13,11 @@ public final class GameBuilder {
     private Board board;
     private Integer currentDay;
     private GameDifficulty difficultyLevel;
+    private Boolean hasEnded;
 
     private GameBuilder() {
         currentDay = 0;
+        hasEnded = false;
     }
 
     public static GameBuilder aGame() {
@@ -44,6 +46,11 @@ public final class GameBuilder {
 
     public GameBuilder withDifficultyLevel(GameDifficulty difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
+        return this;
+    }
+
+    public GameBuilder withHasEnded(Boolean hasEnded) {
+        this.hasEnded = hasEnded;
         return this;
     }
 
@@ -78,6 +85,7 @@ public final class GameBuilder {
         game.setBoard(board);
         game.setCurrentDay(currentDay);
         game.setDifficultyLevel(difficultyLevel);
+        game.setHasEnded(hasEnded);
         return game;
     }
 }
