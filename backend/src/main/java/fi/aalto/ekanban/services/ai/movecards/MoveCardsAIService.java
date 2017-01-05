@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import fi.aalto.ekanban.builders.MoveCardActionBuilder;
-import fi.aalto.ekanban.exceptions.PhaseNotFoundException;
 import fi.aalto.ekanban.models.MoveCardAction;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.Game;
@@ -90,17 +89,12 @@ public class MoveCardsAIService {
 
     private List<MoveCardAction> actionsFromSecondColumnToNextPhase(Phase currentPhase,
                                                                     Integer cardsLetOutFromLatestPhase) {
-        try {
-            if (currentPhase.hasSecondColumn() && game.hasNextPhase(currentPhase)) {
-                Column secondColumn = currentPhase.getSecondColumn();
-                Phase nextPhase = game.getNextPhase(currentPhase);
-                Integer cardsAlreadyMovedToLatestPhase = 0;
-                return actionsToNextPhaseFromLastColumnOfPhase(currentPhase, secondColumn, nextPhase,
-                        cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
-            }
-        }
-        catch (PhaseNotFoundException e) {
-            logger.error("Phase not found", e);
+        if (currentPhase.hasSecondColumn() && game.hasNextPhase(currentPhase)) {
+            Column secondColumn = currentPhase.getSecondColumn();
+            Phase nextPhase = game.getNextPhase(currentPhase);
+            Integer cardsAlreadyMovedToLatestPhase = 0;
+            return actionsToNextPhaseFromLastColumnOfPhase(currentPhase, secondColumn, nextPhase,
+                    cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
         }
         return new ArrayList<>();
     }
@@ -108,23 +102,18 @@ public class MoveCardsAIService {
     private List<MoveCardAction> actionsFromFirstColumnToNextPhase(Phase currentPhase,
                                                                    Integer cardsLetOutFromLatestPhase,
                                                                    Integer cardsAlreadyMovedToLatestPhase) {
-        try {
-            if (game.hasNextPhase(currentPhase)) {
-                Column firstColumn = currentPhase.getFirstColumn();
-                Phase nextPhase = game.getNextPhase(currentPhase);
-                if (currentPhase.hasSecondColumn()) {
-                    Column secondColumn = currentPhase.getSecondColumn();
-                    return actionsToNextPhaseOverSecondColumn(currentPhase, firstColumn, secondColumn, nextPhase,
-                            cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
-                }
-                else {
-                    return actionsToNextPhaseFromLastColumnOfPhase(currentPhase, firstColumn, nextPhase,
-                            cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
-                }
+        if (game.hasNextPhase(currentPhase)) {
+            Column firstColumn = currentPhase.getFirstColumn();
+            Phase nextPhase = game.getNextPhase(currentPhase);
+            if (currentPhase.hasSecondColumn()) {
+                Column secondColumn = currentPhase.getSecondColumn();
+                return actionsToNextPhaseOverSecondColumn(currentPhase, firstColumn, secondColumn, nextPhase,
+                        cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
             }
-        }
-        catch (PhaseNotFoundException e) {
-            logger.error("Phase not found", e);
+            else {
+                return actionsToNextPhaseFromLastColumnOfPhase(currentPhase, firstColumn, nextPhase,
+                        cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
+            }
         }
         return new ArrayList<>();
     }

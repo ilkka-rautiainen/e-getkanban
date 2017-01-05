@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import fi.aalto.ekanban.exceptions.PhaseNotFoundException;
 import fi.aalto.ekanban.models.AdjustWipLimitsAction;
 import fi.aalto.ekanban.models.AssignResourcesAction;
 import fi.aalto.ekanban.models.DrawFromBacklogAction;
@@ -38,15 +37,10 @@ public class ActionExecutorService {
     public static Game assignResources(Game game, List<AssignResourcesAction> assignResourcesActions) {
         if (game != null && game.isValid() && assignResourcesActions != null) {
             assignResourcesActions.forEach(assignResourcesAction -> {
-                try {
-                    if (!isValidAssignResourcesAction(assignResourcesAction, game)) {
-                        return;
-                    }
-                    game.performAssignResourcesAction(assignResourcesAction);
+                if (!isValidAssignResourcesAction(assignResourcesAction, game)) {
+                    return;
                 }
-                catch (PhaseNotFoundException e) {
-                    logger.error(e.getMessage(), e);
-                }
+                game.performAssignResourcesAction(assignResourcesAction);
             });
         }
         return game;
