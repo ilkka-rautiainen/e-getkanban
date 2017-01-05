@@ -1,12 +1,11 @@
 package fi.aalto.ekanban.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fi.aalto.ekanban.enums.GameDifficulty;
+import fi.aalto.ekanban.exceptions.GameHasEndedException;
 import fi.aalto.ekanban.exceptions.GameNotFoundException;
 import fi.aalto.ekanban.models.Turn;
 import fi.aalto.ekanban.models.db.games.*;
@@ -43,6 +42,9 @@ public class GameService {
         Game game = gameRepository.findOne(gameId);
         if (game == null) {
             throw new GameNotFoundException();
+        }
+        else if (game.getHasEnded()) {
+            throw new GameHasEndedException();
         }
         Game playedGame = playerService.playTurn(game, turn);
         gameRepository.save(playedGame);
