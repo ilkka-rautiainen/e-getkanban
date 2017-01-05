@@ -24,6 +24,14 @@ public class PlayerService {
             TurnPlayer turnPlayer = getTurnPlayer(game);
             game.setCurrentDay(game.getCurrentDay() + 1);
             game = turnPlayer.playTurn(game, turn);
+            game = endGameIfNeeded(game);
+        }
+        return game;
+    }
+
+    private Game endGameIfNeeded(Game game) {
+        if (!game.getHasEnded() && game.canBeEnded()) {
+            game.setHasEnded(true);
         }
         return game;
     }
