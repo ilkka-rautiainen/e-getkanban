@@ -84,7 +84,7 @@ Feature: Play Turn on Normal level
     When I press the next round button
 
     Then I should get a game with a turn played
-      And the first column should have some cards drawn from backlog
+      And new cards should have been drawn from backlog to the first column
       And game should include a CFD-diagram
         And the newest records in the CFD-diagram are for day 2
         And the CFD-diagram should show the line of cards entered to the board increased by the amount of cards that entered to the board
@@ -115,4 +115,5 @@ Feature: Play Turn on Normal level
 
     Then I should get a game with a turn played
       And one card should have been deployed
+      And the card that was deployed should have the day deployed set to 6
       And the card that was deployed should have a lead time calculated on it and it's 5
