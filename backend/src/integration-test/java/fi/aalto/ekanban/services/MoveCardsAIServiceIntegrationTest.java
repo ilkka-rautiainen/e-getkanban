@@ -51,7 +51,7 @@ public class MoveCardsAIServiceIntegrationTest {
                 private Game gameBefore;
 
                 @Before
-                public void initAndDoAction() throws PhaseNotFoundException {
+                public void initAndDoAction() {
                     initialGameContainer.fillFirstWorkPhasesWithSomeCardsInProgress();
                     gameBefore = new Cloner().deepClone(initialGameContainer.getGame());
                     performMoveCards();
@@ -77,7 +77,7 @@ public class MoveCardsAIServiceIntegrationTest {
                     private List<String> cardIdsInTestBefore;
 
                     @Before
-                    public void initAndDoAction() throws PhaseNotFoundException {
+                    public void initAndDoAction() {
                         initialGameContainer.fillFirstWorkPhasesToFullWithReadyCards();
                         cardIdsInAnalysisBefore = getCardIds(initialGameContainer.getAnalysisPhase());
                         cardIdsInDevelopmentBefore = getCardIds(initialGameContainer.getDevelopmentPhase());
@@ -123,7 +123,7 @@ public class MoveCardsAIServiceIntegrationTest {
                     private Integer cardsInLastWorkPhaseBefore;
 
                     @Before
-                    public void initAndDoAction() throws PhaseNotFoundException {
+                    public void initAndDoAction() {
                         initialGameContainer.fillFirstWorkPhasesWithSomeReadyCards();
                         cardsInFirstWorkPhaseBefore = initialGameContainer.getAnalysisPhase().getTotalAmountOfCards();
                         cardsInSecondLastWorkPhaseBefore = initialGameContainer.getDevelopmentPhase()
@@ -173,7 +173,7 @@ public class MoveCardsAIServiceIntegrationTest {
             private Integer cardsInSecondWorkPhaseBefore;
 
             @Before
-            public void initAndDoAction() throws PhaseNotFoundException {
+            public void initAndDoAction() {
                 initialGameContainer.fillFirstWorkPhasesWithSomeCardsInProgress();
                 cardsInFirstWorkPhaseBefore = initialGameContainer.getAnalysisPhase().getTotalAmountOfCards();
                 cardsInSecondWorkPhaseBefore = initialGameContainer.getDevelopmentPhase()
@@ -214,7 +214,7 @@ public class MoveCardsAIServiceIntegrationTest {
             private Card cardInSecondWorkPhase;
 
             @Before
-            public void initAndDoAction() throws PhaseNotFoundException {
+            public void initAndDoAction() {
                 initialGameContainer.fillFirstWorkPhasesWithSomeReadyCards();
                 cardsInSecondWorkPhaseBefore = initialGameContainer.getDevelopmentPhase().getTotalAmountOfCards();
                 cardsInLastWorkPhaseBefore = initialGameContainer.getTestPhase().getTotalAmountOfCards();
@@ -275,7 +275,7 @@ public class MoveCardsAIServiceIntegrationTest {
             private Integer cardsInFirstWorkPhaseBefore;
 
             @Before
-            public void initAndDoAction() throws PhaseNotFoundException {
+            public void initAndDoAction() {
                 initialGameContainer.fillFirstWorkPhasesToFullWithReadyCards();
                 cardsInFirstWorkPhaseBefore = initialGameContainer.getTestPhase().getTotalAmountOfCards();
                 performMoveCards();
@@ -308,7 +308,7 @@ public class MoveCardsAIServiceIntegrationTest {
         }
     }
 
-    private void performMoveCards() throws PhaseNotFoundException {
+    private void performMoveCards() {
         List<MoveCardAction> actions = moveCardsAIService.getMoveCardsActions(initialGameContainer.getGame());
         Game gameWithCardsMoved = ActionExecutorService.moveCards(initialGameContainer.getGame(), actions);
         movedCardsGameContainer = TestGameContainer.withGame(gameWithCardsMoved);
