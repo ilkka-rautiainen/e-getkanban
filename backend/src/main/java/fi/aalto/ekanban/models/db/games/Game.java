@@ -126,7 +126,7 @@ public class Game {
     }
 
     public void performAssignResourcesAction(AssignResourcesAction assignResourcesAction)
-            throws CardNotFoundException, CardPhasePointNotFoundException {
+            throws CardNotFoundException {
         Card card = getCardWithId(assignResourcesAction.getCardId());
         CardPhasePoint cardPhasePoint = card.getCardPhasePointOfPhase(assignResourcesAction.getPhaseId());
         cardPhasePoint.increasePointsDoneBy(assignResourcesAction.getPoints());

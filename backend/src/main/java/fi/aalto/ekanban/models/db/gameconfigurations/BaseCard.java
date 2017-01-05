@@ -143,11 +143,7 @@ public class BaseCard {
 
     @JsonIgnore
     public Boolean isReadyWithPhase(Phase phase) {
-        try {
-            CardPhasePoint cardPhasePoint = getCardPhasePointOfPhase(phase.getId());
-            return cardPhasePoint.isReady();
-        } catch (CardPhasePointNotFoundException e) {
-            return false;
-        }
+        CardPhasePoint cardPhasePoint = getCardPhasePointOfPhase(phase.getId());
+        return cardPhasePoint.isReady();
     }
 }
