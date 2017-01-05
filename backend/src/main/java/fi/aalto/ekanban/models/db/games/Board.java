@@ -136,7 +136,7 @@ public class Board {
         toColumn.pushCard(cardToMove);
     }
 
-    public Phase getPhaseWithId(String phaseId) throws PhaseNotFoundException {
+    public Phase getPhaseWithId(String phaseId) {
         Optional<Phase> phaseOptional = phases.stream().filter(phase -> phase.getId().equals(phaseId)).findFirst();
         if (!phaseOptional.isPresent()) {
             throw new PhaseNotFoundException(MessageFormat.format("Board doesn't have phase with id {0}", phaseId));
@@ -144,7 +144,7 @@ public class Board {
         return phaseOptional.get();
     }
 
-    public Boolean hasNextPhase(Phase inspectedPhase) throws PhaseNotFoundException {
+    public Boolean hasNextPhase(Phase inspectedPhase) {
         if (!getPhases().contains(inspectedPhase)) {
             throw new PhaseNotFoundException(
                     MessageFormat.format("Board doesn't have phase with id {0}", inspectedPhase.getId()));
@@ -153,7 +153,7 @@ public class Board {
         return getPhases().indexOf(inspectedPhase) < lastPhaseIdx;
     }
 
-    public Phase getNextPhase(Phase phase) throws PhaseNotFoundException {
+    public Phase getNextPhase(Phase phase) {
         if (!hasNextPhase(phase)) {
             return null;
         }
