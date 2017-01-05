@@ -18,7 +18,6 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import fi.aalto.ekanban.SpringSteps;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,7 @@ import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.repositories.GameRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
 import fi.aalto.ekanban.utils.TestGameContainer;
+import fi.aalto.ekanban.SpringSteps;
 
 public class PlayTurnStepdefs extends SpringSteps {
 
@@ -68,6 +68,7 @@ public class PlayTurnStepdefs extends SpringSteps {
             throws Throwable {
         initGame();
         initRequest();
+        saveSituationBefore();
     }
 
     private void initGame() {
@@ -257,5 +258,24 @@ public class PlayTurnStepdefs extends SpringSteps {
     public void the_phase_should_still_have_more_cards_than_its_wip_limit(String phaseName) throws Throwable {
         response.body("board.phases.find { it.name == '" + phaseName + "' }.columns[0].cards.size()",
                 greaterThan(wipLimitOfAnalysisAfter));
+    }
+
+    @And("^one card should have been deployed$")
+    public void one_card_should_have_been_deployed() throws Throwable {
+        response.body("board.phases.find { it.id == '" + DEPLOYED_PHASE_ID + "' }.columns[0].cards.size()",
+                equalTo(1));
+    }
+
+    @And("^the card that was deployed should have the day deployed set to (\\d+)$")
+    public void the_card_that_was_deployed_should_have_the_day_deployed_set_to(Integer dayDeployed) throws Throwable {
+        response.body("board.phases.find { it.id == '" + DEPLOYED_PHASE_ID + "' }.columns[0].cards[0].dayDeployed",
+                equalTo(dayDeployed));
+    }
+
+    @And("^the card that was deployed should have a lead time calculated on it and it's (\\d+)$")
+    public void the_card_that_was_deployed_should_have_a_lead_time_calculated_on_it_and_its(Integer leadTime)
+            throws Throwable {
+        response.body("board.phases.find { it.id == '" + DEPLOYED_PHASE_ID + "' }.columns[0].cards[0].leadTimeInDays",
+                equalTo(leadTime));
     }
 }
