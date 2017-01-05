@@ -335,14 +335,13 @@ public class ActionExecutorServiceTest {
             performMoveCardsAndAssignResults(fromColumnName, toColumnName, moveCardActions);
         }
 
-        private void performMoveCardsAndAssignResults(TestGameContainer.ColumnName fromColumnName, TestGameContainer.ColumnName toColumnName, List<MoveCardAction> moveCardActions) {
-            Game gameWithCardsMoved = moveCards(initialGameContainer.getGame(), moveCardActions);
-
-            gameWithCardsMovedContainer = TestGameContainer.withGame(gameWithCardsMoved);
-            fromColumnAfter = gameWithCardsMovedContainer.getColumn(fromColumnName);
-            toColumnAfter = gameWithCardsMovedContainer.getColumn(toColumnName);
+        private void addMovingCardsIntoFromColumn(Column fromColumn) {
+            Arrays.asList(firstCardToMove, secondCardToMove).forEach(cardToMove -> {
+                if (!fromColumn.hasCard(cardToMove.getId())) {
+                    fromColumn.getCards().add(cardToMove);
+                }
+            });
         }
-
 
         private List<MoveCardAction> createMoveCardActions(Column fromColumn, Column toColumn) {
             MoveCardAction firstMoveAction = MoveCardActionBuilder.aMoveCardAction()
@@ -356,12 +355,12 @@ public class ActionExecutorServiceTest {
             return Arrays.asList(firstMoveAction, secondMoveAction);
         }
 
-        private void addMovingCardsIntoFromColumn(Column fromColumn) {
-            Arrays.asList(firstCardToMove, secondCardToMove).forEach(cardToMove -> {
-                if (!fromColumn.hasCard(cardToMove.getId())) {
-                    fromColumn.getCards().add(cardToMove);
-                }
-            });
+        private void performMoveCardsAndAssignResults(TestGameContainer.ColumnName fromColumnName, TestGameContainer.ColumnName toColumnName, List<MoveCardAction> moveCardActions) {
+            Game gameWithCardsMoved = moveCards(initialGameContainer.getGame(), moveCardActions);
+
+            gameWithCardsMovedContainer = TestGameContainer.withGame(gameWithCardsMoved);
+            fromColumnAfter = gameWithCardsMovedContainer.getColumn(fromColumnName);
+            toColumnAfter = gameWithCardsMovedContainer.getColumn(toColumnName);
         }
 
     }
