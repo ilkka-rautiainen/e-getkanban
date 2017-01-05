@@ -14,6 +14,7 @@ import java.util.*;
 
 import com.rits.cloning.Cloner;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
+import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -295,31 +296,26 @@ public class ActionExecutorServiceTest {
             }
 
             public class withSomeInvalidToColumnIds {
+                private TestGameContainer.ColumnName fromColumnName;
+                private TestGameContainer.ColumnName toColumnName;
+                private List<MoveCardAction> moveCardActions;
 
                 @Before
-                public void moveCards() {
-                    TestGameContainer.ColumnName fromColumnName = TestGameContainer.ColumnName.ANALYSIS_DONE;
-                    TestGameContainer.ColumnName toColumnName = TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS;
+                public void init() {
+                    fromColumnName = TestGameContainer.ColumnName.ANALYSIS_DONE;
+                    toColumnName = TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS;
 
                     Column fromColumn = initialGameContainer.getColumn(fromColumnName);
                     Column toColumn = initialGameContainer.getColumn(toColumnName);
 
                     addMovingCardsIntoFromColumn(fromColumn);
-                    List<MoveCardAction> moveCardActions = createMoveCardActions(fromColumn, toColumn);
+                    moveCardActions = createMoveCardActions(fromColumn, toColumn);
                     moveCardActions.get(0).setToColumnId("wrongColumnId");
+                }
 
+                @Test(expected = ColumnNotFoundException.class)
+                public void moveCards() {
                     performMoveCardsAndAssignResults(fromColumnName, toColumnName, moveCardActions);
-                }
-
-                @Test
-                public void shouldLeaveTheFirstCardInOldColumn() {
-                    assertThat(fromColumnAfter.getCards(), hasItems(firstCardToMove));
-                    assertThat(fromColumnAfter.getCards(), not(hasItems(secondCardToMove)));
-                }
-                @Test
-                public void shouldMoveTheOtherCardToNewColumn() {
-                    assertThat(toColumnAfter.getCards(), not(hasItems(firstCardToMove)));
-                    assertThat(toColumnAfter.getCards(), hasItems(secondCardToMove));
                 }
             }
         }
