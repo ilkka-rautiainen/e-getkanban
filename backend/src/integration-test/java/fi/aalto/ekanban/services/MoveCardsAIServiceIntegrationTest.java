@@ -14,7 +14,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fi.aalto.ekanban.exceptions.PhaseNotFoundException;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Phase;
@@ -29,6 +28,7 @@ public class MoveCardsAIServiceIntegrationTest {
 
     private TestGameContainer initialGameContainer;
     private TestGameContainer movedCardsGameContainer;
+    private static final Integer CURRENT_DAY = 14;
 
     @BeforeClass
     public static void setUpMoveCardsAIService() {
@@ -38,6 +38,7 @@ public class MoveCardsAIServiceIntegrationTest {
     @Before
     public void init() {
         initialGameContainer = TestGameContainer.withNormalDifficultyMockGame();
+        initialGameContainer.getGame().setCurrentDay(CURRENT_DAY);
     }
 
     public class withLastWorkPhaseWithCardsInProgress {
@@ -204,6 +205,17 @@ public class MoveCardsAIServiceIntegrationTest {
             @Test
             public void shouldNotHaveExceededAnyWipLimit() {
                 assertWipLimitsNotExceeded();
+            }
+
+            @Test
+            public void shouldSetDayDeployedAndCalculateLeadTimeForDeployedCards() {
+                List<Card> deployedCards = movedCardsGameContainer.getDeployedPhase().getAllCards();
+                deployedCards.forEach(deployedCard -> {
+                    Integer currentDay = movedCardsGameContainer.getGame().getCurrentDay();
+                    Integer correctLeadTime = currentDay - deployedCard.getDayStarted();
+                    assertThat(deployedCard.getDayDeployed(), equalTo(currentDay));
+                    assertThat(deployedCard.getLeadTimeInDays(), equalTo(correctLeadTime));
+                });
             }
         }
 
