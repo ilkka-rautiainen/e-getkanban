@@ -237,6 +237,16 @@ public class PlayTurnStepdefs extends SpringSteps {
                 equalTo(0));
     }
 
+    @And("^the cards in the first column have day started of (\\d+)$")
+    public void the_cards_in_the_first_column_have_day_started_of(Integer dayStarted) throws Throwable {
+        Integer cardsInFirstColumn = response.extract()
+                .path("board.phases.find { it.id == '" + ANALYSIS_PHASE_ID + "' }.columns[0].cards.size()");
+        for (Integer i = 0; i < cardsInFirstColumn; i++) {
+            response.body("board.phases.find { it.id == '" + ANALYSIS_PHASE_ID + "' }.columns[0].cards["
+                    + Integer.toString(i) + "].dayStarted", equalTo(dayStarted));
+        }
+    }
+
     @And("^the phase (.+) should have some cards in its first column$")
     public void the_phase_should_have_some_cards_in_its_first_column(String phaseName) throws Throwable {
         response.body("board.phases.find { it.name == '" + phaseName + "' }.columns[0].cards.size()",

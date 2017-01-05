@@ -32,6 +32,16 @@ Feature: Play Turn on Normal level
       And the card in each work phase's first column has been moved to next phase
       And new cards should have been drawn from backlog to the first column
 
+  Scenario: Player plays the first turn of a fresh game
+    Given I have a game with difficulty of Normal
+      And the current day of the game is 0
+
+    When I press the next round button
+
+    Then I should get a game with a turn played
+      And new cards should have been drawn from backlog to the first column
+      And the cards in the first column have day started of 1
+
 
   Scenario: Player doesn't change anything and awaits the wip-limit to remain the same
     Given I have a game with difficulty of Normal
