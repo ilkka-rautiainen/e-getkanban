@@ -128,6 +128,20 @@ public class PlayTurnStepdefs extends SpringSteps {
         saveSituationBefore();
     }
 
+    @And("^game has one ready card in the last work phase$")
+    public void game_has_one_ready_card_in_the_last_work_phase() throws Throwable {
+        initialGameContainer.fillLastWorkPhaseWithSomeReadyCards();
+        gameRepository.save(initialGameContainer.getGame());
+        saveSituationBefore();
+    }
+
+    @And("^game has an empty backlog$")
+    public void game_has_an_empty_backlog() throws Throwable {
+        initialGameContainer.emptyBacklog();
+        gameRepository.save(initialGameContainer.getGame());
+        saveSituationBefore();
+    }
+
     private void saveSituationBefore() {
         if (initialGameContainer.getAnalysisPhase().getFirstColumn().getCards().size() >= 1) {
             firstCardInAnalysisBefore = initialGameContainer.getAnalysisPhase().getFirstColumn().getCards().get(0);
@@ -277,5 +291,15 @@ public class PlayTurnStepdefs extends SpringSteps {
             throws Throwable {
         response.body("board.phases.find { it.id == '" + DEPLOYED_PHASE_ID + "' }.columns[0].cards[0].leadTimeInDays",
                 equalTo(leadTime));
+    }
+
+    @And("^the game should have been ended$")
+    public void the_game_should_have_been_ended() throws Throwable {
+        response.body("hasEnded", equalTo(true));
+    }
+
+    @And("^the game should not have been ended$")
+    public void the_game_should_not_have_been_ended() throws Throwable {
+        response.body("hasEnded", equalTo(false));
     }
 }
