@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import fi.aalto.ekanban.exceptions.CardPhasePointNotFoundException;
 import fi.aalto.ekanban.exceptions.PhaseNotFoundException;
 import fi.aalto.ekanban.models.AdjustWipLimitsAction;
 import fi.aalto.ekanban.models.AssignResourcesAction;
@@ -45,7 +44,7 @@ public class ActionExecutorService {
                     }
                     game.performAssignResourcesAction(assignResourcesAction);
                 }
-                catch (CardPhasePointNotFoundException|PhaseNotFoundException e) {
+                catch (PhaseNotFoundException e) {
                     logger.error(e.getMessage(), e);
                 }
             });
