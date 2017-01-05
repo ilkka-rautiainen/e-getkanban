@@ -14,6 +14,7 @@ Feature: Play Turn on Normal level
       And I press the next round button
 
     Then I should get a game with a turn played
+      And the game should not have been ended
       And game should have phase Analysis with WIP limit 1
       And game should have phase Development with WIP limit 1
       And game should have phase Test with WIP limit 1
@@ -117,3 +118,15 @@ Feature: Play Turn on Normal level
       And one card should have been deployed
       And the card that was deployed should have the day deployed set to 6
       And the card that was deployed should have a lead time calculated on it and it's 5
+
+
+  Scenario: Player plays the last turn of the game and wants to have the game ended
+    Given I have a game with difficulty of Normal
+      And game has one ready card in the last work phase
+      And game has an empty backlog
+
+    When I press the next round button
+
+    Then I should get a game with a turn played
+      And one card should have been deployed
+      And the game should have been ended

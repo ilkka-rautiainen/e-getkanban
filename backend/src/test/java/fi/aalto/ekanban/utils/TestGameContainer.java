@@ -157,6 +157,10 @@ public class TestGameContainer {
         backlogDeck.removeAll(backlogDeck.subList(1, backlogDeck.size()));
     }
 
+    public void emptyBacklog() {
+        game.getBoard().getBacklogDeck().clear();
+    }
+
     public void addCardsWithMockPhasePointsToDevelopmentInProgress(Integer cardsToAdd) {
         Column developmentInProgressColumn = getColumn(ColumnName.DEVELOPMENT_IN_PROGRESS);
         for (Integer i = 0; i < cardsToAdd; i++) {

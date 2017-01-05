@@ -2,6 +2,7 @@ package fi.aalto.ekanban.difficulty.normal.stepdefs;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 import static fi.aalto.ekanban.ApplicationConstants.GAME_PATH;
 
