@@ -94,8 +94,7 @@ public class Board {
         return result;
     }
 
-    public Boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId)
-            throws ColumnNotFoundException {
+    public Boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId) {
         return isColumnNextAdjacentInsideSamePhase(referenceColumnId, inspectedOtherColumnId) ||
                isColumnNextAdjacentInAdjacentPhase(referenceColumnId, inspectedOtherColumnId);
     }
@@ -105,7 +104,7 @@ public class Board {
         return phases != null && phases.stream().allMatch(Phase::isValid);
     }
 
-    public Column getColumnWithId(String columnId) throws ColumnNotFoundException {
+    public Column getColumnWithId(String columnId) {
         for (Phase phase : phases) {
             Optional<Column> columnWithId = phase.getColumns().stream()
                     .filter(column -> column.getId().equals(columnId))
@@ -117,7 +116,7 @@ public class Board {
         throw new ColumnNotFoundException(MessageFormat.format("Board has no column with id {0}", columnId));
     }
 
-    public Boolean doesMoveExceedWIP(MoveCardAction moveCardAction) throws ColumnNotFoundException {
+    public Boolean doesMoveExceedWIP(MoveCardAction moveCardAction) {
         if (areColumnsInSamePhase(moveCardAction.getFromColumnId(), moveCardAction.getToColumnId())) {
             return false;
         }
@@ -125,7 +124,7 @@ public class Board {
         return phase.isFullWip();
     }
 
-    public Boolean isCardInColumn(String cardId, String columnId) throws ColumnNotFoundException {
+    public Boolean isCardInColumn(String cardId, String columnId) {
         Column column = getColumnWithId(columnId);
         return column.hasCard(cardId);
     }
@@ -167,8 +166,7 @@ public class Board {
                 .isEmpty();
     }
 
-    private boolean isColumnNextAdjacentInsideSamePhase(String referenceColumnId, String inspectedOtherColumnId)
-            throws ColumnNotFoundException {
+    private boolean isColumnNextAdjacentInsideSamePhase(String referenceColumnId, String inspectedOtherColumnId) {
         if (!areColumnsInSamePhase(referenceColumnId, inspectedOtherColumnId)) {
             return false;
         }
@@ -176,15 +174,13 @@ public class Board {
         return phase.isColumnNextAdjacent(referenceColumnId, inspectedOtherColumnId);
     }
 
-    private Boolean areColumnsInSamePhase(String referenceColumnId, String inspectedOtherColumnId)
-            throws ColumnNotFoundException {
+    private Boolean areColumnsInSamePhase(String referenceColumnId, String inspectedOtherColumnId) {
         Integer refColPhaseNumber = getPhaseOrderNumberWithColumn(referenceColumnId);
         Integer adjColPhaseNumber = getPhaseOrderNumberWithColumn(inspectedOtherColumnId);
         return refColPhaseNumber.equals(adjColPhaseNumber);
     }
 
-    private Boolean isColumnNextAdjacentInAdjacentPhase(String referenceColumnId, String inspectedOtherColumnId)
-            throws ColumnNotFoundException {
+    private Boolean isColumnNextAdjacentInAdjacentPhase(String referenceColumnId, String inspectedOtherColumnId) {
         if (!areColumnsInAdjacentPhases(referenceColumnId, inspectedOtherColumnId)) {
             return false;
         }
@@ -196,19 +192,18 @@ public class Board {
         }
     }
 
-    private Boolean areColumnsInAdjacentPhases(String referenceColumnId, String inspectedOtherColumnId)
-            throws ColumnNotFoundException {
+    private Boolean areColumnsInAdjacentPhases(String referenceColumnId, String inspectedOtherColumnId) {
         Integer refColPhaseNumber = getPhaseOrderNumberWithColumn(referenceColumnId);
         Integer adjColPhaseNumber = getPhaseOrderNumberWithColumn(inspectedOtherColumnId);
         return refColPhaseNumber == adjColPhaseNumber - 1;
     }
 
-    private Phase getPhaseWithColumn(String columnId) throws ColumnNotFoundException {
+    private Phase getPhaseWithColumn(String columnId) {
         Integer phaseNumber = getPhaseOrderNumberWithColumn(columnId);
         return phases.get(phaseNumber);
     }
 
-    private Integer getPhaseOrderNumberWithColumn(String columnId) throws ColumnNotFoundException {
+    private Integer getPhaseOrderNumberWithColumn(String columnId) {
         for (Integer i = 0; i < phases.size(); i++) {
             if (phases.get(i).containsColumnWithId(columnId)) {
                 return i;

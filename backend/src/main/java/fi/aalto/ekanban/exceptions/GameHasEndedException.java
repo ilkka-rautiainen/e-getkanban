@@ -3,7 +3,7 @@ package fi.aalto.ekanban.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value= HttpStatus.BAD_REQUEST, reason = "The game has already ended")
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "The game has already ended")
 public class GameHasEndedException extends RuntimeException {
     public GameHasEndedException() { super(); }
     public GameHasEndedException(String message) { super(message); }

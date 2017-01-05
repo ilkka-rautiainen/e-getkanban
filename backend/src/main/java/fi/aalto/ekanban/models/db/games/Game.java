@@ -112,17 +112,15 @@ public class Game {
         return this.board != null && this.board.isValid();
     }
 
-    public Column getColumnWithId(String columnId) throws ColumnNotFoundException {
+    public Column getColumnWithId(String columnId) {
         return this.board.getColumnWithId(columnId);
     }
 
-    public Boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId)
-            throws ColumnNotFoundException {
+    public Boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId) {
         return this.board.isColumnNextAdjacent(referenceColumnId, inspectedOtherColumnId);
     }
 
-    public void performMoveCardAction(MoveCardAction moveCardAction)
-            throws ColumnNotFoundException {
+    public void performMoveCardAction(MoveCardAction moveCardAction) {
         Column fromColumn = getColumnWithId(moveCardAction.getFromColumnId());
         Column toColumn = getColumnWithId(moveCardAction.getToColumnId());
         Card cardToMove = fromColumn.pullCard(moveCardAction.getCardId());
@@ -132,11 +130,11 @@ public class Game {
         }
     }
 
-    public Boolean doesMoveExceedWIP(MoveCardAction moveCardAction) throws ColumnNotFoundException {
+    public Boolean doesMoveExceedWIP(MoveCardAction moveCardAction) {
         return board.doesMoveExceedWIP(moveCardAction);
     }
 
-    public Boolean isCardInColumn(String cardId, String columnId) throws ColumnNotFoundException {
+    public Boolean isCardInColumn(String cardId, String columnId) {
         return board.isCardInColumn(cardId, columnId);
     }
 

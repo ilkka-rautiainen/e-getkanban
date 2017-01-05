@@ -173,19 +173,18 @@ public class Phase {
         return columns.stream().anyMatch(column -> column.getId().equals(columnId));
     }
 
-    public Boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId)
-            throws ColumnNotFoundException {
+    public Boolean isColumnNextAdjacent(String referenceColumnId, String inspectedOtherColumnId) {
         Column referenceColumn = getColumnById(referenceColumnId);
         Column inspectedOtherColumn = getColumnById(inspectedOtherColumnId);
         return columns.indexOf(referenceColumn) == columns.indexOf(inspectedOtherColumn) - 1;
     }
 
-    public Boolean isTheLastColumn(String columnId) throws ColumnNotFoundException {
+    public Boolean isTheLastColumn(String columnId) {
         Column column = getColumnById(columnId);
         return columns.indexOf(column) == columns.size() - 1;
     }
 
-    public Boolean isTheFirstColumn(String columnId) throws ColumnNotFoundException {
+    public Boolean isTheFirstColumn(String columnId) {
         Column column = getColumnById(columnId);
         return columns.indexOf(column) == 0;
     }
@@ -216,7 +215,7 @@ public class Phase {
         return allCards;
     }
 
-    private Column getColumnById(String columnId) throws ColumnNotFoundException {
+    private Column getColumnById(String columnId) {
         Optional<Column> result = columns.stream()
                 .filter(column -> column.getId().equals(columnId))
                 .findFirst();

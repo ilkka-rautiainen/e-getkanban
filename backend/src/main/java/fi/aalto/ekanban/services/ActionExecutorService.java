@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import fi.aalto.ekanban.exceptions.CardPhasePointNotFoundException;
-import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
 import fi.aalto.ekanban.exceptions.PhaseNotFoundException;
 import fi.aalto.ekanban.models.AdjustWipLimitsAction;
 import fi.aalto.ekanban.models.AssignResourcesAction;
@@ -57,15 +56,10 @@ public class ActionExecutorService {
     public static Game moveCards(Game game, List<MoveCardAction> moveCardActions) {
         if (game != null && game.isValid() && moveCardActions != null) {
             moveCardActions.forEach(moveCardAction -> {
-                try {
-                    if (!isValidMoveCardAction(moveCardAction, game)) {
-                        return;
-                    }
-                    game.performMoveCardAction(moveCardAction);
+                if (!isValidMoveCardAction(moveCardAction, game)) {
+                    return;
                 }
-                catch (ColumnNotFoundException e) {
-                    logger.error(e.getMessage(), e);
-                }
+                game.performMoveCardAction(moveCardAction);
             });
         }
         return game;
@@ -106,8 +100,7 @@ public class ActionExecutorService {
                 && game.isCardInFirstColumnOfPhase(card, assignResourcesAction.getPhaseId());
     }
 
-    private static boolean isValidMoveCardAction(MoveCardAction moveCardAction, Game game)
-            throws ColumnNotFoundException {
+    private static boolean isValidMoveCardAction(MoveCardAction moveCardAction, Game game) {
         return game.isColumnNextAdjacent(moveCardAction.getFromColumnId(), moveCardAction.getToColumnId()) &&
                 !game.doesMoveExceedWIP(moveCardAction) &&
                 game.isCardInColumn(moveCardAction.getCardId(), moveCardAction.getFromColumnId());

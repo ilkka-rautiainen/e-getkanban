@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
 import fi.aalto.ekanban.builders.MoveCardActionBuilder;
 import fi.aalto.ekanban.models.MoveCardAction;
 import fi.aalto.ekanban.utils.TestGameContainer;
@@ -42,7 +41,7 @@ public class GameTest {
             private Card cardAfterInDeployed;
 
             @Before
-            public void initAndDoAction() throws ColumnNotFoundException {
+            public void initAndDoAction() {
                 cardBeforeInTest = testGameContainer.getTestPhase().getFirstColumn().getCards().get(0);
                 MoveCardAction action = MoveCardActionBuilder.aMoveCardAction()
                         .withCardId(cardBeforeInTest.getId())
@@ -75,7 +74,7 @@ public class GameTest {
             private Card cardAfterInTest;
 
             @Before
-            public void initAndDoAction() throws ColumnNotFoundException {
+            public void initAndDoAction() {
                 cardBeforeInDevelopment = testGameContainer.getDevelopmentPhase().getSecondColumn().getCards().get(0);
                 MoveCardAction action = MoveCardActionBuilder.aMoveCardAction()
                         .withCardId(cardBeforeInDevelopment.getId())
