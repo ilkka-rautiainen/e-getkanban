@@ -2,6 +2,7 @@ package fi.aalto.ekanban.services;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.Before;
@@ -31,7 +32,7 @@ public class PlayerServiceTest {
     public static void initService() {
         normalTurnPlayerService = Mockito.mock(NormalTurnPlayerService.class);
         Mockito.when(normalTurnPlayerService.playTurn(Mockito.any(Game.class), Mockito.any(Turn.class)))
-                .thenReturn(TestGameContainer.withNormalDifficultyMockGame().getGame());
+                .then(returnsFirstArg());
         playerService = new PlayerService(normalTurnPlayerService);
     }
 
