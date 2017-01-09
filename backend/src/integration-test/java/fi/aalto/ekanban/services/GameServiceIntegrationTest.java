@@ -3,6 +3,9 @@ package fi.aalto.ekanban.services;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +16,8 @@ import fi.aalto.ekanban.builders.TurnBuilder;
 import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.Turn;
+import fi.aalto.ekanban.models.db.phases.Phase;
+import fi.aalto.ekanban.models.CFDDailyValue;
 import fi.aalto.ekanban.repositories.GameRepository;
 import fi.aalto.ekanban.utils.TestGameContainer;
 import fi.aalto.ekanban.SpringIntegrationTest;
@@ -35,6 +40,7 @@ public class GameServiceIntegrationTest extends SpringIntegrationTest {
         public class whenDifficultyIsNormal {
 
             private Long gameCountBeforeAction;
+            private List<CFDDailyValue> cfdDailyValues;
 
             @Before
             public void setupGame() {
@@ -42,6 +48,8 @@ public class GameServiceIntegrationTest extends SpringIntegrationTest {
                 gameDifficulty = GameDifficulty.NORMAL;
                 playerName = "Player";
                 newGame = gameService.startGame(playerName, gameDifficulty);
+
+                cfdDailyValues = newGame.getCFD().getCfdDailyValues();
             }
 
             @Test
@@ -53,6 +61,35 @@ public class GameServiceIntegrationTest extends SpringIntegrationTest {
             @Test
             public void boardShouldHaveBoardEnteredTracklineColor() {
                 assertThat(newGame.getBoard().getEnteredBoardTrackLineColor(), is(notNullValue()));
+            }
+
+            @Test
+            public void gameShouldHaveCFD() {
+                assertThat(newGame.getCFD(), is(notNullValue()));
+            }
+
+            @Test
+            public void cfdDailyValuesShouldHaveOneItem() {
+                assertThat(cfdDailyValues.size(), equalTo(1));
+            }
+
+            @Test
+            public void firstCfdDailyValueShouldHaveZeroValues() {
+                CFDDailyValue firstDailyValue = cfdDailyValues.get(0);
+                assertThat(firstDailyValue.getEnteredBoard(), equalTo(0));
+                firstDailyValue.getPhaseValues().values().forEach(dailyValue -> assertThat(dailyValue, equalTo(0)));
+            }
+
+            @Test
+            public void cfdDailyValueShouldIncludeAllPhasesWithATrackLine() {
+                CFDDailyValue firstDailyValue = cfdDailyValues.get(0);
+                List<Phase> phasesWithTrackLine = newGame.getBoard().getPhases().stream()
+                        .filter(phase -> phase.getTrackLinePlace() != null)
+                        .collect(Collectors.toList());
+                phasesWithTrackLine.forEach(phase -> {
+                    assertThat(firstDailyValue.getPhaseValues(), hasKey(phase.getId()));
+                });
+                assertThat(firstDailyValue.getPhaseValues().size(), equalTo(phasesWithTrackLine.size()));
             }
 
         }
