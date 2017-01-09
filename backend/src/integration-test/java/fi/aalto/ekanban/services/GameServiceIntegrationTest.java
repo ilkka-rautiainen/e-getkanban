@@ -49,6 +49,11 @@ public class GameServiceIntegrationTest extends SpringIntegrationTest {
                 assertThat(newGame, is(notNullValue()));
             }
 
+            @Test
+            public void boardShouldHaveBoardEnteredTracklineColor() {
+                assertThat(newGame.getBoard().getEnteredBoardTrackLineColor(), is(notNullValue()));
+            }
+
         }
 
     }

@@ -93,7 +93,6 @@ public class Game {
         if (difficultyLevel != null ? !difficultyLevel.equals(game.difficultyLevel) : game.difficultyLevel != null) return false;
         if (hasEnded != null ? !hasEnded.equals(game.hasEnded) : game.hasEnded != null) return false;
         return board != null ? board.equals(game.board) : game.board == null;
-
     }
 
     @Override

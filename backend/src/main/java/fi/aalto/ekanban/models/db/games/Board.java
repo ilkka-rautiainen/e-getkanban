@@ -21,15 +21,14 @@ public class Board {
 
     @Id
     private String id;
-
     @Field
     private List<Card> backlogDeck;
-
     @Field
     private List<EventCard> eventCardDeck;
-
     @Field
     private List<Phase> phases;
+    @Field
+    private String enteredBoardTrackLineColor;
 
     public String getId() {
         return id;
@@ -68,6 +67,14 @@ public class Board {
         this.phases = phases;
     }
 
+    public String getEnteredBoardTrackLineColor() {
+        return enteredBoardTrackLineColor;
+    }
+
+    public void setEnteredBoardTrackLineColor(String enteredBoardTrackLineColor) {
+        this.enteredBoardTrackLineColor = enteredBoardTrackLineColor;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,6 +88,8 @@ public class Board {
         if (backlogDeck != null ? !backlogDeck.equals(board.backlogDeck) : board.backlogDeck != null) return false;
         if (eventCardDeck != null ? !eventCardDeck.equals(board.eventCardDeck) : board.eventCardDeck != null)
             return false;
+        if (enteredBoardTrackLineColor != null ? !enteredBoardTrackLineColor.equals(board.enteredBoardTrackLineColor) : board.enteredBoardTrackLineColor != null)
+            return false;
         return phases != null ? phases.equals(board.phases) : board.phases == null;
 
     }
@@ -91,6 +100,7 @@ public class Board {
         result = 31 * result + (backlogDeck != null ? backlogDeck.hashCode() : 0);
         result = 31 * result + (eventCardDeck != null ? eventCardDeck.hashCode() : 0);
         result = 31 * result + (phases != null ? phases.hashCode() : 0);
+        result = 31 * result + (enteredBoardTrackLineColor != null ? enteredBoardTrackLineColor.hashCode() : 0);
         return result;
     }
 

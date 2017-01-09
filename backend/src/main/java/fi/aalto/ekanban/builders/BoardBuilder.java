@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
+import fi.aalto.ekanban.models.db.gameconfigurations.DifficultyConfiguration;
 import fi.aalto.ekanban.models.db.games.Board;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.EventCard;
@@ -16,6 +17,7 @@ public final class BoardBuilder {
     private List<Card> backlogDeck;
     private List<EventCard> eventCardDeck;
     private List<Phase> phases;
+    private String enteredBoardTrackLineColor;
 
     private BoardBuilder() {
         this.id = ObjectId.get().toString();
@@ -45,6 +47,11 @@ public final class BoardBuilder {
         return this;
     }
 
+    public BoardBuilder withEnteredBoardTrackLineColor(String enteredBoardTrackLineColor) {
+        this.enteredBoardTrackLineColor = enteredBoardTrackLineColor;
+        return this;
+    }
+
     public BoardBuilder withNormalDifficultyDefaults(BaseCardRepository baseCardRepository,
                                                      PhaseRepository phaseRepository) {
         this.backlogDeck = CardsBuilder.aSetOfCards()
@@ -70,6 +77,7 @@ public final class BoardBuilder {
         board.setBacklogDeck(backlogDeck);
         board.setEventCardDeck(eventCardDeck);
         board.setPhases(phases);
+        board.setEnteredBoardTrackLineColor(enteredBoardTrackLineColor);
         return board;
     }
 }
