@@ -1,6 +1,7 @@
 package fi.aalto.ekanban.builders;
 
 import fi.aalto.ekanban.enums.GameDifficulty;
+import fi.aalto.ekanban.models.CFD;
 import fi.aalto.ekanban.models.Turn;
 import fi.aalto.ekanban.models.db.gameconfigurations.DifficultyConfiguration;
 import fi.aalto.ekanban.models.db.games.Board;
@@ -17,6 +18,7 @@ public final class GameBuilder {
     private GameDifficulty difficultyLevel;
     private Boolean hasEnded;
     private Turn lastTurn;
+    private CFD cfd;
 
     private GameBuilder() {
         currentDay = 0;
@@ -62,6 +64,11 @@ public final class GameBuilder {
         return this;
     }
 
+    public GameBuilder withCFD(CFD cfd) {
+        this.cfd = cfd;
+        return this;
+    }
+
     public GameBuilder withNormalDifficultyDefaults(DifficultyConfiguration difficultyConfiguration,
                                                     String playerName,
                                                     BaseCardRepository baseCardRepository,
@@ -71,6 +78,11 @@ public final class GameBuilder {
         this.board = BoardBuilder.aBoard()
                 .withNormalDifficultyDefaults(difficultyConfiguration, baseCardRepository, phaseRepository)
                 .build();
+        this.cfd = CFDBuilder.aCFD()
+                .withCfdDailyValues(CFDDailyValuesBuilder.aSetOfCfdDailyValues()
+                        .withOneDailyValueWithZerosBasedOnPhases(this.board.getPhases())
+                        .build())
+                .build();
         return this;
     }
 
@@ -79,6 +91,11 @@ public final class GameBuilder {
         this.difficultyLevel = GameDifficulty.NORMAL;
         this.board = BoardBuilder.aBoard()
                 .withNormalDifficultyMockDefaults()
+                .build();
+        this.cfd = CFDBuilder.aCFD()
+                .withCfdDailyValues(CFDDailyValuesBuilder.aSetOfCfdDailyValues()
+                        .withOneDailyValueWithZerosBasedOnPhases(this.board.getPhases())
+                        .build())
                 .build();
         return this;
     }
@@ -97,6 +114,7 @@ public final class GameBuilder {
         game.setDifficultyLevel(difficultyLevel);
         game.setHasEnded(hasEnded);
         game.setLastTurn(lastTurn);
+        game.setCFD(cfd);
         return game;
     }
 }
