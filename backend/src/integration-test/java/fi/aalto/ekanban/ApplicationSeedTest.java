@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import fi.aalto.ekanban.builders.*;
 import fi.aalto.ekanban.enums.FinancialValue;
+import fi.aalto.ekanban.repositories.DifficultyConfigurationRepository;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
 
@@ -21,11 +22,14 @@ public class ApplicationSeedTest extends SpringIntegrationTest {
     private PhaseRepository phaseRepository;
     @Autowired
     private BaseCardRepository baseCardRepository;
+    @Autowired
+    private DifficultyConfigurationRepository difficultyConfigurationRepository;
 
     @Before
     public void emptyDb() {
         phaseRepository.deleteAll();
         baseCardRepository.deleteAll();
+        difficultyConfigurationRepository.deleteAll();
     }
 
     public class whenDataAlreadyInDb {
@@ -34,12 +38,13 @@ public class ApplicationSeedTest extends SpringIntegrationTest {
         public void seedDb() {
             phaseRepository.deleteAll();
             baseCardRepository.deleteAll();
-            new ApplicationSeed(phaseRepository, baseCardRepository);
+            difficultyConfigurationRepository.deleteAll();
+            new ApplicationSeed(phaseRepository, baseCardRepository, difficultyConfigurationRepository);
         }
 
         public class withBaseCardsInDb {
 
-            private Long baseCardCountBeforeSeedAction;
+            private Long baseCardCountBefore;
 
             @Before
             public void doApplicationSeed() {
@@ -47,33 +52,51 @@ public class ApplicationSeedTest extends SpringIntegrationTest {
                         .withFinancialValue(FinancialValue.HIGH)
                         .withSubscribesWhenDeployed("1")
                         .create(baseCardRepository);
-                baseCardCountBeforeSeedAction = baseCardRepository.count();
-                new ApplicationSeed(phaseRepository, baseCardRepository);
+                baseCardCountBefore = baseCardRepository.count();
+                new ApplicationSeed(phaseRepository, baseCardRepository, difficultyConfigurationRepository);
             }
 
             @Test
             public void constructorShouldNotCreateAdditionalBaseCards() {
-                assertThat(baseCardRepository.count(), equalTo(baseCardCountBeforeSeedAction));
+                assertThat(baseCardRepository.count(), equalTo(baseCardCountBefore));
             }
 
         }
 
         public class withPhasesInDb {
 
-            private Long phaseCountBeforeSeedAction;
+            private Long phaseCountBefore;
 
             @Before
             public void doApplicationSeed() {
                 PhasesBuilder.aSetOfPhases().withPhasesForAllGameDifficulties().createIfNotCreated(phaseRepository);
-                phaseCountBeforeSeedAction = phaseRepository.count();
-                new ApplicationSeed(phaseRepository, baseCardRepository);
+                phaseCountBefore = phaseRepository.count();
+                new ApplicationSeed(phaseRepository, baseCardRepository, difficultyConfigurationRepository);
             }
 
             @Test
             public void constructorShouldNotCreateAdditionalPhases() {
-                assertThat(phaseRepository.count(), equalTo(phaseCountBeforeSeedAction));
+                assertThat(phaseRepository.count(), equalTo(phaseCountBefore));
+            }
+        }
+
+        public class withDiffConfigsInDb {
+
+            private Long diffConfigCountBefore;
+
+            @Before
+            public void doApplicationSeed() {
+                DifficultyConfigurationsBuilder.aSetOfDifficultyConfigurations()
+                        .withAllDifficultyConfigurations()
+                        .createIfNotCreated(difficultyConfigurationRepository);
+                diffConfigCountBefore = difficultyConfigurationRepository.count();
+                new ApplicationSeed(phaseRepository, baseCardRepository, difficultyConfigurationRepository);
             }
 
+            @Test
+            public void constructorShouldNotCreateAdditionalPhases() {
+                assertThat(difficultyConfigurationRepository.count(), equalTo(diffConfigCountBefore));
+            }
         }
 
     }
@@ -82,24 +105,31 @@ public class ApplicationSeedTest extends SpringIntegrationTest {
 
         public class constructor {
 
-            private Long baseCardCountBeforeSeedAction;
-            private Long phaseCountBeforeSeedAction;
+            private Long baseCardCountBefore;
+            private Long phaseCountBefore;
+            private Long diffConfigCountBefore;
 
             @Before
             public void doApplicationSeed() {
-                baseCardCountBeforeSeedAction = baseCardRepository.count();
-                phaseCountBeforeSeedAction = phaseRepository.count();
-                new ApplicationSeed(phaseRepository, baseCardRepository);
+                baseCardCountBefore = baseCardRepository.count();
+                phaseCountBefore = phaseRepository.count();
+                diffConfigCountBefore = difficultyConfigurationRepository.count();
+                new ApplicationSeed(phaseRepository, baseCardRepository, difficultyConfigurationRepository);
             }
 
             @Test
             public void shouldCreatePhases() {
-                assertThat(phaseRepository.count(), greaterThan(phaseCountBeforeSeedAction));
+                assertThat(phaseRepository.count(), greaterThan(phaseCountBefore));
             }
 
             @Test
             public void shouldCreateBaseCards() {
-                assertThat(baseCardRepository.count(), greaterThan(baseCardCountBeforeSeedAction));
+                assertThat(baseCardRepository.count(), greaterThan(baseCardCountBefore));
+            }
+
+            @Test
+            public void shouldCreateDiffConfigs() {
+                assertThat(difficultyConfigurationRepository.count(), greaterThan(diffConfigCountBefore));
             }
 
         }

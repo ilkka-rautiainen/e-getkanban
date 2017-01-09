@@ -6,23 +6,23 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import fi.aalto.ekanban.enums.GameDifficulty;
+
 @Document
 public class DifficultyConfiguration {
 
     @Id
     private String id;
-
     @Field
-    private String name;
-
+    private GameDifficulty gameDifficulty;
     @Field
     private List<GameOptionChange> initialGameOptionChanges;
-
     @Field
     private List<EventCardInstantiator> eventCardConfigurations;
-
     @Field
-    private List<String> baseCardIds;
+    private List<String> backlogCardIds;
+    @Field
+    private String boardEnteredTracklineColor;
 
     public String getId() {
         return id;
@@ -32,12 +32,12 @@ public class DifficultyConfiguration {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public GameDifficulty getGameDifficulty() {
+        return gameDifficulty;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setGameDifficulty(GameDifficulty gameDifficulty) {
+        this.gameDifficulty = gameDifficulty;
     }
 
     public List<GameOptionChange> getInitialGameOptionChanges() {
@@ -56,12 +56,20 @@ public class DifficultyConfiguration {
         this.eventCardConfigurations = eventCardConfigurations;
     }
 
-    public List<String> getbaseCardIds() {
-        return baseCardIds;
+    public List<String> getBacklogCardIds() {
+        return backlogCardIds;
     }
 
-    public void setbaseCardIds(List<String> baseCardIds) {
-        this.baseCardIds = baseCardIds;
+    public void setBacklogCardIds(List<String> backlogCardIds) {
+        this.backlogCardIds = backlogCardIds;
+    }
+
+    public String getBoardEnteredTracklineColor() {
+        return boardEnteredTracklineColor;
+    }
+
+    public void setBoardEnteredTracklineColor(String boardEnteredTracklineColor) {
+        this.boardEnteredTracklineColor = boardEnteredTracklineColor;
     }
 
     @Override
@@ -74,22 +82,25 @@ public class DifficultyConfiguration {
         DifficultyConfiguration that = (DifficultyConfiguration) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (gameDifficulty != null ? !gameDifficulty.equals(that.gameDifficulty) : that.gameDifficulty != null) return false;
         if (initialGameOptionChanges != null ? !initialGameOptionChanges.equals(that.initialGameOptionChanges) : that.initialGameOptionChanges != null)
             return false;
         if (eventCardConfigurations != null ? !eventCardConfigurations.equals(that.eventCardConfigurations) : that.eventCardConfigurations != null)
             return false;
-        return baseCardIds != null ? baseCardIds.equals(that.baseCardIds) : that.baseCardIds == null;
+        if (boardEnteredTracklineColor != null ? !boardEnteredTracklineColor.equals(that.boardEnteredTracklineColor) : that.boardEnteredTracklineColor != null)
+            return false;
+        return backlogCardIds != null ? backlogCardIds.equals(that.backlogCardIds) : that.backlogCardIds == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (gameDifficulty != null ? gameDifficulty.hashCode() : 0);
         result = 31 * result + (initialGameOptionChanges != null ? initialGameOptionChanges.hashCode() : 0);
         result = 31 * result + (eventCardConfigurations != null ? eventCardConfigurations.hashCode() : 0);
-        result = 31 * result + (baseCardIds != null ? baseCardIds.hashCode() : 0);
+        result = 31 * result + (backlogCardIds != null ? backlogCardIds.hashCode() : 0);
+        result = 31 * result + (boardEnteredTracklineColor != null ? boardEnteredTracklineColor.hashCode() : 0);
         return result;
     }
 }

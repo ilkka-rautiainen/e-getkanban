@@ -7,11 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import fi.aalto.ekanban.builders.*;
+import fi.aalto.ekanban.repositories.DifficultyConfigurationRepository;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
 
 /*
-Idea is to run the component for data seeding automatically in the process of spring IOC
+ * Seeds data automatically in the process of spring IOC
  */
 @Component
 public class ApplicationSeed {
@@ -19,10 +20,12 @@ public class ApplicationSeed {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationSeed.class);
 
     @Autowired
-    public ApplicationSeed(PhaseRepository phaseRepository, BaseCardRepository baseCardRepository) {
+    public ApplicationSeed(PhaseRepository phaseRepository, BaseCardRepository baseCardRepository,
+                           DifficultyConfigurationRepository difficultyConfigurationRepository) {
         try {
             seedPhases(phaseRepository);
             seedBaseCards(baseCardRepository);
+            seedDifficultyConfigurations(difficultyConfigurationRepository);
         } catch (MongoException ex) {
             logger.error(ex.getLocalizedMessage());
             throw ex;
@@ -40,6 +43,12 @@ public class ApplicationSeed {
         BaseCardsBuilder.aSetOfCards()
                 .withAllBaseCardsWithMockPoints()
                 .createIfNotCreated(baseCardRepository);
+    }
+
+    private void seedDifficultyConfigurations(DifficultyConfigurationRepository difficultyConfigurationRepository) {
+        DifficultyConfigurationsBuilder.aSetOfDifficultyConfigurations()
+                .withAllDifficultyConfigurations()
+                .createIfNotCreated(difficultyConfigurationRepository);
     }
 
 }
