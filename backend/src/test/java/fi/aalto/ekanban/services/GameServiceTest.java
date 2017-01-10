@@ -17,14 +17,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import fi.aalto.ekanban.builders.DifficultyConfigurationBuilder;
 import fi.aalto.ekanban.builders.GameBuilder;
 import fi.aalto.ekanban.builders.TurnBuilder;
 import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.exceptions.GameHasEndedException;
 import fi.aalto.ekanban.models.Turn;
+import fi.aalto.ekanban.models.db.gameconfigurations.DifficultyConfiguration;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.utils.TestGameContainer;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
+import fi.aalto.ekanban.repositories.DifficultyConfigurationRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
 import fi.aalto.ekanban.repositories.GameRepository;
 
@@ -44,6 +47,8 @@ public class GameServiceTest {
     private static PhaseRepository phaseRepository;
     @Mock
     private static BaseCardRepository baseCardRepository;
+    @Mock
+    private static DifficultyConfigurationRepository difficultyConfigurationRepository;
 
     @BeforeClass
     public static void initService() {
@@ -67,10 +72,14 @@ public class GameServiceTest {
         @Before
         public void setupContextAndCallMethod() {
             Game blankGame = GameBuilder.aGame().build();
+            DifficultyConfiguration blankDiffConfig = DifficultyConfigurationBuilder.aDifficultyConfiguration().build();
             playerName = "Player";
             gameDifficulty = GameDifficulty.NORMAL;
 
-            Mockito.when(gameInitService.getInitializedGame(gameDifficulty, playerName)).thenReturn(blankGame);
+            Mockito.when(difficultyConfigurationRepository.findOne(gameDifficulty.toString()))
+                    .thenReturn(blankDiffConfig);
+            Mockito.when(gameInitService.getInitializedGame(
+                    Mockito.any(DifficultyConfiguration.class), Mockito.any(String.class))).thenReturn(blankGame);
             Mockito.when(gameRepository.save(Mockito.any(Game.class))).thenReturn(blankGame);
 
             newGame = gameService.startGame(playerName, gameDifficulty);
@@ -81,7 +90,9 @@ public class GameServiceTest {
 
         @Test
         public void shouldCallOtherServices() {
-            Mockito.verify(gameInitService, Mockito.times(1)).getInitializedGame(gameDifficulty, playerName);
+            Mockito.verify(difficultyConfigurationRepository, Mockito.times(1)).findOne(gameDifficulty.toString());
+            Mockito.verify(gameInitService, Mockito.times(1))
+                    .getInitializedGame(Mockito.any(DifficultyConfiguration.class), Mockito.any(String.class));
             Mockito.verify(gameRepository, Mockito.times(1)).save(Mockito.any(Game.class));
         }
 
