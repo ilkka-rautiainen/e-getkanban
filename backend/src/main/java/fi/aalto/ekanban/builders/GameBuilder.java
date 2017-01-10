@@ -1,6 +1,7 @@
 package fi.aalto.ekanban.builders;
 
 import fi.aalto.ekanban.enums.GameDifficulty;
+import fi.aalto.ekanban.models.Turn;
 import fi.aalto.ekanban.models.db.gameconfigurations.DifficultyConfiguration;
 import fi.aalto.ekanban.models.db.games.Board;
 import fi.aalto.ekanban.models.db.games.Game;
@@ -15,6 +16,7 @@ public final class GameBuilder {
     private Integer currentDay;
     private GameDifficulty difficultyLevel;
     private Boolean hasEnded;
+    private Turn lastTurn;
 
     private GameBuilder() {
         currentDay = 0;
@@ -55,6 +57,11 @@ public final class GameBuilder {
         return this;
     }
 
+    public GameBuilder withLastTurn(Turn lastTurn) {
+        this.lastTurn = lastTurn;
+        return this;
+    }
+
     public GameBuilder withNormalDifficultyDefaults(DifficultyConfiguration difficultyConfiguration,
                                                     String playerName,
                                                     BaseCardRepository baseCardRepository,
@@ -89,6 +96,7 @@ public final class GameBuilder {
         game.setCurrentDay(currentDay);
         game.setDifficultyLevel(difficultyLevel);
         game.setHasEnded(hasEnded);
+        game.setLastTurn(lastTurn);
         return game;
     }
 }
