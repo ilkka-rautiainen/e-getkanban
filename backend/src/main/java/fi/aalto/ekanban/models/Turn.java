@@ -13,6 +13,9 @@ public class Turn {
     private List<MoveCardAction> moveCardActions;
     @NotNull
     private List<DrawFromBacklogAction> drawFromBacklogActions;
+    @NotNull
+    private List<AssignResourcesAction> assignResourcesActions;
+
 
     public AdjustWipLimitsAction getAdjustWipLimitsAction() {
         return adjustWipLimitsAction;
@@ -38,4 +41,11 @@ public class Turn {
         this.moveCardActions = moveCardActions;
     }
 
+    public List<AssignResourcesAction> getAssignResourcesActions() {
+        return assignResourcesActions;
+    }
+
+    public void setAssignResourcesActions(List<AssignResourcesAction> assignResourcesActions) {
+        this.assignResourcesActions = assignResourcesActions;
+    }
 }
