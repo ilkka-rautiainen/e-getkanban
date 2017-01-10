@@ -52,8 +52,10 @@ public final class BoardBuilder {
         return this;
     }
 
-    public BoardBuilder withNormalDifficultyDefaults(BaseCardRepository baseCardRepository,
+    public BoardBuilder withNormalDifficultyDefaults(DifficultyConfiguration difficultyConfiguration,
+                                                     BaseCardRepository baseCardRepository,
                                                      PhaseRepository phaseRepository) {
+        this.enteredBoardTrackLineColor = difficultyConfiguration.getBoardEnteredTracklineColor();
         this.backlogDeck = CardsBuilder.aSetOfCards()
                 .withNormalDifficultyBacklog(baseCardRepository)
                 .build();

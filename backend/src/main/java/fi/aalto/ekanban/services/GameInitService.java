@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import fi.aalto.ekanban.builders.GameBuilder;
-import fi.aalto.ekanban.enums.GameDifficulty;
+import fi.aalto.ekanban.models.db.gameconfigurations.DifficultyConfiguration;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
@@ -18,10 +18,16 @@ public class GameInitService {
     @Autowired
     PhaseRepository phaseRepository;
 
-    public Game getInitializedGame(GameDifficulty gameDifficulty, String playerName) {
-        return GameBuilder.aGame()
-                .withNormalDifficultyDefaults(playerName, baseCardRepository, phaseRepository)
-                .build();
+    public Game getInitializedGame(DifficultyConfiguration difficultyConfiguration, String playerName) {
+        if (difficultyConfiguration.isNormal()) {
+            return GameBuilder.aGame()
+                    .withNormalDifficultyDefaults(difficultyConfiguration,
+                            playerName, baseCardRepository, phaseRepository)
+                    .build();
+        }
+        else {
+            throw new UnsupportedOperationException("Just the normal version is supported for now");
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package fi.aalto.ekanban.models.db.gameconfigurations;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -70,6 +71,11 @@ public class DifficultyConfiguration {
 
     public void setBoardEnteredTracklineColor(String boardEnteredTracklineColor) {
         this.boardEnteredTracklineColor = boardEnteredTracklineColor;
+    }
+
+    @JsonIgnore
+    public boolean isNormal() {
+        return getId().equals(GameDifficulty.NORMAL.toString());
     }
 
     @Override

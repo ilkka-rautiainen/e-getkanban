@@ -8,7 +8,9 @@ import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.exceptions.GameHasEndedException;
 import fi.aalto.ekanban.exceptions.GameNotFoundException;
 import fi.aalto.ekanban.models.Turn;
+import fi.aalto.ekanban.models.db.gameconfigurations.DifficultyConfiguration;
 import fi.aalto.ekanban.models.db.games.*;
+import fi.aalto.ekanban.repositories.DifficultyConfigurationRepository;
 import fi.aalto.ekanban.repositories.GameRepository;
 
 @Service
@@ -22,6 +24,9 @@ public class GameService {
     private GameRepository gameRepository;
 
     @Autowired
+    private DifficultyConfigurationRepository difficultyConfigurationRepository;
+
+    @Autowired
     public GameService(GameInitService gameInitService,
                        PlayerService playerService,
                        GameOptionService gameOptionService) {
@@ -32,7 +37,9 @@ public class GameService {
 
     @Transactional
     public Game startGame(String playerName, GameDifficulty gameDifficulty) {
-        Game newGame = gameInitService.getInitializedGame(gameDifficulty, playerName);
+        String diffConfigId = gameDifficulty.toString();
+        DifficultyConfiguration difficultyConfiguration = difficultyConfigurationRepository.findOne(diffConfigId);
+        Game newGame = gameInitService.getInitializedGame(difficultyConfiguration, playerName);
         Game createdGame = gameRepository.save(newGame);
         return createdGame;
     }

@@ -1,6 +1,7 @@
 package fi.aalto.ekanban.builders;
 
 import fi.aalto.ekanban.enums.GameDifficulty;
+import fi.aalto.ekanban.models.db.gameconfigurations.DifficultyConfiguration;
 import fi.aalto.ekanban.models.db.games.Board;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
@@ -54,12 +55,14 @@ public final class GameBuilder {
         return this;
     }
 
-    public GameBuilder withNormalDifficultyDefaults(String playerName, BaseCardRepository baseCardRepository,
+    public GameBuilder withNormalDifficultyDefaults(DifficultyConfiguration difficultyConfiguration,
+                                                    String playerName,
+                                                    BaseCardRepository baseCardRepository,
                                                     PhaseRepository phaseRepository) {
         this.playerName = playerName;
         this.difficultyLevel = GameDifficulty.NORMAL;
         this.board = BoardBuilder.aBoard()
-                .withNormalDifficultyDefaults(baseCardRepository, phaseRepository)
+                .withNormalDifficultyDefaults(difficultyConfiguration, baseCardRepository, phaseRepository)
                 .build();
         return this;
     }
