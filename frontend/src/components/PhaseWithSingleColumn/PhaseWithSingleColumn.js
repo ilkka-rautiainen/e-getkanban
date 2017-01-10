@@ -19,9 +19,7 @@ const PhaseWithSingleColumn = ({phase, column}) => {
       wipLimit={phase.wipLimit}
       titleStyle={phaseHeaderStyle}
     />
-    <div className="column-cards">
-      <ColumnCards columnCardIds={column.cards} />
-    </div>
+    <ColumnCards columnCardIds={column.cards} />
   </div>
 };
 

@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import Card from '../Card/Card';
+import './ColumnCards.scss';
 
 const ColumnCards = ({ columnCardIds }) => {
   return <div className="column-cards">

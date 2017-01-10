@@ -1,6 +1,7 @@
 @import "../../variables";
 
 .board {
+  height: 90%;
   flex: 1;
   border: 5px outset $board-border-color;
   border-radius: 5px;
