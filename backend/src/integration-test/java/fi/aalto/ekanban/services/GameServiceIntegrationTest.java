@@ -1,9 +1,7 @@
 package fi.aalto.ekanban.services;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.Before;
@@ -11,10 +9,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import fi.aalto.ekanban.SpringIntegrationTest;
+import fi.aalto.ekanban.builders.TurnBuilder;
 import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.models.Turn;
 import fi.aalto.ekanban.repositories.GameRepository;
+import fi.aalto.ekanban.utils.TestGameContainer;
+import fi.aalto.ekanban.SpringIntegrationTest;
 
 @RunWith(HierarchicalContextRunner.class)
 public class GameServiceIntegrationTest extends SpringIntegrationTest {
@@ -54,6 +55,41 @@ public class GameServiceIntegrationTest extends SpringIntegrationTest {
                 assertThat(newGame.getBoard().getEnteredBoardTrackLineColor(), is(notNullValue()));
             }
 
+        }
+
+    }
+
+    public class playTurn {
+        Game newGame;
+
+        @Before
+        public void setup() {
+            TestGameContainer initialGameContainer = TestGameContainer.withNormalDifficultyMockGame();
+            initialGameContainer.fillFirstWorkPhasesWithSomeAlmostReadyCards();
+            initialGameContainer.fillLastWorkPhaseWithSomeAlmostReadyCards();
+            Game initialGame = gameRepository.save(initialGameContainer.getGame());
+            Turn blankTurn = TurnBuilder.aTurn().build();
+            newGame = gameService.playTurn(initialGame.getId(), blankTurn);
+        }
+
+        @Test
+        public void gameShouldHaveLastTurn() {
+            assertThat(newGame.getLastTurn(), is(notNullValue()));
+        }
+
+        @Test
+        public void gameLastTurnShouldHaveAssignResourceActions() {
+            assertThat(newGame.getLastTurn().getAssignResourcesActions(), is(not(empty())));
+        }
+
+        @Test
+        public void gameLastTurnShouldHaveMoveCardsActions() {
+            assertThat(newGame.getLastTurn().getMoveCardActions(), is(not(empty())));
+        }
+
+        @Test
+        public void gameLastTurnShouldHaveDrawFromBacklogActions() {
+            assertThat(newGame.getLastTurn().getDrawFromBacklogActions(), is(not(empty())));
         }
 
     }
