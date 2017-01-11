@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { playTurn } from '../../actions';
 import Board from '../Board/Board';
 import BacklogDeckArea from '../BacklogDeckArea/BacklogDeckArea';
+import CFD from '../CFD/CFD';
 import './Game.scss';
 
 class Game extends React.Component {
@@ -44,6 +45,7 @@ class Game extends React.Component {
         </div>
         <BacklogDeckArea />
         <Board  />
+        <CFD  />
       </div>
     )
   }

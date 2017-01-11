@@ -1,0 +1,44 @@
+@import "../../variables";
+
+.cfd {
+  height: 60%;
+  width: 50%;
+  min-width: 380px;
+  position: fixed;
+  background-color: $minor-color;
+  z-index: 1;
+  bottom: 0%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  > div {
+    background-color: $cfd-background-color;
+  }
+  &.visible {
+    opacity: 0.3;
+    &:hover {
+      opacity: 1;
+    }
+    button {
+      position: absolute !important;
+      left: -60px !important;
+      top: 42% !important;
+      background-color: $minor-color !important;
+      height: 90px !important;
+      width: 60px !important;
+      transition: none !important;
+    }
+  }
+  &.hidden {
+    width: 25%;
+    height: 60px;
+    bottom: 0%;
+    > div {
+      display: none;
+    }
+    button {
+      flex: 0 1 100%;
+      transition: none !important;
+    }
+  }
+}
