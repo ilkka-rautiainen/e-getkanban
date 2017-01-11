@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import { Schema, arrayOf } from 'normalizr';
 import { CHANGE_WIP, SET_GAME_DATA } from '../actions/actionTypes';
+import { dummyCfd, dummyCfdConfig } from "./dummyCfd";
 
 export const gameSchema = new Schema('games');
 const boardSchema = new Schema('boards');
@@ -97,7 +98,6 @@ function backlogDeck(state = null, action) {
   }
 }
 
-
 function wipLimits(state = null, action) {
   switch (action.type) {
     case CHANGE_WIP:
@@ -111,6 +111,20 @@ function wipLimits(state = null, action) {
   }
 }
 
+function cfdData(state = dummyCfd, action) {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
+
+function cfdConfig(state = dummyCfdConfig, action) {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
+
 const reducers = combineReducers({
   game,
   board,
@@ -119,7 +133,9 @@ const reducers = combineReducers({
   cards,
   cardPhasePoints,
   backlogDeck,
-  wipLimits
+  wipLimits,
+  cfdData,
+  cfdConfig
 });
 
 export default reducers;
