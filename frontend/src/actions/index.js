@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { CHANGE_WIP, START_GAME, PLAY_TURN, SET_GAME_DATA } from './actionTypes';
+import { CHANGE_WIP, START_GAME, PLAY_TURN, SET_GAME_DATA, REMOVE_DICE, ADD_DICE, ENABLE_NEXT_ROUND } from './actionTypes';
 
 /*
  * action creators
@@ -7,6 +7,18 @@ import { CHANGE_WIP, START_GAME, PLAY_TURN, SET_GAME_DATA } from './actionTypes'
 
 export function changeWip(phase, wipLimit) {
   return { type: CHANGE_WIP, phase, wipLimit };
+}
+
+export function removeDice() {
+  return { type: REMOVE_DICE };
+}
+
+export function addDice() {
+  return { type: ADD_DICE };
+}
+
+export function enableNextRoundButton() {
+  return { type: ENABLE_NEXT_ROUND }
 }
 
 export function startGame(playerName, difficultyLevel) {
