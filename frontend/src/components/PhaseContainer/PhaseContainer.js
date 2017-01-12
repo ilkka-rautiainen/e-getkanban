@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Col } from 'react-flexbox-grid';
 import PhaseWithSingleColumn from '../PhaseWithSingleColumn/PhaseWithSingleColumn';
 import PhaseWithTwoColumns from '../PhaseWithTwoColumns/PhaseWithTwoColumns';
+import Die from "../Die/Die";
 import './PhaseContainer.scss';
 
 class PhaseContainer extends React.Component {
@@ -20,6 +21,7 @@ class PhaseContainer extends React.Component {
   constructor({ phase, firstColumn }) {
     super();
     this.phase = phase;
+    this.diceAmount = this.phase.diceAmount ? this.phase.diceAmount : 0;
   }
 
   get className() {
@@ -28,15 +30,34 @@ class PhaseContainer extends React.Component {
     return [...baseClassNames, columnAmountBasedClassName].join(' ');
   }
 
+  get dieStyle() {
+    return {
+      color: "#"+this.phase.color
+    }
+  }
+
+  get dieAddedClass() {
+    return this.props.showDice ? "visible" : "hidden";
+  }
+
+  get dice() {
+    let dice = [];
+    for (var i = 0; i < this.diceAmount; i++) {
+      dice.push(<Die key={i} castNumber={5} addedClass={this.dieAddedClass} dieStyle={this.dieStyle} />)
+    }
+    return dice;
+  }
+
   render() {
     if (!this.phase) {
       return null;
     }
     return (
       <Col xs className={this.className}>
-          {this.phase.columns.length === 1 ?
-            <PhaseWithSingleColumn phase={this.phase} column={this.props.firstColumn} /> :
-            <PhaseWithTwoColumns phase={this.phase} />}
+        {this.dice}
+        {this.phase.columns.length === 1 ?
+          <PhaseWithSingleColumn phase={this.phase} column={this.props.firstColumn} /> :
+          <PhaseWithTwoColumns phase={this.phase} />}
       </Col>
     )
   }
@@ -47,7 +68,8 @@ const mapStateToProps = (state, ownProps) => {
   const firstColumn = phase === undefined ? null : state.columns[phase.columns[0]];
   return {
     phase: phase,
-    firstColumn: firstColumn
+    firstColumn: firstColumn,
+    showDice: state.nextRoundUIState.showDice
   };
 };
 

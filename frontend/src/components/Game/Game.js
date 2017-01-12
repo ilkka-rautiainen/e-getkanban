@@ -38,9 +38,10 @@ class Game extends React.Component {
           </div>
           <RaisedButton
             label="Next Round"
-            secondary={true}
+            secondary={this.props.enableNextRound}
+            disabled={!this.props.enableNextRound}
             style={this.buttonStyle}
-            onClick={() => {this.props.onPlayTurn(this.props.game.id, this.props.wipLimits); }}
+            onClick={() => {this.props.enableNextRound && this.props.onPlayTurn(this.props.game.id, this.props.wipLimits); }}
           />
         </div>
         <BacklogDeckArea />
@@ -55,7 +56,8 @@ class Game extends React.Component {
 const mapStateToProps = (state) => {
   return {
     game: state.game,
-    wipLimits: state.wipLimits
+    wipLimits: state.wipLimits,
+    enableNextRound: state.nextRoundUIState.enableButtonPress
   }
 };
 

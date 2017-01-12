@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { Schema, arrayOf } from 'normalizr';
-import { CHANGE_WIP, SET_GAME_DATA } from '../actions/actionTypes';
+import { CHANGE_WIP, SET_GAME_DATA, REMOVE_DICE, ADD_DICE, ENABLE_NEXT_ROUND } from '../actions/actionTypes';
 import { dummyCfd, dummyCfdConfig } from "./dummyCfd";
 
 export const gameSchema = new Schema('games');
@@ -125,6 +125,21 @@ function cfdConfig(state = dummyCfdConfig, action) {
   }
 }
 
+function nextRoundUIState(state = { showDice: false, enableButtonPress: true }, action) {
+  switch (action.type) {
+    case REMOVE_DICE:
+      return { showDice: false, enableButtonPress: false };
+    case ADD_DICE:
+      return { showDice: true, enableButtonPress: false };
+    case ENABLE_NEXT_ROUND:
+      return Object.assign({}, state, {
+        enableButtonPress: true
+      });
+    default:
+      return state;
+  }
+}
+
 const reducers = combineReducers({
   game,
   board,
@@ -134,6 +149,7 @@ const reducers = combineReducers({
   cardPhasePoints,
   backlogDeck,
   wipLimits,
+  nextRoundUIState,
   cfdData,
   cfdConfig
 });
