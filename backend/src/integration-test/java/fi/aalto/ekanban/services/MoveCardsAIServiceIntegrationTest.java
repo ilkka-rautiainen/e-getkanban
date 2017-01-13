@@ -19,6 +19,7 @@ import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.models.MoveCardAction;
 import fi.aalto.ekanban.services.ai.movecards.MoveCardsAIService;
+import fi.aalto.ekanban.services.ActionExecutorService;
 import fi.aalto.ekanban.utils.TestGameContainer;
 
 @RunWith(HierarchicalContextRunner.class)
@@ -322,7 +323,8 @@ public class MoveCardsAIServiceIntegrationTest {
 
     private void performMoveCards() {
         List<MoveCardAction> actions = moveCardsAIService.getMoveCardsActions(initialGameContainer.getGame());
-        Game gameWithCardsMoved = ActionExecutorService.moveCards(initialGameContainer.getGame(), actions);
+        ActionExecutorService actionExecutorService = new ActionExecutorService();
+        Game gameWithCardsMoved = actionExecutorService.moveCards(initialGameContainer.getGame(), actions);
         movedCardsGameContainer = TestGameContainer.withGame(gameWithCardsMoved);
     }
 

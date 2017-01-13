@@ -18,6 +18,7 @@ import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.services.ai.assignresources.AssignResourcesAIService;
 import fi.aalto.ekanban.services.ai.assignresources.DiceService;
+import fi.aalto.ekanban.services.ActionExecutorService;
 import fi.aalto.ekanban.utils.TestGameContainer;
 
 
@@ -64,7 +65,8 @@ public class AssignResourcesAIIntegrationTest {
     private void performAssignResources() {
         List<AssignResourcesAction> actions = assignResourcesAIService
                 .getAssignResourcesActions(initialGameContainer.getGame());
-        Game gameWithResourcesUsed = ActionExecutorService.assignResources(initialGameContainer.getGame(), actions);
+        ActionExecutorService actionExecutorService = new ActionExecutorService();
+        Game gameWithResourcesUsed = actionExecutorService.assignResources(initialGameContainer.getGame(), actions);
         resourcesUsedGameContainer = TestGameContainer.withGame(gameWithResourcesUsed);
     }
 }

@@ -5,16 +5,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.not;
 
-import static fi.aalto.ekanban.services.ActionExecutorService.adjustWipLimits;
-import static fi.aalto.ekanban.services.ActionExecutorService.assignResources;
-import static fi.aalto.ekanban.services.ActionExecutorService.moveCards;
-import static fi.aalto.ekanban.services.ActionExecutorService.drawFromBacklog;
-
 import java.util.*;
 
 import com.rits.cloning.Cloner;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
-import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,6 +18,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import fi.aalto.ekanban.builders.*;
+import fi.aalto.ekanban.exceptions.ColumnNotFoundException;
 import fi.aalto.ekanban.models.AdjustWipLimitsAction;
 import fi.aalto.ekanban.models.AssignResourcesAction;
 import fi.aalto.ekanban.models.DrawFromBacklogAction;
@@ -37,11 +33,13 @@ import fi.aalto.ekanban.utils.TestGameContainer;
 @RunWith(HierarchicalContextRunner.class)
 public class ActionExecutorServiceTest {
 
+    private ActionExecutorService actionExecutorService;
     private TestGameContainer initialGameContainer;
 
     @Before
     public void initGame() {
         initialGameContainer = TestGameContainer.withNormalDifficultyMockGame();
+        actionExecutorService = new ActionExecutorService();
     }
 
     public class moveCards {
@@ -358,7 +356,7 @@ public class ActionExecutorServiceTest {
         }
 
         private void performMoveCardsAndAssignResults(TestGameContainer.ColumnName fromColumnName, TestGameContainer.ColumnName toColumnName, List<MoveCardAction> moveCardActions) {
-            Game gameWithCardsMoved = moveCards(initialGameContainer.getGame(), moveCardActions);
+            Game gameWithCardsMoved = actionExecutorService.moveCards(initialGameContainer.getGame(), moveCardActions);
 
             gameWithCardsMovedContainer = TestGameContainer.withGame(gameWithCardsMoved);
             fromColumnAfter = gameWithCardsMovedContainer.getColumn(fromColumnName);
@@ -395,7 +393,8 @@ public class ActionExecutorServiceTest {
                         .mapToInt(phase -> phase.getWipLimit()).toArray();
 
                 AdjustWipLimitsAction emptyWipLimitChangeAction = null;
-                wipLimitAdjustedGame = adjustWipLimits(initialGameContainer.getGame(), emptyWipLimitChangeAction);
+                wipLimitAdjustedGame =
+                        actionExecutorService.adjustWipLimits(initialGameContainer.getGame(), emptyWipLimitChangeAction);
             }
 
             @Test
@@ -423,7 +422,8 @@ public class ActionExecutorServiceTest {
                         AdjustWipLimitsActionBuilder.anAdjustWipLimitsAction()
                                 .withPhaseWipLimits(phaseWipLimits)
                                 .build();
-                wipLimitAdjustedGame = adjustWipLimits(initialGameContainer.getGame(), singlePhaseWipLimitChangeAction);
+                wipLimitAdjustedGame =
+                        actionExecutorService.adjustWipLimits(initialGameContainer.getGame(), singlePhaseWipLimitChangeAction);
             }
 
             @Test
@@ -454,7 +454,7 @@ public class ActionExecutorServiceTest {
                         AdjustWipLimitsActionBuilder.anAdjustWipLimitsAction()
                                 .withPhaseWipLimits(phaseWipLimits)
                                 .build();
-                wipLimitAdjustedGame = adjustWipLimits(initialGame, singlePhaseWipLimitChangeAction);
+                wipLimitAdjustedGame = actionExecutorService.adjustWipLimits(initialGame, singlePhaseWipLimitChangeAction);
             }
 
             @Test
@@ -494,7 +494,8 @@ public class ActionExecutorServiceTest {
                     .aDrawFromBacklogAction()
                     .withIndexToPlaceCardAt(index)
                     .build();
-            Game gameWithBacklogDrawn = drawFromBacklog(initialGameContainer.getGame(), Arrays.asList(backlogAction));
+            Game gameWithBacklogDrawn =
+                    actionExecutorService.drawFromBacklog(initialGameContainer.getGame(), Arrays.asList(backlogAction));
             gameWithBacklogDrawnContainer = TestGameContainer.withGame(gameWithBacklogDrawn);
             firstColumnCards = gameWithBacklogDrawnContainer.getGame().getBoard()
                     .getPhases().get(0).getColumns().get(0).getCards();
@@ -694,7 +695,7 @@ public class ActionExecutorServiceTest {
 
         private void assignResourcesAndFetchResults(Integer points) {
             List<AssignResourcesAction> actions = getActions(points);
-            Game gameWithResourcesAssigned = assignResources(initialGameContainer.getGame(), actions);
+            Game gameWithResourcesAssigned = actionExecutorService.assignResources(initialGameContainer.getGame(), actions);
             TestGameContainer gameWithResourcesAssignedContainer
                     = TestGameContainer.withGame(gameWithResourcesAssigned);
             firstCardAfter = gameWithResourcesAssignedContainer

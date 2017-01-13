@@ -2,6 +2,7 @@ package fi.aalto.ekanban.models.db.games;
 
 import static fi.aalto.ekanban.ApplicationConstants.DEPLOYED_PHASE_ID;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,6 +30,8 @@ public class Game {
     private GameDifficulty difficultyLevel;
     @Field
     private Boolean hasEnded;
+    @Field
+    private List<AssignResourcesAction> latestAssignResourcesActions;
 
     public Board getBoard() {
         return board;
@@ -78,6 +81,14 @@ public class Game {
         this.hasEnded = hasEnded;
     }
 
+    public List<AssignResourcesAction> getLatestAssignResourcesActions() {
+        return latestAssignResourcesActions;
+    }
+
+    public void setLatestAssignResourcesActions(List<AssignResourcesAction> latestAssignResourcesActions) {
+        this.latestAssignResourcesActions = latestAssignResourcesActions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,6 +103,10 @@ public class Game {
         if (currentDay != null ? !currentDay.equals(game.currentDay) : game.currentDay != null) return false;
         if (difficultyLevel != null ? !difficultyLevel.equals(game.difficultyLevel) : game.difficultyLevel != null) return false;
         if (hasEnded != null ? !hasEnded.equals(game.hasEnded) : game.hasEnded != null) return false;
+        if (latestAssignResourcesActions != null ? !latestAssignResourcesActions.equals(game.latestAssignResourcesActions) :
+                game.latestAssignResourcesActions != null) {
+            return false;
+        }
         return board != null ? board.equals(game.board) : game.board == null;
 
     }
@@ -104,6 +119,7 @@ public class Game {
         result = 31 * result + (currentDay != null ? currentDay.hashCode() : 0);
         result = 31 * result + (difficultyLevel != null ? difficultyLevel.hashCode() : 0);
         result = 31 * result + (hasEnded != null ? hasEnded.hashCode() : 0);
+        result = 31 * result + (latestAssignResourcesActions!= null ? latestAssignResourcesActions.hashCode() : 0);
         return result;
     }
 

@@ -1,6 +1,9 @@
 package fi.aalto.ekanban.builders;
 
+import java.util.List;
+
 import fi.aalto.ekanban.enums.GameDifficulty;
+import fi.aalto.ekanban.models.AssignResourcesAction;
 import fi.aalto.ekanban.models.db.games.Board;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
@@ -14,6 +17,7 @@ public final class GameBuilder {
     private Integer currentDay;
     private GameDifficulty difficultyLevel;
     private Boolean hasEnded;
+    private List<AssignResourcesAction> latestAssignResourcesActions;
 
     private GameBuilder() {
         currentDay = 0;
@@ -54,6 +58,11 @@ public final class GameBuilder {
         return this;
     }
 
+    public GameBuilder withLatestAssignResourcesActions(List<AssignResourcesAction> assignResourcesActions) {
+        this.latestAssignResourcesActions = assignResourcesActions;
+        return this;
+    }
+
     public GameBuilder withNormalDifficultyDefaults(String playerName, BaseCardRepository baseCardRepository,
                                                     PhaseRepository phaseRepository) {
         this.playerName = playerName;
@@ -86,6 +95,7 @@ public final class GameBuilder {
         game.setCurrentDay(currentDay);
         game.setDifficultyLevel(difficultyLevel);
         game.setHasEnded(hasEnded);
+        game.setLatestAssignResourcesActions(latestAssignResourcesActions);
         return game;
     }
 }

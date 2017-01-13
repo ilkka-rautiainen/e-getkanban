@@ -19,9 +19,11 @@ import fi.aalto.ekanban.models.db.phases.Phase;
 @Service
 public class ActionExecutorService {
 
+    public ActionExecutorService() {};
+
     private static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
-    public static Game adjustWipLimits(Game game, AdjustWipLimitsAction adjustWipLimitsAction) {
+    public Game adjustWipLimits(Game game, AdjustWipLimitsAction adjustWipLimitsAction) {
         if (game != null && game.isValid() && adjustWipLimitsAction != null) {
             game.getBoard().getPhases()
                     .forEach(phase -> {
@@ -34,7 +36,7 @@ public class ActionExecutorService {
         return game;
     }
 
-    public static Game assignResources(Game game, List<AssignResourcesAction> assignResourcesActions) {
+    public Game assignResources(Game game, List<AssignResourcesAction> assignResourcesActions) {
         if (game != null && game.isValid() && assignResourcesActions != null) {
             assignResourcesActions.forEach(assignResourcesAction -> {
                 if (!isValidAssignResourcesAction(assignResourcesAction, game)) {
@@ -46,7 +48,7 @@ public class ActionExecutorService {
         return game;
     }
 
-    public static Game moveCards(Game game, List<MoveCardAction> moveCardActions) {
+    public Game moveCards(Game game, List<MoveCardAction> moveCardActions) {
         if (game != null && game.isValid() && moveCardActions != null) {
             moveCardActions.forEach(moveCardAction -> {
                 if (!isValidMoveCardAction(moveCardAction, game)) {
@@ -58,7 +60,7 @@ public class ActionExecutorService {
         return game;
     }
 
-    public static Game drawFromBacklog(Game game, List<DrawFromBacklogAction> drawActions) {
+    public Game drawFromBacklog(Game game, List<DrawFromBacklogAction> drawActions) {
         if (game != null && game.isValid() && drawActions != null) {
             Phase firstPhase = game.getBoard().getPhases().get(0);
 
