@@ -110,7 +110,7 @@ public final class PhaseBuilder {
         this.shortName = "Test";
         this.isWorkPhase = true;
         this.color = "00ff00";
-        this.trackLinePlace = TrackLinePlace.RIGHT;
+        this.trackLinePlace = null;
         this.diceAmount = 2;
         return this;
     }
@@ -122,7 +122,7 @@ public final class PhaseBuilder {
         this.shortName = "Depl";
         this.isWorkPhase = false;
         this.color = "000000";
-        this.trackLinePlace = null;
+        this.trackLinePlace = TrackLinePlace.LEFT;
         return this;
     }
 

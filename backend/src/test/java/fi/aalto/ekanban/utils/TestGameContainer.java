@@ -2,8 +2,7 @@ package fi.aalto.ekanban.utils;
 
 import java.util.Arrays;
 
-import fi.aalto.ekanban.builders.CardBuilder;
-import fi.aalto.ekanban.builders.GameBuilder;
+import fi.aalto.ekanban.builders.*;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Column;
@@ -41,21 +40,24 @@ public class TestGameContainer {
         ANALYSIS_DONE,
         DEVELOPMENT_IN_PROGRESS,
         DEVELOPMENT_DONE,
-        TEST
+        TEST,
+        DEPLOYED
     }
 
     public Column getColumn(ColumnName column) {
         switch (column) {
             case ANALYSIS_IN_PROGRESS:
-                return getAnalysisPhase().getColumns().get(0);
+                return getAnalysisPhase().getFirstColumn();
             case ANALYSIS_DONE:
-                return getAnalysisPhase().getColumns().get(1);
+                return getAnalysisPhase().getSecondColumn();
             case DEVELOPMENT_IN_PROGRESS:
-                return getDevelopmentPhase().getColumns().get(0);
+                return getDevelopmentPhase().getFirstColumn();
             case DEVELOPMENT_DONE:
-                return getDevelopmentPhase().getColumns().get(1);
+                return getDevelopmentPhase().getSecondColumn();
             case TEST:
-                return getTestPhase().getColumns().get(0);
+                return getTestPhase().getFirstColumn();
+            case DEPLOYED:
+                return getDeployedPhase().getFirstColumn();
             default:
                 return null;
         }
@@ -161,11 +163,19 @@ public class TestGameContainer {
         game.getBoard().getBacklogDeck().clear();
     }
 
-    public void addCardsWithMockPhasePointsToDevelopmentInProgress(Integer cardsToAdd) {
-        Column developmentInProgressColumn = getColumn(ColumnName.DEVELOPMENT_IN_PROGRESS);
+    public void addCardsWithMockPhasePointsToColumn(Integer cardsToAdd, ColumnName columnName) {
+        Column column = getColumn(columnName);
         for (Integer i = 0; i < cardsToAdd; i++) {
-            developmentInProgressColumn.getCards().add(CardBuilder.aCard().withMockPhasePoints().build());
+            column.getCards().add(CardBuilder.aCard().withMockPhasePoints().build());
         }
+    }
+
+    public void fillCFDWithZeroValuesUntilDay(Integer day) {
+        getGame().setCFD(CFDBuilder.aCFD()
+                .withCfdDailyValues(CFDDailyValuesBuilder.aSetOfCfdDailyValues()
+                        .withValuesWithZerosBasedOnPhasesUntilDay(getGame().getBoard().getPhases(), day)
+                        .build())
+                .build());
     }
 
     public Phase getAnalysisPhase() {
@@ -197,7 +207,7 @@ public class TestGameContainer {
                 - development.getTotalAmountOfCards()
                 - amountToLeaveUnfilled;
 
-        addCardsWithMockPhasePointsToDevelopmentInProgress(cardsToAddUntilFullEnough);
+        addCardsWithMockPhasePointsToColumn(cardsToAddUntilFullEnough, ColumnName.DEVELOPMENT_IN_PROGRESS);
     }
 
     private List<Phase> getFirstWorkPhases() {

@@ -644,7 +644,8 @@ public class ActionExecutorServiceTest {
         @Before
         public void init() {
             phase = initialGameContainer.getDevelopmentPhase();
-            initialGameContainer.addCardsWithMockPhasePointsToDevelopmentInProgress(2);
+            initialGameContainer.addCardsWithMockPhasePointsToColumn(2,
+                    TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS);
             firstCard = initialGameContainer.getColumn(TestGameContainer.ColumnName.DEVELOPMENT_IN_PROGRESS)
                     .getCards().get(0);
         }
