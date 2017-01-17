@@ -13,10 +13,12 @@ import fi.aalto.ekanban.services.turnplayers.TurnPlayer;
 public class PlayerService {
 
     private NormalTurnPlayerService normalTurnPlayerService;
+    private CFDCalculatorService cfdCalculatorService;
 
     @Autowired
-    public PlayerService(NormalTurnPlayerService normalTurnPlayerService) {
+    public PlayerService(NormalTurnPlayerService normalTurnPlayerService, CFDCalculatorService cfdCalculatorService) {
         this.normalTurnPlayerService = normalTurnPlayerService;
+        this.cfdCalculatorService = cfdCalculatorService;
     }
 
     public Game playTurn(Game game, Turn turn) {
@@ -25,6 +27,7 @@ public class PlayerService {
             game.setCurrentDay(game.getCurrentDay() + 1);
             game = turnPlayer.playTurn(game, turn);
             game = endGameIfNeeded(game);
+            game = cfdCalculatorService.calculateCFDForCurrentDay(game);
         }
         return game;
     }
