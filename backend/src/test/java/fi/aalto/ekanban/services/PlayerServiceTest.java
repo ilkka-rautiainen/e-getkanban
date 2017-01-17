@@ -22,6 +22,7 @@ public class PlayerServiceTest {
 
     private static PlayerService playerService;
     private static NormalTurnPlayerService normalTurnPlayerService;
+    private static CFDCalculatorService cfdCalculatorService;
 
     private TestGameContainer initialGameContainer;
     private Game turnPlayedGame;
@@ -31,9 +32,11 @@ public class PlayerServiceTest {
     @BeforeClass
     public static void initService() {
         normalTurnPlayerService = Mockito.mock(NormalTurnPlayerService.class);
+        cfdCalculatorService = Mockito.mock(CFDCalculatorService.class);
         Mockito.when(normalTurnPlayerService.playTurn(Mockito.any(Game.class), Mockito.any(Turn.class)))
                 .then(returnsFirstArg());
-        playerService = new PlayerService(normalTurnPlayerService);
+        Mockito.when(cfdCalculatorService.calculateCFDForCurrentDay(Mockito.any(Game.class))).then(returnsFirstArg());
+        playerService = new PlayerService(normalTurnPlayerService, cfdCalculatorService);
     }
 
     @Before
@@ -60,8 +63,8 @@ public class PlayerServiceTest {
             @Test
             public void shouldCallTurnPlayerService() {
                 Game game = initialGameContainer.getGame();
-                Mockito.verify(normalTurnPlayerService,
-                        Mockito.times(1)).playTurn(game, validTurn);
+                Mockito.verify(normalTurnPlayerService, Mockito.times(1)).playTurn(game, validTurn);
+                Mockito.verify(cfdCalculatorService, Mockito.times(1)).calculateCFDForCurrentDay(game);
             }
 
         }
