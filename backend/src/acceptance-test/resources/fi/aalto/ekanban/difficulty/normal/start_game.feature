@@ -35,13 +35,12 @@ Feature: Start Game on Normal level
             And the phase Test should have 1 column(s)
           And 4. phase in board is Deployed
             And the phase Deployed should have 1 column(s)
+        And the game should include a CFD-diagram
+          And the CFD-diagram should include a line for the cards passed the track line of phase Analysis
+          And the CFD-diagram should include a line for the cards passed the track line of phase Development
+          And the CFD-diagram should include a line for the cards passed the track line of phase Deployed
         And board should include colored track lines
           And there should be a track line for the cards entered the board
           And there should be a track line for the cards passed the phase Analysis
           And there should be a track line for the cards passed the phase Development
           And there should be a track line for the cards that have been deployed
-      And game should include a CFD-diagram
-        And the CFD-diagram should include a line for the cards entered the board
-        And the CFD-diagram should include a line for the cards passed the phase Analysis
-        And the CFD-diagram should include a line for the cards passed the phase Development
-        And the CFD-diagram should include a line for the cards that have been deployed

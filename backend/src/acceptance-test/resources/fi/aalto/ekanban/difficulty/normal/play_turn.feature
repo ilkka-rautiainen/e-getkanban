@@ -87,30 +87,29 @@ Feature: Play Turn on Normal level
     Then I should get a game with a turn played
       And new cards should have been drawn from backlog to the first column
       And game should include a CFD-diagram
-        And the newest records in the CFD-diagram are for day 2
-        And the CFD-diagram should show the line of cards entered to the board increased by the amount of cards that entered to the board
+        And the newest records in the CFD-diagram are for day 1
 
 
   Scenario: Player wants to see the CFD diagram update in the middle of the game
     Given I have a game with difficulty of Normal
-      And game has one ready card in first columns of the work phases
       And the current day of the game is 5
+      And game has one ready card in first columns of the work phases
 
     When I press the next round button
 
     Then I should get a game with a turn played
       And game should include a CFD-diagram
         And the newest records in the CFD-diagram are for day 6
-        And the CFD-diagram should increase the line of cards entered the board by 1
-        And the CFD-diagram should increase the line of cards passed the phase Analysis by 1
-        And the CFD-diagram should increase the line of cards passed the phase Development by 1
-        And the CFD-diagram should increase the line of cards deployed by 1
+        And the CFD-diagram should increase the line of cards entered the board by 2
+        And the CFD-diagram should increase the line of cards passed the track line of phase Analysis by 1
+        And the CFD-diagram should increase the line of cards passed the track line of phase Development by 1
+        And the CFD-diagram should increase the line of cards passed the track line of phase Deployed by 1
 
 
   Scenario: Player wants to see the lead time of the cards
     Given I have a game with difficulty of Normal
-      And game has one ready card in first columns of the work phases
       And the current day of the game is 5
+      And game has one ready card in first columns of the work phases
 
     When I press the next round button
 

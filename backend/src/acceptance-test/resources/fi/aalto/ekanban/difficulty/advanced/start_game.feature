@@ -29,10 +29,9 @@ Feature: Start Game on Advanced level
         And there should be a track line for the cards passed the phase Development
         And there should be a track line for the cards that have been deployed
       And game should include a CFD-diagram
-        And the CFD-diagram should include a line for the cards entered the board
-        And the CFD-diagram should include a line for the cards passed the phase Analysis
-        And the CFD-diagram should include a line for the cards passed the phase Development
-        And the CFD-diagram should include a line for the cards that have been deployed
+        And the CFD-diagram should include a line for the cards passed the track line of phase Analysis
+        And the CFD-diagram should include a line for the cards passed the track line of phase Development
+        And the CFD-diagram should include a line for the cards passed the track line of phase Deployed
 
 
   Scenario: Player starts the game with advanced difficulty with the cycles
@@ -65,12 +64,11 @@ Feature: Start Game on Advanced level
         And there should be a track line for the cards passed the phase Test
         And there should be a track line for the cards that have been deployed
       And game should include a CFD-diagram
-        And the CFD-diagram should include a line for the cards entered the board
-        And the CFD-diagram should include a line for the cards passed the phase Selected
-        And the CFD-diagram should include a line for the cards passed the phase Analysis
-        And the CFD-diagram should include a line for the cards passed the phase Development
-        And the CFD-diagram should include a line for the cards passed the phase Test
-        And the CFD-diagram should include a line for the cards that have been deployed
+        And the CFD-diagram should include a line for the cards passed the track line of phase Selected
+        And the CFD-diagram should include a line for the cards passed the track line of phase Analysis
+        And the CFD-diagram should include a line for the cards passed the track line of phase Development
+        And the CFD-diagram should include a line for the cards passed the track line of phase Test
+        And the CFD-diagram should include a line for the cards passed the track line of phase Deployed
 
 
   Scenario: Player starts the game with advanced difficulty with the expedite lane

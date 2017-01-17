@@ -2,7 +2,9 @@ package fi.aalto.ekanban.difficulty.normal.stepdefs;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 import static fi.aalto.ekanban.ApplicationConstants.GAME_PATH;
 
@@ -164,5 +166,20 @@ public class StartGameStepdefs extends SpringSteps {
     public void column_in_phase_is(Integer columnNumber, String phaseName, String columnName) throws Throwable {
         response.body("board.phases.find { it.name == '" + phaseName + "'}.columns[" + (columnNumber-1) + "].name",
                 equalTo(columnName));
+    }
+
+    @And("^the game should include a CFD-diagram$")
+    public void the_game_should_include_a_CFD_diagram() throws Throwable {
+        response.body("cfd", is(notNullValue()));
+    }
+
+    @And("^the CFD-diagram should include a line for the cards passed the track line of phase (.+)")
+    public void the_CFD_diagram_should_include_a_line_for_the_cards_passed_the_track_line_of_phase(String phaseName)
+            throws Throwable {
+        String phaseId = response.extract().path("board.phases.find { it.name == '" + phaseName + "' }.id");
+        Integer newCurrentDay = response.extract().path("currentDay");
+        String pathForDailyValueInPhase =
+                "cfd.cfdDailyValues[" + Integer.toString(newCurrentDay) + "].phaseValues." + phaseId;
+        response.body(pathForDailyValueInPhase, is(notNullValue()));
     }
 }

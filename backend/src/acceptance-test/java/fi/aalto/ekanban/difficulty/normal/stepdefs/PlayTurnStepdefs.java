@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import fi.aalto.ekanban.builders.AdjustWipLimitsActionBuilder;
 import fi.aalto.ekanban.builders.TurnBuilder;
 import fi.aalto.ekanban.models.AdjustWipLimitsAction;
+import fi.aalto.ekanban.models.CFDDailyValue;
 import fi.aalto.ekanban.models.Turn;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.Game;
@@ -51,6 +52,7 @@ public class PlayTurnStepdefs extends SpringSteps {
     private Card firstCardInDevelopmentBefore;
     private Card firstCardInTestBefore;
     private Integer cardsInBacklogDeckBefore;
+    private CFDDailyValue lastCFDDailyValueBefore;
     private Integer wipLimitOfAnalysisAfter;
 
     @Before
@@ -96,6 +98,12 @@ public class PlayTurnStepdefs extends SpringSteps {
     public void game_has_one_ready_card_in_first_columns_of_the_work_phases() throws Throwable {
         initialGameContainer.fillFirstWorkPhasesWithSomeReadyCards();
         initialGameContainer.fillLastWorkPhaseWithSomeReadyCards();
+        CFDDailyValue lastDailyValue = initialGameContainer.getGame().getCFD().getCfdDailyValues()
+                .get(initialGameContainer.getGame().getCurrentDay());
+        lastDailyValue.setEnteredBoard(3);
+        lastDailyValue.getPhaseValues().put(ANALYSIS_PHASE_ID, 2);
+        lastDailyValue.getPhaseValues().put(DEVELOPMENT_PHASE_ID, 1);
+        lastDailyValue.getPhaseValues().put(DEPLOYED_PHASE_ID, 0);
         gameRepository.save(initialGameContainer.getGame());
         saveSituationBefore();
     }
@@ -124,6 +132,7 @@ public class PlayTurnStepdefs extends SpringSteps {
     @And("^the current day of the game is (\\d+)$")
     public void the_current_day_of_the_game_is(Integer currentDay) throws Throwable {
         initialGameContainer.getGame().setCurrentDay(currentDay);
+        initialGameContainer.fillCFDWithZeroValuesUntilDay(currentDay);
         gameRepository.save(initialGameContainer.getGame());
         saveSituationBefore();
     }
@@ -154,6 +163,8 @@ public class PlayTurnStepdefs extends SpringSteps {
             firstCardInTestBefore = initialGameContainer.getTestPhase().getFirstColumn().getCards().get(0);
         }
         cardsInBacklogDeckBefore = initialGameContainer.getGame().getBoard().getBacklogDeck().size();
+        lastCFDDailyValueBefore = initialGameContainer.getGame().getCFD().getCfdDailyValues()
+                .get(initialGameContainer.getGame().getCurrentDay());
 
         // saving this already in case it's not being changed by a when-action
         wipLimitOfAnalysisAfter = initialGameContainer.getAnalysisPhase().getWipLimit();
@@ -264,8 +275,7 @@ public class PlayTurnStepdefs extends SpringSteps {
 
     @And("^the phase (.+) should have some cards in its first column$")
     public void the_phase_should_have_some_cards_in_its_first_column(String phaseName) throws Throwable {
-        response.body("board.phases.find { it.name == '" + phaseName + "' }.columns[0].cards.size()",
-                greaterThan(0));
+        response.body("board.phases.find { it.name == '" + phaseName + "' }.columns[0].cards.size()", greaterThan(0));
     }
 
     @And("^the phase (.+) should still have more cards than it's WIP limit$")
@@ -282,14 +292,17 @@ public class PlayTurnStepdefs extends SpringSteps {
 
     @And("^the card that was deployed should have the day deployed set to (\\d+)$")
     public void the_card_that_was_deployed_should_have_the_day_deployed_set_to(Integer dayDeployed) throws Throwable {
-        response.body("board.phases.find { it.id == '" + DEPLOYED_PHASE_ID + "' }.columns[0].cards[0].dayDeployed",
-                equalTo(dayDeployed));
+        String pathForDayDeployedOfTheFirstDeployedCard = "board.phases.find { it.id == '" + DEPLOYED_PHASE_ID
+                + "' }.columns[0].cards[0].dayDeployed";
+        response.body(pathForDayDeployedOfTheFirstDeployedCard, equalTo(dayDeployed));
     }
 
     @And("^the card that was deployed should have a lead time calculated on it and it's (\\d+)$")
     public void the_card_that_was_deployed_should_have_a_lead_time_calculated_on_it_and_its(Integer leadTime)
             throws Throwable {
-        response.body("board.phases.find { it.id == '" + DEPLOYED_PHASE_ID + "' }.columns[0].cards[0].leadTimeInDays",
+        String pathForLeadTimeOfTheFirstDeployedCard = "board.phases.find { it.id == '" + DEPLOYED_PHASE_ID
+                + "' }.columns[0].cards[0].leadTimeInDays";
+        response.body(pathForLeadTimeOfTheFirstDeployedCard,
                 equalTo(leadTime));
     }
 
@@ -301,5 +314,42 @@ public class PlayTurnStepdefs extends SpringSteps {
     @And("^the game should not have been ended$")
     public void the_game_should_not_have_been_ended() throws Throwable {
         response.body("hasEnded", equalTo(false));
+    }
+
+    @And("^game should include a CFD-diagram$")
+    public void game_should_include_a_CFD_diagram() throws Throwable {
+        response.body("cfd", is(notNullValue()));
+    }
+
+    @And("^the newest records in the CFD-diagram are for day (\\d+)$")
+    public void the_newest_records_in_the_CFD_diagram_are_for_day(Integer day) throws Throwable {
+        response.body("cfd.cfdDailyValues.size()", equalTo(day + 1));
+    }
+
+    @And("^the CFD-diagram should increase the line of cards entered the board by (\\d+)$")
+    public void the_CFD_diagram_should_increase_the_line_of_cards_entered_the_board_by(Integer amount)
+            throws Throwable {
+        Integer newCurrentDay = response.extract().path("currentDay");
+
+        String pathForCurrentDaysEnteredBoard =
+                "cfd.cfdDailyValues[" + Integer.toString(newCurrentDay) + "].enteredBoard";
+        Integer lastCfdEnteredBoardPlusAmountIncrement = lastCFDDailyValueBefore.getEnteredBoard() + amount;
+
+        response.body(pathForCurrentDaysEnteredBoard, equalTo(lastCfdEnteredBoardPlusAmountIncrement));
+    }
+
+    @And("^the CFD-diagram should increase the line of cards passed the track line of phase (.+) by (\\d+)$")
+    public void the_CFD_diagram_should_increase_the_line_of_cards_passed_the_track_line_of_phase(String phaseName,
+                                                                                                 Integer amount)
+            throws Throwable {
+        String phaseId = response.extract().path("board.phases.find { it.name == '" + phaseName + "' }.id");
+        Integer newCurrentDay = response.extract().path("currentDay");
+
+        String pathForDailyValueInPhase =
+                "cfd.cfdDailyValues[" + Integer.toString(newCurrentDay) + "].phaseValues." + phaseId;
+        Integer lastCfdDailyValueForPhasePlusAmountIncrement = lastCFDDailyValueBefore.getPhaseValues().get(phaseId)
+                + amount;
+
+        response.body(pathForDailyValueInPhase, equalTo(lastCfdDailyValueForPhasePlusAmountIncrement));
     }
 }
