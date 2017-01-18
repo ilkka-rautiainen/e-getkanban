@@ -322,7 +322,8 @@ public class MoveCardsAIServiceIntegrationTest {
 
     private void performMoveCards() {
         List<MoveCardAction> actions = moveCardsAIService.getMoveCardsActions(initialGameContainer.getGame());
-        Game gameWithCardsMoved = ActionExecutorService.moveCards(initialGameContainer.getGame(), actions);
+        ActionExecutorService actionExecutorService = new ActionExecutorService();
+        Game gameWithCardsMoved = actionExecutorService.moveCards(initialGameContainer.getGame(), actions);
         movedCardsGameContainer = TestGameContainer.withGame(gameWithCardsMoved);
     }
 

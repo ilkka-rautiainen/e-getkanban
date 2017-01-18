@@ -19,9 +19,11 @@ import fi.aalto.ekanban.models.db.phases.Phase;
 @Service
 public class ActionExecutorService {
 
+    public ActionExecutorService() {}
+
     private static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
-    public static Game adjustWipLimits(Game game, AdjustWipLimitsAction adjustWipLimitsAction) {
+    public Game adjustWipLimits(Game game, AdjustWipLimitsAction adjustWipLimitsAction) {
         if (game != null && game.isValid() && adjustWipLimitsAction != null) {
             game.getBoard().getPhases()
                     .forEach(phase -> {
@@ -34,7 +36,7 @@ public class ActionExecutorService {
         return game;
     }
 
-    public static Game assignResources(Game game, List<AssignResourcesAction> assignResourcesActions) {
+    public Game assignResources(Game game, List<AssignResourcesAction> assignResourcesActions) {
         if (game != null && game.isValid() && assignResourcesActions != null) {
             assignResourcesActions.forEach(assignResourcesAction -> {
                 if (!isValidAssignResourcesAction(assignResourcesAction, game)) {
@@ -46,7 +48,7 @@ public class ActionExecutorService {
         return game;
     }
 
-    public static Game moveCards(Game game, List<MoveCardAction> moveCardActions) {
+    public Game moveCards(Game game, List<MoveCardAction> moveCardActions) {
         if (game != null && game.isValid() && moveCardActions != null) {
             moveCardActions.forEach(moveCardAction -> {
                 if (!isValidMoveCardAction(moveCardAction, game)) {
@@ -58,7 +60,7 @@ public class ActionExecutorService {
         return game;
     }
 
-    public static Game drawFromBacklog(Game game, List<DrawFromBacklogAction> drawActions) {
+    public Game drawFromBacklog(Game game, List<DrawFromBacklogAction> drawActions) {
         if (game != null && game.isValid() && drawActions != null) {
             Phase firstPhase = game.getBoard().getPhases().get(0);
 
@@ -79,13 +81,13 @@ public class ActionExecutorService {
         return game;
     }
 
-    private static Boolean isValidDrawFromBacklogAction(Phase firstPhase, DrawFromBacklogAction drawAction) {
+    private Boolean isValidDrawFromBacklogAction(Phase firstPhase, DrawFromBacklogAction drawAction) {
         return !firstPhase.isFullWip()
                 && drawAction.getIndexToPlaceCardAt() >= 0
                 && drawAction.getIndexToPlaceCardAt() <= firstPhase.getColumns().get(0).getCards().size();
     }
 
-    private static boolean isValidAssignResourcesAction(AssignResourcesAction assignResourcesAction, Game game) {
+    private boolean isValidAssignResourcesAction(AssignResourcesAction assignResourcesAction, Game game) {
         Card card = game.getCardWithId(assignResourcesAction.getCardId());
         CardPhasePoint cardPhasePoint = card.getCardPhasePointOfPhase(assignResourcesAction.getPhaseId());
         Integer pointsLeft = cardPhasePoint.getTotalPoints() - cardPhasePoint.getPointsDone();
@@ -93,7 +95,7 @@ public class ActionExecutorService {
                 && game.isCardInFirstColumnOfPhase(card, assignResourcesAction.getPhaseId());
     }
 
-    private static boolean isValidMoveCardAction(MoveCardAction moveCardAction, Game game) {
+    private boolean isValidMoveCardAction(MoveCardAction moveCardAction, Game game) {
         return game.isColumnNextAdjacent(moveCardAction.getFromColumnId(), moveCardAction.getToColumnId()) &&
                 !game.doesMoveExceedWIP(moveCardAction) &&
                 game.isCardInColumn(moveCardAction.getCardId(), moveCardAction.getFromColumnId());

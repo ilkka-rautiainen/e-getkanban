@@ -158,7 +158,8 @@ public class DrawFromBacklogAIServiceIntegrationTest {
     private void performDrawFromBacklog() {
         List<DrawFromBacklogAction> actions = drawFromBacklogAIService
                 .getDrawFromBacklogActions(initialGameContainer.getGame());
-        Game gameWithCardsDrawn = ActionExecutorService.drawFromBacklog(initialGameContainer.getGame(), actions);
+        ActionExecutorService actionExecutorService = new ActionExecutorService();
+        Game gameWithCardsDrawn = actionExecutorService.drawFromBacklog(initialGameContainer.getGame(), actions);
         drawnCardsGameContainer = TestGameContainer.withGame(gameWithCardsDrawn);
         setResults();
     }

@@ -64,7 +64,8 @@ public class AssignResourcesAIIntegrationTest {
     private void performAssignResources() {
         List<AssignResourcesAction> actions = assignResourcesAIService
                 .getAssignResourcesActions(initialGameContainer.getGame());
-        Game gameWithResourcesUsed = ActionExecutorService.assignResources(initialGameContainer.getGame(), actions);
+        ActionExecutorService actionExecutorService = new ActionExecutorService();
+        Game gameWithResourcesUsed = actionExecutorService.assignResources(initialGameContainer.getGame(), actions);
         resourcesUsedGameContainer = TestGameContainer.withGame(gameWithResourcesUsed);
     }
 }
