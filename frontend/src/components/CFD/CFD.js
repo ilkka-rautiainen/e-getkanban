@@ -5,7 +5,8 @@ import _ from 'lodash';
 import IconButton from 'material-ui/IconButton';
 import ExpandMore from 'material-ui/svg-icons/navigation/expand-more';
 import ExpandLess from 'material-ui/svg-icons/navigation/expand-less';
-import cfd from './CFDConfig';
+import cfdConfig from './CFDConfig';
+import cfdGraphConfigTemplate from './CFDGraphConfigTemplate';
 import './CFD.scss';
 
 class CFD extends React.Component {
@@ -19,7 +20,7 @@ class CFD extends React.Component {
     this.state = {isVisible: false};
     let graphConfigs = [];
     graphConfigValues.forEach(function(config) {
-      let graphConfig = _.clone(cfd.graphConfig, true);
+      let graphConfig = _.clone(cfdGraphConfigTemplate, true);
       graphConfig["balloonColor"] = config.color;
       graphConfig["lineColor"] = config.color;
       graphConfig["valueField"] = config.valueField;
@@ -61,13 +62,13 @@ class CFD extends React.Component {
         <AmCharts
           type="serial"
           theme="light"
-          legend={cfd.legendConfig}
+          legend={cfdConfig.legendConfig}
           graphs={this.graphConfigs}
-          chartCursor={cfd.chartCursorConfig}
+          chartCursor={cfdConfig.chartCursorConfig}
           dataProvider={this.props.dataProvider}
-          valueAxes={cfd.valueAxesConfig}
+          valueAxes={cfdConfig.valueAxesConfig}
           categoryField="day"
-          categoryAxis={cfd.categoryAxisConfig}
+          categoryAxis={cfdConfig.categoryAxisConfig}
         />
       </div>
     )

@@ -1,18 +1,18 @@
-const cfd = {
+const cfdConfig = {
   legendConfig: {
     "equalWidths": false,
-    "periodValueText": "total: [[value.high]]",
+    "periodValueText": "latest: [[value.high]]",
     "position": "top",
     "valueAlign": "left",
     "valueWidth": 60
   },
-  graphConfig: {
+  graphConfigTemplate: {
     "balloon":{
       "drop":true,
       "adjustBorderColor":false,
       "color":"#ffffff",
     },
-    "balloonColor": "BALLOON_COLOR",
+    "balloonColor": "",
     "bullet": "round",
     "bulletBorderAlpha": 1,
     "bulletColor": "#FFFFFF",
@@ -22,9 +22,9 @@ const cfd = {
     "useLineColorForBulletBorder": true,
     "fillAlphas": 0.0,
     "lineAlpha": 0.8,
-    "title": "TITLE_TEXT",
-    "valueField": "VALUE_FIELD",
-    "lineColor": "LINE_COLOR"
+    "title": "",
+    "valueField": "",
+    "lineColor": ""
   },
   chartCursorConfig: {
     "cursorAlpha": 0
@@ -39,4 +39,4 @@ const cfd = {
   }
 };
 
-export default cfd;
+export default cfdConfig;
