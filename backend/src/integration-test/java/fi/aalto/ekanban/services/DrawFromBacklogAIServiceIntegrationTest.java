@@ -17,6 +17,7 @@ import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.utils.TestGameContainer;
 import fi.aalto.ekanban.services.ai.drawfrombacklog.DrawFromBacklogAIService;
+import fi.aalto.ekanban.services.ActionExecutorService;
 
 @RunWith(HierarchicalContextRunner.class)
 public class DrawFromBacklogAIServiceIntegrationTest {
@@ -158,7 +159,8 @@ public class DrawFromBacklogAIServiceIntegrationTest {
     private void performDrawFromBacklog() {
         List<DrawFromBacklogAction> actions = drawFromBacklogAIService
                 .getDrawFromBacklogActions(initialGameContainer.getGame());
-        Game gameWithCardsDrawn = ActionExecutorService.drawFromBacklog(initialGameContainer.getGame(), actions);
+        ActionExecutorService actionExecutorService = new ActionExecutorService();
+        Game gameWithCardsDrawn = actionExecutorService.drawFromBacklog(initialGameContainer.getGame(), actions);
         drawnCardsGameContainer = TestGameContainer.withGame(gameWithCardsDrawn);
         setResults();
     }
