@@ -7,7 +7,6 @@ import java.util.stream.IntStream;
 
 import fi.aalto.ekanban.models.db.gameconfigurations.BaseCard;
 import fi.aalto.ekanban.models.db.games.Card;
-import fi.aalto.ekanban.models.db.games.CardPhasePoint;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
 
 public class CardsBuilder {

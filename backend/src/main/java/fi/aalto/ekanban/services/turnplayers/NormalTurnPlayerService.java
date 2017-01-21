@@ -30,7 +30,6 @@ public class NormalTurnPlayerService implements TurnPlayer {
     @Autowired
     private DrawFromBacklogAIService drawFromBacklogAIService;
 
-
     public Game playTurn(Game game, Turn turn) {
         game.setLastTurn(turn);
         game = actionExecutorService.adjustWipLimits(game, turn.getAdjustWipLimitsAction());
