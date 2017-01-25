@@ -23,9 +23,10 @@ public class CardsBuilder {
 
         cardBuilders = new ArrayList<>();
         for (Integer i = 0; i < baseCards.size(); i++) {
+            Integer oneBasedOrderNumber = i + 1;
             CardBuilder cardFromBaseCard = CardBuilder.aCard()
                     .fromBaseCard(baseCards.get(i))
-                    .withOrderNumber(i);
+                    .withOrderNumber(oneBasedOrderNumber);
             cardBuilders.add(cardFromBaseCard);
         }
 
