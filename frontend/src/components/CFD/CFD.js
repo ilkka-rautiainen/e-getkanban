@@ -49,8 +49,16 @@ class CFD extends React.Component {
     }
   }
 
+  componentWillReceiveProps(newProps) {
+    const containerState = newProps.gameHasEnded ? true : this.state.isVisible;
+    this.setState({
+      isVisible: containerState
+    });
+  }
+
   get containerClass() {
-    return this.state.isVisible ? "cfd visible" : "cfd hidden";
+    let containerClass = this.state.isVisible ? "cfd visible" : "cfd hidden";
+    return this.props.gameHasEnded ? containerClass + " ended" : containerClass;
   }
 
   render() {
@@ -78,7 +86,8 @@ class CFD extends React.Component {
 const mapStateToProps = (state) => {
   return {
     dataProvider: state.cfdData,
-    graphConfigValues: state.cfdConfig
+    graphConfigValues: state.cfdConfig,
+    gameHasEnded: state.game.hasEnded
   }
 };
 

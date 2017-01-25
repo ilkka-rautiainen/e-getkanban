@@ -40,7 +40,8 @@ export function playTurn(gameId, newWipLimits) {
         phaseWipLimits: newWipLimits
       },
       moveCardActions: [],
-      drawFromBacklogActions: []
+      drawFromBacklogActions: [],
+      assignResourcesActions: []
     }
   }
 }

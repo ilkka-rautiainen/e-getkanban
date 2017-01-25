@@ -16,7 +16,7 @@
   }
   &.visible {
     opacity: 0.3;
-    &:hover {
+    &:hover, &.ended {
       opacity: 1;
     }
     button {

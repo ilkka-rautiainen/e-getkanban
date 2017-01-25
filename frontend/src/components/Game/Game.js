@@ -5,6 +5,8 @@ import { playTurn } from '../../actions';
 import Board from '../Board/Board';
 import BacklogDeckArea from '../BacklogDeckArea/BacklogDeckArea';
 import CFD from '../CFD/CFD';
+import Message from '../Message/Message';
+import constants from '../../constants';
 import './Game.scss';
 
 class Game extends React.Component {
@@ -28,6 +30,17 @@ class Game extends React.Component {
     }
   }
 
+  get gameEndedMessage() {
+    const linkStyle = {
+      display: "block",
+      marginTop: 10
+    };
+    let messageElements = [];
+    messageElements.push(<div>{constants.GAME_ENDED_MESSAGE}</div>);
+    messageElements.push(<a href="/" style={linkStyle}>{constants.START_OVER_MESSAGE}</a>);
+    return messageElements;
+  }
+
   render() {
     return (
       <div className="game">
@@ -39,13 +52,14 @@ class Game extends React.Component {
           <RaisedButton
             label="Next Round"
             secondary={this.props.enableNextRound}
-            disabled={!this.props.enableNextRound}
+            disabled={this.props.gameHasEnded || !this.props.enableNextRound}
             style={this.buttonStyle}
-            onClick={() => {this.props.enableNextRound && this.props.onPlayTurn(this.props.game.id, this.props.wipLimits); }}
+            onClick={() => {if (this.props.enableNextRound) this.props.onPlayTurn(this.props.game.id, this.props.wipLimits)}}
           />
         </div>
         <BacklogDeckArea />
         <Board  />
+        {this.props.gameHasEnded && <Message message={this.gameEndedMessage} />}
         <CFD  />
       </div>
     )
@@ -57,7 +71,8 @@ const mapStateToProps = (state) => {
   return {
     game: state.game,
     wipLimits: state.wipLimits,
-    enableNextRound: state.nextRoundUIState.enableButtonPress
+    enableNextRound: state.nextRoundUIState.enableButtonPress,
+    gameHasEnded: state.game.hasEnded
   }
 };
 
