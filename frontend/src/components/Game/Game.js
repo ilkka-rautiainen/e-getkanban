@@ -32,12 +32,12 @@ class Game extends React.Component {
 
   get gameEndedMessage() {
     const linkStyle = {
-      display: "block",
-      marginTop: 10
+      marginTop: 10,
+      height: 40
     };
     let messageElements = [];
-    messageElements.push(<div>{constants.GAME_ENDED_MESSAGE}</div>);
-    messageElements.push(<a href="/" style={linkStyle}>{constants.START_OVER_MESSAGE}</a>);
+    messageElements.push(<div key={1}>{constants.GAME_ENDED_MESSAGE}</div>);
+    messageElements.push(<RaisedButton key={2} label={constants.START_OVER_MESSAGE} primary={true} style={linkStyle} href="/" />);
     return messageElements;
   }
 
@@ -65,7 +65,7 @@ class Game extends React.Component {
     )
   }
 
-};
+}
 
 const mapStateToProps = (state) => {
   return {

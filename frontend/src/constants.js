@@ -5,7 +5,11 @@ const constants = {
   GAMES_PATH: "games/",
   BACKEND_HOST: backendHost,
   GAME_ENDED_MESSAGE: "Game Has Ended!",
-  START_OVER_MESSAGE: "Start Over"
+  START_OVER_MESSAGE: "Start Over",
+  TEST: "TEST",
+  DEPLOYED: "DEPLOYED",
+  ENTERED_BOARD: "ENTERED_BOARD",
+  ENTERED_BOARD_TITLE: "Entered Board"
 };
 
 export default constants;

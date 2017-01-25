@@ -4,8 +4,8 @@ $column-header-height: 30px;
 $board-min-width: 1270px;
 
 // Colors
-$board-border-color: black;
-$phase-separator-color: black;
+$board-border-color: #000000;
+$phase-separator-color: #868686;
 $column-separator-color: lighten($phase-separator-color, 50%);
 $background-color: #00BCD4;
 $cfd-background-color: #FFFFFF;

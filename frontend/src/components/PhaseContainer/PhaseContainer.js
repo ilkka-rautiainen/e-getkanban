@@ -4,6 +4,7 @@ import { Col } from 'react-flexbox-grid';
 import PhaseWithSingleColumn from '../PhaseWithSingleColumn/PhaseWithSingleColumn';
 import PhaseWithTwoColumns from '../PhaseWithTwoColumns/PhaseWithTwoColumns';
 import Die from "../Die/Die";
+import constants from '../../constants';
 import './PhaseContainer.scss';
 
 class PhaseContainer extends React.Component {
@@ -56,7 +57,7 @@ class PhaseContainer extends React.Component {
       <Col xs className={this.className}>
         {this.dice}
         {this.phase.columns.length === 1 ?
-          <PhaseWithSingleColumn phase={this.phase} column={this.props.firstColumn} /> :
+          <PhaseWithSingleColumn phase={this.phase} column={this.props.firstColumn} isFinalPhase={this.props.isFinalPhase} /> :
           <PhaseWithTwoColumns phase={this.phase} />}
       </Col>
     )
@@ -66,10 +67,12 @@ class PhaseContainer extends React.Component {
 const mapStateToProps = (state, ownProps) => {
   const phase = state.phases[ownProps.id];
   const firstColumn = phase === undefined ? null : state.columns[phase.columns[0]];
+  const isFinalPhase = phase.id === constants.DEPLOYED;
   return {
     phase: phase,
     firstColumn: firstColumn,
-    showDice: state.nextRoundUIState.showDice
+    showDice: state.nextRoundUIState.showDice,
+    isFinalPhase: isFinalPhase
   };
 };
 

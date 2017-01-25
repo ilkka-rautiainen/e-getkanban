@@ -4,8 +4,11 @@ import { Row } from 'react-flexbox-grid';
 import PhaseContainer from '../PhaseContainer/PhaseContainer';
 import './Board.scss';
 
-const Board = ({ phases }) => {
-  return <div className="board">
+const Board = ({ phases, enteredBoardTrackLineColor }) => {
+  const boardStyle = {
+    borderLeftColor: "#"+enteredBoardTrackLineColor
+  }
+  return <div className="board" style={boardStyle}>
       <Row className="phase-row">
         { phases.map(phaseId => {
           return <PhaseContainer
@@ -17,13 +20,14 @@ const Board = ({ phases }) => {
 };
 
 Board.propTypes = {
-  phases: PropTypes.arrayOf(PropTypes.string).isRequired
+  phases: PropTypes.arrayOf(PropTypes.string).isRequired,
+  enteredBoardTrackLineColor: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => {
   return {
     phases: state.board.phases,
-    totalColumns: state.columns.length
+    enteredBoardTrackLineColor: state.board.enteredBoardTrackLineColor
   }
 };
 

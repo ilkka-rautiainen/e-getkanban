@@ -29,9 +29,13 @@
 
       &:not(:last-child) {
         .column {
-          border-right: 1px solid $column-separator-color;
+          border-right: 2px solid $column-separator-color;
         }
       }
     }
+  }
+  .column-cards {
+    overflow-y: auto;
+    height: 96%;
   }
 }
