@@ -4,6 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -11,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import fi.aalto.ekanban.builders.*;
 import fi.aalto.ekanban.enums.FinancialValue;
+import fi.aalto.ekanban.models.db.gameconfigurations.BaseCard;
 import fi.aalto.ekanban.repositories.DifficultyConfigurationRepository;
 import fi.aalto.ekanban.repositories.BaseCardRepository;
 import fi.aalto.ekanban.repositories.PhaseRepository;
@@ -125,6 +130,23 @@ public class ApplicationSeedTest extends SpringIntegrationTest {
             @Test
             public void shouldCreateBaseCards() {
                 assertThat(baseCardRepository.count(), greaterThan(baseCardCountBefore));
+            }
+
+            @Test
+            public void shouldCreateUniqueBaseCards() {
+                List<BaseCard> baseCards = baseCardRepository.findAll();
+                // Remove ids as we're not concerned about differences in them
+                removeIds(baseCards);
+                // Set takes automatically only the unique elements of a collection
+                Set<BaseCard> uniqueBaseCards = new HashSet<>(baseCards);
+                assertThat(uniqueBaseCards.size(), equalTo(baseCards.size()));
+            }
+
+            private void removeIds(List<BaseCard> baseCards) {
+                baseCards.forEach(baseCard -> {
+                    baseCard.setId(null);
+                    baseCard.getCardPhasePoints().forEach(phasePoint -> phasePoint.setId(null));
+                });
             }
 
             @Test
