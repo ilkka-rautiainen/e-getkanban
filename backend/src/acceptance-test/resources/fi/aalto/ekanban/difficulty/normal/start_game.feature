@@ -15,7 +15,7 @@ Feature: Start Game on Normal level
       And game should have difficulty of Normal
       And game should include a board
         And board should include 1 backlog deck
-          And backlog deck should have 15 cards
+          And backlog deck should have 36 cards
             And each card should contain phase points
               And 1. phase is Analysis
               And 2. phase is Development

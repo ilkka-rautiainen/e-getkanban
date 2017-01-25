@@ -41,7 +41,7 @@ public class ApplicationSeed {
 
     private void seedBaseCards(BaseCardRepository baseCardRepository) {
         BaseCardsBuilder.aSetOfCards()
-                .withAllBaseCardsWithMockPoints()
+                .withBaseCardsForNormalDifficulty()
                 .createIfNotCreated(baseCardRepository);
     }
 

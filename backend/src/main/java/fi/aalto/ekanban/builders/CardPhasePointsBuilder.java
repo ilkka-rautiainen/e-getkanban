@@ -39,10 +39,30 @@ public class CardPhasePointsBuilder {
         return this;
     }
 
+    public CardPhasePointsBuilder withAnalysisPoints(Integer points) {
+        cardPhasePointBuilders.add(CardPhasePointBuilder.aCardPhasePoint()
+                .withTotalPoints(points)
+                .withPhaseId(ANALYSIS_PHASE_ID));
+        return this;
+    }
+
+    public CardPhasePointsBuilder withDevelopmentPoints(Integer points) {
+        cardPhasePointBuilders.add(CardPhasePointBuilder.aCardPhasePoint()
+                .withTotalPoints(points)
+                .withPhaseId(DEVELOPMENT_PHASE_ID));
+        return this;
+    }
+
+    public CardPhasePointsBuilder withTestPoints(Integer points) {
+        cardPhasePointBuilders.add(CardPhasePointBuilder.aCardPhasePoint()
+                .withTotalPoints(points)
+                .withPhaseId(TEST_PHASE_ID));
+        return this;
+    }
+
     public List<CardPhasePoint> build() {
         return cardPhasePointBuilders.stream()
                 .map(CardPhasePointBuilder::build)
                 .collect(Collectors.toList());
     }
-
 }
