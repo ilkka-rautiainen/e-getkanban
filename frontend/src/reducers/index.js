@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux'
 import { Schema, arrayOf } from 'normalizr';
 import { CHANGE_WIP, SET_GAME_DATA, REMOVE_DICE, ADD_DICE, ENABLE_NEXT_ROUND } from '../actions/actionTypes';
-import { dummyCfd, dummyCfdConfig } from "./dummyCfd";
 
 export const gameSchema = new Schema('games');
 const boardSchema = new Schema('boards');
@@ -111,15 +110,19 @@ function wipLimits(state = null, action) {
   }
 }
 
-function cfdData(state = dummyCfd, action) {
+function cfdData(state = null, action) {
   switch (action.type) {
+    case SET_GAME_DATA:
+      return action.payload.cfdData;
     default:
       return state;
   }
 }
 
-function cfdConfig(state = dummyCfdConfig, action) {
+function cfdConfig(state = null, action) {
   switch (action.type) {
+    case SET_GAME_DATA:
+      return action.payload.cfdConfig;
     default:
       return state;
   }

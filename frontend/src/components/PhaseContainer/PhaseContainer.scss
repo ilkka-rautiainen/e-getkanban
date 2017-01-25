@@ -5,7 +5,7 @@
   height: 100%;
   padding: 0;
 
-  &:not(:last-child) {
+  &:not(.single-col) {
     border-right: 2px solid $phase-separator-color;
   }
 

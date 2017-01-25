@@ -1,7 +1,7 @@
 @import "../../variables";
 
 .phase-with-single-column {
-  height: 92%;
+  height: 100%;
 
   .phase-header {
     height: $phase-header-height;
@@ -12,6 +12,9 @@
     .align-wrapper {
       text-align: center;
     }
-
+  }
+  .column-cards {
+    overflow-y: auto;
+    height: 88.4%;
   }
 }
