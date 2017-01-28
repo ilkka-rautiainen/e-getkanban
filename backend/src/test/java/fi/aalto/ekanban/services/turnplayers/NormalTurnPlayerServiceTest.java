@@ -23,6 +23,7 @@ import fi.aalto.ekanban.models.*;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.services.ActionExecutorService;
 import fi.aalto.ekanban.services.ai.assignresources.AssignResourcesAIService;
+import fi.aalto.ekanban.services.ai.assignresources.DiceCastService;
 import fi.aalto.ekanban.services.ai.drawfrombacklog.DrawFromBacklogAIService;
 import fi.aalto.ekanban.services.ai.movecards.MoveCardsAIService;
 
@@ -40,6 +41,8 @@ public class NormalTurnPlayerServiceTest {
     private static MoveCardsAIService moveCardsAIService;
     @Mock
     private static DrawFromBacklogAIService drawFromBacklogAIService;
+    @Mock
+    private static DiceCastService diceCastService;
 
     @BeforeClass
     public static void initService() { normalTurnPlayerService = new NormalTurnPlayerService();}
@@ -55,6 +58,7 @@ public class NormalTurnPlayerServiceTest {
         private List<AssignResourcesAction> assignResourcesActions;
         private List<MoveCardAction> moveCardsActions;
         private List<DrawFromBacklogAction> drawFromBacklogActions;
+        private List<DiceCastAction> diceCastActions;
 
         @Before
         public void setupContextAndCallMethod() {
@@ -72,6 +76,8 @@ public class NormalTurnPlayerServiceTest {
                     MoveCardActionBuilder.aMoveCardAction().build());
             drawFromBacklogActions = Arrays.asList(DrawFromBacklogActionBuilder.aDrawFromBacklogAction().build(),
                     DrawFromBacklogActionBuilder.aDrawFromBacklogAction().build());
+            diceCastActions = Arrays.asList(DiceCastActionBuilder.aDiceCastAction().build(),
+                    DiceCastActionBuilder.aDiceCastAction().build());
 
             Mockito.when(actionExecutorService.adjustWipLimits(
                     Mockito.any(Game.class), Mockito.any(AdjustWipLimitsAction.class))).thenReturn(game);
@@ -81,16 +87,19 @@ public class NormalTurnPlayerServiceTest {
                     Mockito.any(Game.class), Mockito.anyList())).thenReturn(game);
             Mockito.when(actionExecutorService.drawFromBacklog(
                     Mockito.any(Game.class), Mockito.anyList())).thenReturn(game);
-            Mockito.when(assignResourcesAIService.getAssignResourcesActions(game)).thenReturn(assignResourcesActions);
+            Mockito.when(assignResourcesAIService.getAssignResourcesActions(Mockito.any(Game.class), Mockito.anyList()))
+                    .thenReturn(assignResourcesActions);
             Mockito.when(moveCardsAIService.getMoveCardsActions(game)).thenReturn(moveCardsActions);
             Mockito.when(drawFromBacklogAIService.getDrawFromBacklogActions(game)).thenReturn(drawFromBacklogActions);
+            Mockito.when(diceCastService.getDiceCastActions(game)).thenReturn(diceCastActions);
 
             normalTurnPlayerService.playTurn(game, turnWithAdjustWipLimits);
         }
 
         @Test
         public void shouldCallAssignResourcesAIService() {
-            Mockito.verify(assignResourcesAIService, Mockito.times(1)).getAssignResourcesActions(Mockito.any(Game.class));
+            Mockito.verify(assignResourcesAIService, Mockito.times(1))
+                    .getAssignResourcesActions(Mockito.any(Game.class), Mockito.anyList());
         }
 
         @Test
@@ -123,6 +132,11 @@ public class NormalTurnPlayerServiceTest {
         @Test
         public void shouldSetAssignResourcesActions() {
             assertThat(game.getLastTurn().getAssignResourcesActions(), equalTo(assignResourcesActions));
+        }
+
+        @Test
+        public void shouldSetDiceCastActions() {
+            assertThat(game.getLastTurn().getDiceCastActions(), equalTo(diceCastActions));
         }
 
         @Test
