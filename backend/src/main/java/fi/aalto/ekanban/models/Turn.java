@@ -15,7 +15,8 @@ public class Turn {
     private List<DrawFromBacklogAction> drawFromBacklogActions;
     @NotNull
     private List<AssignResourcesAction> assignResourcesActions;
-
+    @NotNull
+    private List<DiceCastAction> diceCastActions;
 
     public AdjustWipLimitsAction getAdjustWipLimitsAction() {
         return adjustWipLimitsAction;
@@ -47,6 +48,14 @@ public class Turn {
 
     public void setAssignResourcesActions(List<AssignResourcesAction> assignResourcesActions) {
         this.assignResourcesActions = assignResourcesActions;
+    }
+
+    public List<DiceCastAction> getDiceCastActions() {
+        return diceCastActions;
+    }
+
+    public void setDiceCastActions(List<DiceCastAction> diceCastActions) {
+        this.diceCastActions = diceCastActions;
     }
 
     @Override

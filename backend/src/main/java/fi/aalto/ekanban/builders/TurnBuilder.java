@@ -10,11 +10,13 @@ public final class TurnBuilder {
     private List<MoveCardAction> moveCardActions;
     private List<DrawFromBacklogAction> drawFromBacklogActions;
     private List<AssignResourcesAction> assignResourcesActions;
+    private List<DiceCastAction> diceCastActions;
 
     private TurnBuilder() {
         moveCardActions = new ArrayList<>();
         drawFromBacklogActions = new ArrayList<>();
         assignResourcesActions = new ArrayList<>();
+        diceCastActions = new ArrayList<>();
     }
 
     public static TurnBuilder aTurn() {
@@ -41,12 +43,18 @@ public final class TurnBuilder {
         return this;
     }
 
+    public TurnBuilder withDiceCastActions(List<DiceCastAction> diceCastActions) {
+        this.diceCastActions = diceCastActions;
+        return this;
+    }
+
     public Turn build() {
         Turn turn = new Turn();
         turn.setAdjustWipLimitsAction(adjustWipLimitsAction);
         turn.setMoveCardActions(moveCardActions);
         turn.setDrawFromBacklogActions(drawFromBacklogActions);
         turn.setAssignResourcesActions(assignResourcesActions);
+        turn.setDiceCastActions(diceCastActions);
         return turn;
     }
 }
