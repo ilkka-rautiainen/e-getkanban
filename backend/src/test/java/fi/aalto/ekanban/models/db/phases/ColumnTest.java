@@ -1,4 +1,4 @@
-package fi.aalto.ekanban.models.db.games;
+package fi.aalto.ekanban.models.db.phases;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
