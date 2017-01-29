@@ -22,7 +22,6 @@ class PhaseContainer extends React.Component {
   constructor({ phase, firstColumn }) {
     super();
     this.phase = phase;
-    this.diceAmount = this.phase.diceAmount ? this.phase.diceAmount : 0;
   }
 
   get className() {
@@ -43,8 +42,9 @@ class PhaseContainer extends React.Component {
 
   get dice() {
     let dice = [];
-    for (var i = 0; i < this.diceAmount; i++) {
-      dice.push(<Die key={i} castNumber={5} addedClass={this.dieAddedClass} dieStyle={this.dieStyle} />)
+    for (var i = 0; i < this.props.dice.diceValues.length; i++) {
+      const dieValue = this.props.dice.diceValues[i];
+      dice.push(<Die key={i} castNumber={dieValue} addedClass={this.dieAddedClass} dieStyle={this.dieStyle} />)
     }
     return dice;
   }
@@ -55,9 +55,13 @@ class PhaseContainer extends React.Component {
     }
     return (
       <Col xs className={this.className}>
-        {this.dice}
+        {this.props.dice && this.dice}
         {this.phase.columns.length === 1 ?
-          <PhaseWithSingleColumn phase={this.phase} column={this.props.firstColumn} isFinalPhase={this.props.isFinalPhase} /> :
+          <PhaseWithSingleColumn
+            phase={this.phase}
+            column={this.props.firstColumn}
+            isFinalPhase={this.props.isFinalPhase}
+          /> :
           <PhaseWithTwoColumns phase={this.phase} />}
       </Col>
     )
@@ -68,9 +72,14 @@ const mapStateToProps = (state, ownProps) => {
   const phase = state.phases[ownProps.id];
   const firstColumn = phase === undefined ? null : state.columns[phase.columns[0]];
   const isFinalPhase = phase.id === constants.DEPLOYED;
+  let dice = null;
+  if (state.game.lastTurn && state.game.lastTurn.diceCastActions) {
+    dice = state.game.lastTurn.diceCastActions.filter(function(diceAction) {return diceAction.phaseId === phase.id})[0];
+  }
   return {
     phase: phase,
     firstColumn: firstColumn,
+    dice: dice,
     showDice: state.nextRoundUIState.showDice,
     isFinalPhase: isFinalPhase
   };

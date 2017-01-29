@@ -1,5 +1,7 @@
 package fi.aalto.ekanban.services.turnplayers;
 
+import static fi.aalto.ekanban.ApplicationConstants.DAY_THRESHOLD_TO_RETURN_DICE_CAST_ACTIONS;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,9 @@ public class NormalTurnPlayerService implements TurnPlayer {
                 diceCastActions);
         game = actionExecutorService.assignResources(game, assignResourcesActions);
         game.getLastTurn().setAssignResourcesActions(assignResourcesActions);
-        game.getLastTurn().setDiceCastActions(diceCastActions);
+        if (game.getCurrentDay() >= DAY_THRESHOLD_TO_RETURN_DICE_CAST_ACTIONS) {
+            game.getLastTurn().setDiceCastActions(diceCastActions);
+        }
         return game;
     }
 

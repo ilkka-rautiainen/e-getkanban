@@ -17,4 +17,6 @@ public class ApplicationConstants {
     public static final Integer RESOURCE_DICE_MIN = 3;
     public static final Integer RESOURCE_DICE_MAX = 6;
 
+    public static final Integer DAY_THRESHOLD_TO_RETURN_DICE_CAST_ACTIONS = 2;
+
 }

@@ -16,14 +16,15 @@ export default function playTurn(action$, store) {
       let delay = store.getState().game && store.getState().game.currentDay > 0 ? 500 : 0;
       return Observable.concat(
         Observable.of(removeDice()),
-        Observable.of(addDice()).filter(() => store.getState().game && store.getState().game.currentDay > 0).delay(1000),
         Observable.ajax.put(constants.BACKEND_HOST+constants.GAMES_PATH+action.gameId, action.turn, headers).delay(delay)
           .map(data => normalize(data.response, gameSchema))
           .map(normalizedData => setGameData(normalizedData))
-          .catch(error => Observable.of(
-            console.log(error)
+          .catch(error => Observable.concat(
+            Observable.of(console.log(error),
+            Observable.of(alert(constants.GAME_ERROR)))
           )),
-        Observable.of(enableNextRoundButton()).filter(() => store.getState().game && store.getState().game.currentDay > 0)
+        Observable.of(addDice()).filter(() => store.getState().game && store.getState().game.currentDay > 0).delay(0),
+        Observable.of(enableNextRoundButton()).filter(() => store.getState().game && store.getState().game.currentDay > 0).delay(1000)
       )
     })
 }

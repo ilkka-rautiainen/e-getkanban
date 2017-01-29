@@ -9,7 +9,8 @@ const constants = {
   TEST: "TEST",
   DEPLOYED: "DEPLOYED",
   ENTERED_BOARD: "ENTERED_BOARD",
-  ENTERED_BOARD_TITLE: "Entered Board"
+  ENTERED_BOARD_TITLE: "Entered Board",
+  GAME_ERROR: "Game Error, Start Over!"
 };
 
 export default constants;

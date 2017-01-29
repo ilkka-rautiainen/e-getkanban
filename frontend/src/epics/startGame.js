@@ -12,8 +12,9 @@ export default function startGame(action$) {
       Observable.ajax.post(constants.BACKEND_HOST+constants.GAMES_PATH, action.payload)
         .map(data => normalize(data.response, gameSchema))
         .map(normalizedData => setGameData(normalizedData))
-        .catch(error => Observable.of(
-          console.log(error)
+        .catch(error => Observable.concat(
+          Observable.of(console.log(error),
+          Observable.of(alert(constants.GAME_ERROR)))
         ))
     );
 }
