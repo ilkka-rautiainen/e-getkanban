@@ -15,7 +15,6 @@ public class Turn {
     private List<DrawFromBacklogAction> drawFromBacklogActions;
     @NotNull
     private List<AssignResourcesAction> assignResourcesActions;
-    @NotNull
     private List<DiceCastAction> diceCastActions;
 
     public AdjustWipLimitsAction getAdjustWipLimitsAction() {

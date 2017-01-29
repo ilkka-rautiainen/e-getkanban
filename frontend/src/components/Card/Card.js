@@ -33,10 +33,34 @@ class Card extends React.Component {
     super();
     this.card = card;
     this.gameDifficulty = gameDifficulty;
+    this.state = {isVisible: true};
   };
 
+  componentWillMount() {
+    const that = this;
+    if (this.props.waitForCardRender) {
+      this.setState({
+        isVisible: false
+      });
+      setTimeout(function() {
+        that.show();
+      }, 2000);
+    }
+  }
+
+  show() {
+    this.setState({
+      isVisible: true
+    });
+  }
+
+  get cardClass() {
+    let columnCardsClass = "card";
+    return this.state.isVisible ? columnCardsClass : columnCardsClass + " hidden";
+  }
+
   render() {
-    return <Paper className="card" zDepth={3} >
+    return <Paper className={this.cardClass} zDepth={3} >
       <div className="card-title">
         <span className="order-number">S{this.card.orderNumber}</span>
         { this.gameDifficulty !== "NORMAL" &&
@@ -60,9 +84,11 @@ class Card extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   const gameDifficulty = state.game.difficultyLevel ? state.game.difficultyLevel : "NORMAL";
+  const waitForCardRender = state.game.currentDay >= 2;
   return {
     card: state.cards[ownProps.id],
-    gameDifficulty: gameDifficulty
+    gameDifficulty: gameDifficulty,
+    waitForCardRender: waitForCardRender
   }
 };
 

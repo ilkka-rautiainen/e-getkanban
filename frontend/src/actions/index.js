@@ -43,7 +43,8 @@ export function playTurn(gameId, newWipLimits) {
       },
       moveCardActions: [],
       drawFromBacklogActions: [],
-      assignResourcesActions: []
+      assignResourcesActions: [],
+      diceCastActions: []
     }
   }
 }

@@ -6,6 +6,11 @@
   margin: 3%;
   display: inline-block;
   border-radius: 20px !important;
+  transition: all ease-in-out 1s;
+  opacity: 1;
+  &.hidden {
+    opacity: 0;
+  }
   .card-title {
     color: $card-text-color;
     background-color: $card-title-bg-color;

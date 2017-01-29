@@ -62,8 +62,10 @@ public class NormalTurnPlayerServiceTest {
 
         @Before
         public void setupContextAndCallMethod() {
+            Integer dayWhenAllActionsShouldHappen = 2;
             game = GameBuilder.aGame()
                     .withNormalDifficultyMockDefaults("Player")
+                    .withCurrentDay(dayWhenAllActionsShouldHappen)
                     .build();
 
             Turn turnWithAdjustWipLimits = TurnBuilder.aTurn()

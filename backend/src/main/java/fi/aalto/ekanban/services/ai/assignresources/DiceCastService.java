@@ -26,12 +26,14 @@ public class DiceCastService {
 
     public List<DiceCastAction> getDiceCastActions(Game game) {
         List<DiceCastAction> diceCastActions = new ArrayList<>();
-        game.getBoard().getWorkPhases().forEach(workPhase -> {
-            List<Integer> diceValues = getDiceValues(workPhase.getDiceAmount());
-            diceCastActions.add(DiceCastActionBuilder.aDiceCastAction()
-                    .withPhaseId(workPhase.getId())
-                    .withDiceValues(diceValues)
-                    .build());
+        game.getBoard().getWorkPhases().stream()
+            .filter(workPhase -> workPhase.getFirstColumn().getCards().size() > 0)
+            .forEach(workPhase -> {
+                List<Integer> diceValues = getDiceValues(workPhase.getDiceAmount());
+                diceCastActions.add(DiceCastActionBuilder.aDiceCastAction()
+                        .withPhaseId(workPhase.getId())
+                        .withDiceValues(diceValues)
+                        .build());
         });
         return diceCastActions;
     }
