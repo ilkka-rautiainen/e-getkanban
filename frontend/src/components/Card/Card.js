@@ -60,7 +60,8 @@ class Card extends React.Component {
   }
 
   render() {
-    return <Paper className={this.cardClass} zDepth={3} >
+    return (
+      <Paper className={this.cardClass} zDepth={3} >
       <div className="card-title">
         <span className="order-number">S{this.card.orderNumber}</span>
         { this.gameDifficulty !== "NORMAL" &&
@@ -79,12 +80,13 @@ class Card extends React.Component {
         }
       </div>
       </Paper>
+    )
   };
 }
 
 const mapStateToProps = (state, ownProps) => {
   const gameDifficulty = state.game.difficultyLevel ? state.game.difficultyLevel : "NORMAL";
-  const waitForCardRender = state.game.currentDay >= 2;
+  const waitForCardRender = state.game.currentDay >= 0;
   return {
     card: state.cards[ownProps.id],
     gameDifficulty: gameDifficulty,

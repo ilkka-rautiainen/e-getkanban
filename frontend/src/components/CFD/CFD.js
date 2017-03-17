@@ -57,15 +57,13 @@ class CFD extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.refs.chartref) {
-      if (this.refs.chartref.state.chart) {
-        this.refs.chartref.state.chart.zoomOut();
-      }
+    if (this.refs.chartref && this.refs.chartref.state.chart) {
+      this.refs.chartref.state.chart.zoomOut();
     }
   }
 
   get containerClass() {
-    let containerClass = this.state.isVisible ? "cfd visible" : "cfd hidden";
+    const containerClass = this.state.isVisible ? "cfd visible" : "cfd hidden";
     return this.props.gameHasEnded ? containerClass + " ended" : containerClass;
   }
 
@@ -75,7 +73,7 @@ class CFD extends React.Component {
         <IconButton iconStyle={this.buttonStyles} style={this.buttonStyles} onClick={this.handleClick}>
           {!this.state.isVisible ? <ExpandLess /> : <ExpandMore />}
         </IconButton>
-        <AmCharts
+        <AmCharts.React
           ref={`chartref`}
           type="serial"
           theme="light"
