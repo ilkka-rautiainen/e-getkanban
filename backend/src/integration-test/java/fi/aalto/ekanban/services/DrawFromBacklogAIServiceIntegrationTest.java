@@ -65,7 +65,7 @@ public class DrawFromBacklogAIServiceIntegrationTest {
         }
     }
 
-    public class withSomeCardsInFirstPhase {
+    public class withEmptyFirstPhase {
         private Integer cardsInBacklogBefore;
         private Integer cardsInFirstPhaseBefore;
         private Integer placesInFirstPhaseBefore;
@@ -73,7 +73,6 @@ public class DrawFromBacklogAIServiceIntegrationTest {
 
         @Before
         public void initAndDoAction() {
-            initialGameContainer.fillFirstWorkPhasesWithSomeReadyCards();
             List<Card> backlogDeck = initialGameContainer.getGame().getBoard().getBacklogDeck();
 
             cardsInBacklogBefore = backlogDeck.size();
@@ -106,20 +105,13 @@ public class DrawFromBacklogAIServiceIntegrationTest {
         public void shouldAddTheCardsInRightOrder() {
             List<Card> cardsInFirstColumn = drawnCardsGameContainer.getAnalysisPhase().getFirstColumn().getCards();
 
-            for (Integer backlogCardIdxBefore = 0;
-                 backlogCardIdxBefore < placesInFirstPhaseBefore;
-                 backlogCardIdxBefore++) {
-                Card cardInBacklog = firstCardsInBacklogBefore.get(backlogCardIdxBefore);
-                Card cardInFirstColumn = cardsInFirstColumn.get(getCardInFirstColumnIdx(backlogCardIdxBefore));
-                assertThat(cardInBacklog.getId(), equalTo(cardInFirstColumn.getId()));
+            for (Integer cardIndex = 0; cardIndex < cardsInFirstColumn.size(); cardIndex++) {
+                Card cardToRemoveFromBacklog = firstCardsInBacklogBefore.get(cardIndex);
+                Card cardInFirstColumn = cardsInFirstColumn.get(cardIndex);
+                assertThat(cardToRemoveFromBacklog.getOrderNumber(), equalTo(cardInFirstColumn.getOrderNumber()));
             }
         }
 
-        private int getCardInFirstColumnIdx(Integer backlogCardIdxBefore) {
-            // example 1: first card drawn from backlog should be last of the drawn cards in the first column
-            // example 2: last card drawn from backlog should be the first card in the first column
-            return placesInFirstPhaseBefore - backlogCardIdxBefore - 1;
-        }
     }
 
     public class withRestrictedBacklogDeck {

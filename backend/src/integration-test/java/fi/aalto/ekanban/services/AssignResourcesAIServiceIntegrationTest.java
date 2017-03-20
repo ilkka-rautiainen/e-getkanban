@@ -123,10 +123,10 @@ public class AssignResourcesAIServiceIntegrationTest {
             @Test
             public void shouldPartlyFillCardsInDevelopment() {
                 List<Card> developmentCards = cardsByPhaseId.get(DEVELOPMENT_PHASE_ID);
-                shouldFillCard(developmentCards.get(3), DEVELOPMENT_PHASE_ID);
-                shouldFillCard(developmentCards.get(2), DEVELOPMENT_PHASE_ID);
+                shouldFillCard(developmentCards.get(0), DEVELOPMENT_PHASE_ID);
                 shouldFillCard(developmentCards.get(1), DEVELOPMENT_PHASE_ID);
-                shouldNotFillCardAtAll(developmentCards.get(0), DEVELOPMENT_PHASE_ID);
+                shouldFillCard(developmentCards.get(2), DEVELOPMENT_PHASE_ID);
+                shouldNotFillCardAtAll(developmentCards.get(3), DEVELOPMENT_PHASE_ID);
             }
 
             /*
@@ -136,9 +136,9 @@ public class AssignResourcesAIServiceIntegrationTest {
             @Test
             public void shouldPartlyFillCardsInTest() {
                 List<Card> testCards = cardsByPhaseId.get(TEST_PHASE_ID);
-                shouldFillCard(testCards.get(2), TEST_PHASE_ID);
+                shouldFillCard(testCards.get(0), TEST_PHASE_ID);
                 shouldFillCard(testCards.get(1), TEST_PHASE_ID);
-                shouldNotFillCardAtAll(testCards.get(0), TEST_PHASE_ID);
+                shouldNotFillCardAtAll(testCards.get(2), TEST_PHASE_ID);
             }
 
             private void shouldFillCard(Card card, String phaseId) {
