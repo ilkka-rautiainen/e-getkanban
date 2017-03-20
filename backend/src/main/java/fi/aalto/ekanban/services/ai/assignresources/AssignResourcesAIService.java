@@ -3,7 +3,6 @@ package fi.aalto.ekanban.services.ai.assignresources;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 
 import fi.aalto.ekanban.builders.AssignResourcesActionBuilder;
@@ -33,9 +32,9 @@ public class AssignResourcesAIService {
     private List<AssignResourcesAction> getAssignResourcesActions(Phase phase, DiceCastAction diceCastAction) {
         List<AssignResourcesAction> actions = new ArrayList<>();
         Integer diceValueLeft = diceCastAction.getTotalDiceValue();
-        List<Card> cardsReversed = Lists.reverse(phase.getFirstColumn().getCards());
-        for (Integer i = 0; i < cardsReversed.size() && diceValueLeft > 0; i++) {
-            Card card = cardsReversed.get(i);
+        List<Card> cards = phase.getFirstColumn().getCards();
+        for (Integer i = 0; i < cards.size() && diceValueLeft > 0; i++) {
+            Card card = cards.get(i);
             CardPhasePoint cardPhasePoint = card.getCardPhasePointOfPhase(phase.getId());
             if (cardPhasePoint.isReady()) {
                 continue;

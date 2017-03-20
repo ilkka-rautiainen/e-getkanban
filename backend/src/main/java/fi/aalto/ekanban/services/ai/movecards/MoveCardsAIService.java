@@ -122,11 +122,11 @@ public class MoveCardsAIService {
                                                                          Phase nextPhase,
                                                                          Integer cardsLeftOutFromLatestPhase,
                                                                          Integer cardsAlreadyMovedToLatestPhase) {
-        List<Card> columnCardsReversed = Lists.reverse(fromColumn.getCards());
-        Integer cardAmountToMoveToNextPhase = getCardAmountToMoveToNextPhase(nextPhase, columnCardsReversed,
+        List<Card> columnCards = fromColumn.getCards();
+        Integer cardAmountToMoveToNextPhase = getCardAmountToMoveToNextPhase(nextPhase, columnCards,
                 cardsLeftOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
 
-        return columnCardsReversed.stream()
+        return columnCards.stream()
                 .limit(cardAmountToMoveToNextPhase)
                 .filter(card -> card.isReadyWithPhase(currentPhase))
                 .map(cardToMove -> MoveCardActionBuilder.aMoveCardAction()
@@ -141,11 +141,11 @@ public class MoveCardsAIService {
                                                                     Column secondColumn, Phase nextPhase,
                                                                     Integer cardsLeftOutFromLatestPhase,
                                                                     Integer cardsAlreadyMovedToLatestPhase) {
-        List<Card> columnCardsReversed = Lists.reverse(firstColumn.getCards());
-        Integer cardAmountToMoveToNextPhase = getCardAmountToMoveToNextPhase(nextPhase, columnCardsReversed,
+        List<Card> columnCards = firstColumn.getCards();
+        Integer cardAmountToMoveToNextPhase = getCardAmountToMoveToNextPhase(nextPhase, columnCards,
                 cardsLeftOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
 
-        return columnCardsReversed.stream()
+        return columnCards.stream()
                 .limit(cardAmountToMoveToNextPhase)
                 .filter(card -> card.isReadyWithPhase(currentPhase))
                 .map(cardToMove -> Arrays.asList(
@@ -163,11 +163,11 @@ public class MoveCardsAIService {
                 .collect(Collectors.toList());
     }
 
-    private Integer getCardAmountToMoveToNextPhase(Phase nextPhase, List<Card> columnCardsReversed,
+    private Integer getCardAmountToMoveToNextPhase(Phase nextPhase, List<Card> columnCards,
                                                    Integer cardsLeftOutFromLatestPhase,
                                                    Integer cardsAlreadyMovedToLatestPhase) {
         Integer cardAmountToMoveToNextPhase;
-        Integer cardsInColumn = columnCardsReversed.size();
+        Integer cardsInColumn = columnCards.size();
         if (nextPhase.getWipLimit() == null) {
             cardAmountToMoveToNextPhase = cardsInColumn;
         }
@@ -182,13 +182,13 @@ public class MoveCardsAIService {
     private List<MoveCardAction> actionsFromFirstColumnToSecond(Phase currentPhase,
                                                                 List<String> cardsIdsTakenFromFirstColumnToNextPhase) {
         Column firstColumn = currentPhase.getFirstColumn();
-        List<Card> firstColumnCardsReversed = Lists.reverse(firstColumn.getCards());
-        Integer totalCardsInFirstColumn = firstColumnCardsReversed.size();
+        List<Card> firstColumnCards = firstColumn.getCards();
+        Integer totalCardsInFirstColumn = firstColumnCards.size();
         Integer cardsLeft = totalCardsInFirstColumn - cardsIdsTakenFromFirstColumnToNextPhase.size();
 
         if (currentPhase.hasSecondColumn() && cardsLeft > 0) {
             Column secondColumn = currentPhase.getSecondColumn();
-            return firstColumnCardsReversed.stream()
+            return firstColumnCards.stream()
                     .filter(card -> card.isReadyWithPhase(currentPhase)
                             && !cardsIdsTakenFromFirstColumnToNextPhase.contains(card.getId()))
                     .map(cardToMove -> MoveCardActionBuilder.aMoveCardAction()

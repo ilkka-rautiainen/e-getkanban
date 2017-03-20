@@ -1,7 +1,7 @@
 package fi.aalto.ekanban.services.ai.drawfrombacklog;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -16,12 +16,19 @@ import fi.aalto.ekanban.models.db.phases.Phase;
 public class DrawFromBacklogAIService {
     public List<DrawFromBacklogAction> getDrawFromBacklogActions(Game game) {
         List<Card> cardsToDraw = getCardsToDraw(game);
-        return cardsToDraw.stream()
-                .map(card -> DrawFromBacklogActionBuilder.aDrawFromBacklogAction()
+        Phase firstPhase = game.getBoard().getPhases().get(0);
+        Integer cardAmountInFirstPhaseFirstColumn = firstPhase.getFirstColumn().getCards().size();
+        List<DrawFromBacklogAction> drawFromBacklogActions = new ArrayList<>();
+        for (Integer i = 0; i < cardsToDraw.size(); i++) {
+            Integer indexToPlaceCard = cardAmountInFirstPhaseFirstColumn+i;
+            drawFromBacklogActions.add(
+                    DrawFromBacklogActionBuilder.aDrawFromBacklogAction()
                         .withDeckType(BacklogDeckType.STANDARD)
-                        .withIndexToPlaceCardAt(0)
-                        .build())
-                .collect(Collectors.toList());
+                        .withIndexToPlaceCardAt(indexToPlaceCard)
+                        .build()
+            );
+        }
+        return drawFromBacklogActions;
     }
 
     private List<Card> getCardsToDraw(Game game) {
@@ -35,4 +42,5 @@ public class DrawFromBacklogAIService {
         Phase firstPhase = game.getBoard().getPhases().get(0);
         return Math.max(0, firstPhase.getWipLimit() - firstPhase.getTotalAmountOfCards());
     }
+
 }

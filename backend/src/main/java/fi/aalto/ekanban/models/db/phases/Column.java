@@ -91,6 +91,6 @@ public class Column {
     }
 
     public void pushCard(Card card) {
-        cards.add(0, card);
+        cards.add(cards.size(), card);
     }
 }

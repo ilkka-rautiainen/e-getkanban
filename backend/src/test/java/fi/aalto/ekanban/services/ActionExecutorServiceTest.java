@@ -170,11 +170,13 @@ public class ActionExecutorServiceTest {
                             }
                             @Test
                             public void shouldPickMovedCardsFromTheStartOfTheFromColumn() {
-                                assertThat(toColumnAfter.getCards().get(0), equalTo(fromColumnFirstCardBefore));
+                                Integer lastIndexWhereCardIsSet = toColumnAfter.getCards().size()-1;
+                                assertThat(toColumnAfter.getCards().get(lastIndexWhereCardIsSet), equalTo(fromColumnFirstCardBefore));
                             }
                             @Test
-                            public void shouldPlaceMovedCardsToBeginningOfTheToColumn() {
-                                assertThat(toColumnAfter.getCards().get(0), equalTo(firstCardToMove));
+                            public void shouldPlaceMovedCardsToEndOfTheToColumn() {
+                                Integer lastIndexWhereCardIsSet = toColumnAfter.getCards().size()-1;
+                                assertThat(toColumnAfter.getCards().get(lastIndexWhereCardIsSet), equalTo(firstCardToMove));
                             }
                         }
                     }

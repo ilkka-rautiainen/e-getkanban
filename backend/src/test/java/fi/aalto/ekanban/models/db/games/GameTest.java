@@ -75,14 +75,17 @@ public class GameTest {
 
             @Before
             public void initAndDoAction() {
-                cardBeforeInDevelopment = testGameContainer.getDevelopmentPhase().getSecondColumn().getCards().get(0);
+                Integer indexForLastCardInDevelopment = testGameContainer.getDevelopmentPhase().getSecondColumn().getCards().size() - 1;
+                cardBeforeInDevelopment = testGameContainer.getDevelopmentPhase().getSecondColumn().getCards()
+                        .get(indexForLastCardInDevelopment);
                 MoveCardAction action = MoveCardActionBuilder.aMoveCardAction()
                         .withCardId(cardBeforeInDevelopment.getId())
                         .withFromColumnId(testGameContainer.getDevelopmentPhase().getSecondColumn().getId())
                         .withToColumnId(testGameContainer.getTestPhase().getFirstColumn().getId())
                         .build();
                 testGameContainer.getGame().performMoveCardAction(action);
-                cardAfterInTest = testGameContainer.getTestPhase().getFirstColumn().getCards().get(0);
+                Integer indexForLastCardInTest = testGameContainer.getTestPhase().getFirstColumn().getCards().size() - 1;
+                cardAfterInTest = testGameContainer.getTestPhase().getFirstColumn().getCards().get(indexForLastCardInTest);
             }
 
             @Test
