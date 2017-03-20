@@ -7,17 +7,25 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
+import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE_ID;
+import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE_ID;
+import static fi.aalto.ekanban.ApplicationConstants.TEST_PHASE_ID;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
-import fi.aalto.ekanban.models.db.games.Card;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import fi.aalto.ekanban.builders.CardBuilder;
+import fi.aalto.ekanban.builders.CardPhasePointBuilder;
+import fi.aalto.ekanban.models.db.games.Card;
+import fi.aalto.ekanban.models.db.games.CardPhasePoint;
 import fi.aalto.ekanban.models.db.phases.Phase;
 import fi.aalto.ekanban.models.MoveCardAction;
 import fi.aalto.ekanban.utils.TestGameContainer;
@@ -116,7 +124,7 @@ public class MoveCardsAIServiceTest {
         }
 
         @Test
-        public void shouldFillTestingWithCardsFromDevelopmenReady() {
+        public void shouldFillTestingWithCardsFromDevelopmentReady() {
             String developmentReadyColumn = initialGameContainer.getDevelopmentPhase().getSecondColumn().getId();
             Integer cardsFromDevelopmentReady = (int) generatedActions.stream()
                     .filter(action -> action.getToColumnId().equals(testColumnId))
@@ -162,6 +170,38 @@ public class MoveCardsAIServiceTest {
                         .filter(action -> !action.getToColumnId().equals(developmentSecondColumnId))
                         .collect(Collectors.toList());
                 assertThat(actionsToOtherColumnsThanDevelopmentSecondColumn.size(), equalTo(0));
+            }
+
+        }
+
+        //regression-test to found bug https://trello.com/c/9gKckxpC/83-bugi-wip-limitin-muutos-aiheuttaa-500-errorin-bakkarilla-joskus
+        public class withCardsThatShouldNotBeAbleToMoveToNextPhase {
+            @Before
+            public void setTestWipLimitAndDoAction() {
+                List<CardPhasePoint> pointsForDevFirstColumnCards = createCardPhasePointsForAnalysisDone();
+                List<CardPhasePoint> pointsForDevSecondColumnAndTestPhaseCards = createCardPhasePointsForAnalysisAndDevDone();
+                initialGameContainer.getDevelopmentPhase().getFirstColumn().setCards(Arrays.asList(
+                    CardBuilder.aCard().withCardPhasePoints(pointsForDevFirstColumnCards).build(),
+                    CardBuilder.aCard().withCardPhasePoints(pointsForDevFirstColumnCards).build(),
+                    CardBuilder.aCard().withCardPhasePoints(pointsForDevFirstColumnCards).build()
+                ));
+                initialGameContainer.getDevelopmentPhase().getSecondColumn().setCards(Arrays.asList(
+                    CardBuilder.aCard().withCardPhasePoints(pointsForDevSecondColumnAndTestPhaseCards).build()
+                ));
+                initialGameContainer.getTestPhase().getFirstColumn().setCards(Arrays.asList(
+                    CardBuilder.aCard().withCardPhasePoints(pointsForDevSecondColumnAndTestPhaseCards).build(),
+                    CardBuilder.aCard().withCardPhasePoints(pointsForDevSecondColumnAndTestPhaseCards).build(),
+                    CardBuilder.aCard().withCardPhasePoints(pointsForDevSecondColumnAndTestPhaseCards).build()
+                ));
+                initialGameContainer.getTestPhase().setWipLimit(0);
+
+                getMoveCardActions();
+            }
+
+            @Test
+            public void shouldReturnEmptyActionList() {
+                assertThat(generatedActions, is(notNullValue()));
+                assertThat(generatedActions.size(), equalTo(0));
             }
         }
 
@@ -246,4 +286,39 @@ public class MoveCardsAIServiceTest {
         generatedActions = moveCardsAIService.getMoveCardsActions(initialGameContainer.getGame());
         toColumnIds = generatedActions.stream().map(MoveCardAction::getToColumnId).collect(Collectors.toList());
     }
+
+    private List<CardPhasePoint> createCardPhasePointsForAnalysisDone() {
+        return Arrays.asList(
+                CardPhasePointBuilder.aCardPhasePoint().withPhaseId(ANALYSIS_PHASE_ID)
+                        .withPointsDone(5)
+                        .withTotalPoints(5)
+                        .build(),
+                CardPhasePointBuilder.aCardPhasePoint().withPhaseId(DEVELOPMENT_PHASE_ID)
+                        .withPointsDone(0)
+                        .withTotalPoints(5)
+                        .build(),
+                CardPhasePointBuilder.aCardPhasePoint().withPhaseId(TEST_PHASE_ID)
+                        .withPointsDone(0)
+                        .withTotalPoints(5)
+                        .build()
+        );
+    }
+
+    private List<CardPhasePoint> createCardPhasePointsForAnalysisAndDevDone() {
+        return Arrays.asList(
+                CardPhasePointBuilder.aCardPhasePoint().withPhaseId(ANALYSIS_PHASE_ID)
+                        .withPointsDone(5)
+                        .withTotalPoints(5)
+                        .build(),
+                CardPhasePointBuilder.aCardPhasePoint().withPhaseId(DEVELOPMENT_PHASE_ID)
+                        .withPointsDone(5)
+                        .withTotalPoints(5)
+                        .build(),
+                CardPhasePointBuilder.aCardPhasePoint().withPhaseId(TEST_PHASE_ID)
+                        .withPointsDone(0)
+                        .withTotalPoints(5)
+                        .build()
+        );
+    }
+
 }

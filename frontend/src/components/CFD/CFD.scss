@@ -7,10 +7,19 @@
   position: fixed;
   background-color: $minor-color;
   z-index: 1;
-  bottom: 0%;
+  bottom: 7%;
   left: 0;
   right: 0;
   margin: 0 auto;
+  text-align: center;
+  h2 {
+    flex: 0 1 28%;
+    color: #fff;
+    font-size: 1.5em;
+    text-shadow: 3px 3px gray;
+    display: inline-block;
+    vertical-align: top
+  }
   > div {
     background-color: $cfd-background-color;
   }
@@ -18,15 +27,6 @@
     opacity: 0.3;
     &:hover, &.ended {
       opacity: 1;
-    }
-    button {
-      position: absolute !important;
-      left: -60px !important;
-      top: 42% !important;
-      background-color: $minor-color !important;
-      height: 90px !important;
-      width: 60px !important;
-      transition: none !important;
     }
   }
   &.hidden {
@@ -37,7 +37,7 @@
       display: none;
     }
     button {
-      flex: 0 1 100%;
+      flex: 0 1 10%;
       transition: none !important;
     }
   }

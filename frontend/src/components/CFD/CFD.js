@@ -40,13 +40,19 @@ class CFD extends React.Component {
 
   get buttonStyles() {
     return {
-      width: 60,
-      height: 60,
-      padding: 0,
-      color: '#fff',
-      display: 'block',
-      margin: '0 auto'
+      icon: {
+        width: 45,
+        height: 45,
+        padding: 0,
+        color: '#fff',
+        margin: '0 auto'
+      },
+      button: {
+        width: 60,
+        height: 60,
+      }
     }
+
   }
 
   componentWillReceiveProps(newProps) {
@@ -70,7 +76,8 @@ class CFD extends React.Component {
   render() {
     return (
       <div className={this.containerClass}>
-        <IconButton iconStyle={this.buttonStyles} style={this.buttonStyles} onClick={this.handleClick}>
+        <h2>CFD</h2>
+        <IconButton iconStyle={this.buttonStyles.icon} style={this.buttonStyles.button} onClick={this.handleClick}>
           {!this.state.isVisible ? <ExpandLess /> : <ExpandMore />}
         </IconButton>
         <AmCharts.React

@@ -34,20 +34,20 @@ public class MoveCardsAIService {
                 .filter(Phase::getIsWorkPhase)
                 .collect(Collectors.toList());
         List<MoveCardAction> moveCardActions = new ArrayList<>();
-        Integer cardsLetOutFromLatestPhase = 0;
+        Integer cardsLeftOutFromLatestPhase = 0;
         for (Phase phase : workPhases) {
-            PhaseActions latestPhaseActions = getMoveCardActionsInPhase(phase, cardsLetOutFromLatestPhase);
-            cardsLetOutFromLatestPhase = latestPhaseActions.getCardsLetOutOfPhase();
+            PhaseActions latestPhaseActions = getMoveCardActionsInPhase(phase, cardsLeftOutFromLatestPhase);
+            cardsLeftOutFromLatestPhase = latestPhaseActions.getCardsLetOutOfPhase();
             moveCardActions.addAll(latestPhaseActions.getMoveCardActions());
         }
         return moveCardActions;
     }
 
-    private PhaseActions getMoveCardActionsInPhase(Phase currentPhase, Integer cardsLetOutFromLatestPhase) {
+    private PhaseActions getMoveCardActionsInPhase(Phase currentPhase, Integer cardsLeftOutFromLatestPhase) {
         List<MoveCardAction> secondColumnActionsToNextPhase = actionsFromSecondColumnToNextPhase(currentPhase,
-                cardsLetOutFromLatestPhase);
+                cardsLeftOutFromLatestPhase);
         Integer cardsLetOutFromSecondColumnToNextPhase = secondColumnActionsToNextPhase.size();
-        PhaseActions firstColumnActions = actionsFromFirstColumn(currentPhase, cardsLetOutFromLatestPhase,
+        PhaseActions firstColumnActions = actionsFromFirstColumn(currentPhase, cardsLeftOutFromLatestPhase,
                 cardsLetOutFromSecondColumnToNextPhase);
 
         List<MoveCardAction> bothColumnActions = new ArrayList<>();
@@ -63,10 +63,10 @@ public class MoveCardsAIService {
                 .build();
     }
 
-    private PhaseActions actionsFromFirstColumn(Phase currentPhase, Integer cardsLetOutFromLatestPhase,
+    private PhaseActions actionsFromFirstColumn(Phase currentPhase, Integer cardsLeftOutFromLatestPhase,
                                                 Integer cardsAlreadyMovedToLatestPhase) {
         List<MoveCardAction> actionsFromFirstColumnToNextPhase = actionsFromFirstColumnToNextPhase(currentPhase,
-                cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
+                cardsLeftOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
         Integer cardsLetOutFromFirstColumnToNextPhase = actionsFromFirstColumnToNextPhase.size();
         List<MoveCardAction> actionsFromFirstColumnToSecond
                 = actionsFromFirstColumnToSecond(currentPhase, cardIdsFrom(actionsFromFirstColumnToNextPhase));
@@ -88,19 +88,19 @@ public class MoveCardsAIService {
     }
 
     private List<MoveCardAction> actionsFromSecondColumnToNextPhase(Phase currentPhase,
-                                                                    Integer cardsLetOutFromLatestPhase) {
+                                                                    Integer cardsLeftOutFromLatestPhase) {
         if (currentPhase.hasSecondColumn() && game.hasNextPhase(currentPhase)) {
             Column secondColumn = currentPhase.getSecondColumn();
             Phase nextPhase = game.getNextPhase(currentPhase);
             Integer cardsAlreadyMovedToLatestPhase = 0;
             return actionsToNextPhaseFromLastColumnOfPhase(currentPhase, secondColumn, nextPhase,
-                    cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
+                    cardsLeftOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
         }
         return new ArrayList<>();
     }
 
     private List<MoveCardAction> actionsFromFirstColumnToNextPhase(Phase currentPhase,
-                                                                   Integer cardsLetOutFromLatestPhase,
+                                                                   Integer cardsLeftOutFromLatestPhase,
                                                                    Integer cardsAlreadyMovedToLatestPhase) {
         if (game.hasNextPhase(currentPhase)) {
             Column firstColumn = currentPhase.getFirstColumn();
@@ -108,11 +108,11 @@ public class MoveCardsAIService {
             if (currentPhase.hasSecondColumn()) {
                 Column secondColumn = currentPhase.getSecondColumn();
                 return actionsToNextPhaseOverSecondColumn(currentPhase, firstColumn, secondColumn, nextPhase,
-                        cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
+                        cardsLeftOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
             }
             else {
                 return actionsToNextPhaseFromLastColumnOfPhase(currentPhase, firstColumn, nextPhase,
-                        cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
+                        cardsLeftOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
             }
         }
         return new ArrayList<>();
@@ -120,11 +120,11 @@ public class MoveCardsAIService {
 
     private List<MoveCardAction> actionsToNextPhaseFromLastColumnOfPhase(Phase currentPhase, Column fromColumn,
                                                                          Phase nextPhase,
-                                                                         Integer cardsLetOutFromLatestPhase,
+                                                                         Integer cardsLeftOutFromLatestPhase,
                                                                          Integer cardsAlreadyMovedToLatestPhase) {
         List<Card> columnCardsReversed = Lists.reverse(fromColumn.getCards());
         Integer cardAmountToMoveToNextPhase = getCardAmountToMoveToNextPhase(nextPhase, columnCardsReversed,
-                cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
+                cardsLeftOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
 
         return columnCardsReversed.stream()
                 .limit(cardAmountToMoveToNextPhase)
@@ -139,11 +139,11 @@ public class MoveCardsAIService {
 
     private List<MoveCardAction> actionsToNextPhaseOverSecondColumn(Phase currentPhase, Column firstColumn,
                                                                     Column secondColumn, Phase nextPhase,
-                                                                    Integer cardsLetOutFromLatestPhase,
+                                                                    Integer cardsLeftOutFromLatestPhase,
                                                                     Integer cardsAlreadyMovedToLatestPhase) {
         List<Card> columnCardsReversed = Lists.reverse(firstColumn.getCards());
         Integer cardAmountToMoveToNextPhase = getCardAmountToMoveToNextPhase(nextPhase, columnCardsReversed,
-                cardsLetOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
+                cardsLeftOutFromLatestPhase, cardsAlreadyMovedToLatestPhase);
 
         return columnCardsReversed.stream()
                 .limit(cardAmountToMoveToNextPhase)
@@ -164,7 +164,7 @@ public class MoveCardsAIService {
     }
 
     private Integer getCardAmountToMoveToNextPhase(Phase nextPhase, List<Card> columnCardsReversed,
-                                                   Integer cardsLetOutFromLatestPhase,
+                                                   Integer cardsLeftOutFromLatestPhase,
                                                    Integer cardsAlreadyMovedToLatestPhase) {
         Integer cardAmountToMoveToNextPhase;
         Integer cardsInColumn = columnCardsReversed.size();
@@ -172,7 +172,7 @@ public class MoveCardsAIService {
             cardAmountToMoveToNextPhase = cardsInColumn;
         }
         else {
-            Integer placesInNextPhase = placesInPhase(nextPhase, cardsLetOutFromLatestPhase,
+            Integer placesInNextPhase = placesInPhase(nextPhase, cardsLeftOutFromLatestPhase,
                     cardsAlreadyMovedToLatestPhase);
             cardAmountToMoveToNextPhase = Math.min(placesInNextPhase, cardsInColumn);
         }
@@ -201,9 +201,9 @@ public class MoveCardsAIService {
         return new ArrayList<>();
     }
 
-    private Integer placesInPhase(Phase phase, Integer cardsLetOutFromLatestPhase,
+    private Integer placesInPhase(Phase phase, Integer cardsLeftOutFromLatestPhase,
                                   Integer cardsAlreadyMovedToLatestPhase) {
-        Integer normalPlaces = phase.getWipLimit() - phase.getTotalAmountOfCards();
-        return normalPlaces + cardsLetOutFromLatestPhase - cardsAlreadyMovedToLatestPhase;
+        Integer normalPlaces = Math.max(phase.getWipLimit() - phase.getTotalAmountOfCards(), 0);
+        return normalPlaces + cardsLeftOutFromLatestPhase - cardsAlreadyMovedToLatestPhase;
     }
 }
