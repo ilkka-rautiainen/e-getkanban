@@ -78,7 +78,7 @@ public final class PhaseBuilder {
                 ColumnBuilder.aColumn().inProgress().build(),
                 ColumnBuilder.aColumn().waitingForNext(nextPhase).build());
         this.name = "Analysis";
-        this.shortName = "An";
+        this.shortName = "An.";
         this.isWorkPhase = true;
         this.color = "ff0000";
         this.trackLinePlace = TrackLinePlace.MIDDLE;
@@ -94,7 +94,7 @@ public final class PhaseBuilder {
                 ColumnBuilder.aColumn().waitingForNext(nextPhase).build()
         );
         this.name = "Development";
-        this.shortName = "Dev";
+        this.shortName = "Dev.";
         this.isWorkPhase = true;
         this.color = "0000ff";
         this.trackLinePlace = TrackLinePlace.MIDDLE;

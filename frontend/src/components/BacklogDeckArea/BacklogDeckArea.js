@@ -26,15 +26,21 @@ class BacklogDeckArea extends React.Component {
 
   render() {
     const styles = {
-      width: 60,
-      height: 60,
+      width: 45,
+      height: 67,
+      padding: 0,
+      color: '#fff',
+    };
+    const iconStyles = {
+      width: 45,
+      height: 45,
       padding: 0,
       color: '#fff',
     };
     return <div className={this.containerClass}>
-      <h2>Backlog</h2>
       <BacklogDeck />
-      <IconButton iconStyle={styles} style={styles} onClick={this.handleClick}>
+      <h2>Backlog</h2>
+      <IconButton iconStyle={iconStyles} style={styles} onClick={this.handleClick}>
         {this.state.isVisible ? <ExpandLess /> : <ExpandMore />}
       </IconButton>
     </div>

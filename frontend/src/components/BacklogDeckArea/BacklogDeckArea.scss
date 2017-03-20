@@ -19,15 +19,24 @@
   background-color: $minor-color;
 
   &.closed {
-    top: -285px;
+    top: -220px;
   }
   h2 {
     flex: 0 1 28%;
     color: #fff;
     font-size: 1.5em;
     text-shadow: 3px 3px gray;
+    text-align: right;
   }
   button {
-    flex: 0 1 100%;
+    flex: 0 1 18%;
+  }
+  span.card-situation {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: #fff;
+    font-size: 1.2em;
+    text-shadow: 1px 1px gray;
   }
 }
