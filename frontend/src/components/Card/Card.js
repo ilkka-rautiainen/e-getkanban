@@ -36,24 +36,6 @@ class Card extends React.Component {
     this.state = {isVisible: true};
   };
 
-  componentWillMount() {
-    const that = this;
-    if (this.props.waitForCardRender) {
-      this.setState({
-        isVisible: false
-      });
-      setTimeout(function() {
-        that.show();
-      }, 2000);
-    }
-  }
-
-  show() {
-    this.setState({
-      isVisible: true
-    });
-  }
-
   get cardClass() {
     let columnCardsClass = "card";
     return this.state.isVisible ? columnCardsClass : columnCardsClass + " hidden";
@@ -61,7 +43,7 @@ class Card extends React.Component {
 
   render() {
     return (
-      <Paper className={this.cardClass} zDepth={3} >
+      <Paper className={this.cardClass} zDepth={3} style={this.props.style} >
       <div className="card-title">
         <span className="order-number">S{this.card.orderNumber}</span>
         { this.gameDifficulty !== "NORMAL" &&
