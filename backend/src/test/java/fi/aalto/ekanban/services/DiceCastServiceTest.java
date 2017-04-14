@@ -69,7 +69,7 @@ public class DiceCastServiceTest {
                     DiceCastAction analysisAction = diceCastActions.stream()
                             .filter(action -> action.getPhaseId().equals(ANALYSIS_PHASE_ID))
                             .findFirst().orElse(null);
-                    assertThat(analysisAction.getDiceValues().size(), equalTo(2));
+                    assertThat(analysisAction.getDice().size(), equalTo(2));
                 }
 
                 @Test
@@ -85,7 +85,7 @@ public class DiceCastServiceTest {
                     DiceCastAction developmentAction = diceCastActions.stream()
                             .filter(action -> action.getPhaseId().equals(DEVELOPMENT_PHASE_ID))
                             .findFirst().orElse(null);
-                    assertThat(developmentAction.getDiceValues().size(), equalTo(3));
+                    assertThat(developmentAction.getDice().size(), equalTo(3));
                 }
 
                 @Test
@@ -101,7 +101,7 @@ public class DiceCastServiceTest {
                     DiceCastAction testAction = diceCastActions.stream()
                             .filter(action -> action.getPhaseId().equals(TEST_PHASE_ID))
                             .findFirst().orElse(null);
-                    assertThat(testAction.getDiceValues().size(), equalTo(2));
+                    assertThat(testAction.getDice().size(), equalTo(2));
                 }
             }
 
@@ -140,7 +140,7 @@ public class DiceCastServiceTest {
                     DiceCastAction testAction = diceCastActions.stream()
                             .filter(action -> action.getPhaseId().equals(TEST_PHASE_ID))
                             .findFirst().orElse(null);
-                    assertThat(testAction.getDiceValues().size(), equalTo(2));
+                    assertThat(testAction.getDice().size(), equalTo(2));
                 }
             }
         }

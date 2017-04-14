@@ -44,7 +44,7 @@ public class AssignResourcesAIService {
             diceValueLeft -= pointsToUse;
             AssignResourcesAction action = AssignResourcesActionBuilder.anAssignResourcesAction()
                     .withCardId(card.getId())
-                    .withPhaseId(phase.getId())
+                    .withCardPhaseId(phase.getId())
                     .withPoints(pointsToUse)
                     .build();
             actions.add(action);

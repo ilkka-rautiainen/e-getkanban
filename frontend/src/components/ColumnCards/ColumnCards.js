@@ -1,9 +1,17 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import {TransitionMotion, spring, presets} from 'react-motion';
+import { setActiveCard } from '../../actions';
 import Card from '../Card/Card';
 
-const ColumnCards = React.createClass({
-  getDefaultStyles() {
+class ColumnCards extends React.Component {
+
+  constructor({ phase }) {
+    super();
+    this.phase = phase;
+  }
+
+  get getDefaultStyles() {
     const styles = this.props.columnCardIds.map((cardId) => {
       return {
         key: cardId,
@@ -11,8 +19,9 @@ const ColumnCards = React.createClass({
       }
     });
     return styles;
-  },
-  getStyles() {
+  }
+
+  get getStyles() {
     const styles = this.props.columnCardIds.map((cardId) => {
       return {
         key: cardId,
@@ -22,23 +31,32 @@ const ColumnCards = React.createClass({
       }
     });
     return styles;
-  },
+  }
 
   willEnter() {
     return { opacity: 0.0 }
-  },
+  }
+
   willLeave() {
     return {
       opacity: spring(0, presets.gentle)
     };
-  },
+  }
+
+  handleCardClick(event, cardId, phaseId) {
+    if (this.phase.isWorkPhase) {
+      const cardPageX = event.nativeEvent.pageX;
+      const cardPageY = event.nativeEvent.pageY;
+      this.props.onSetActiveCard(cardId, phaseId, cardPageX, cardPageY);
+    }
+  }
 
   render() {
     if (this.props.columnCardIds) {
       return (
         <TransitionMotion
-          defaultStyles={this.getDefaultStyles()}
-          styles={this.getStyles()}
+          defaultStyles={this.getDefaultStyles}
+          styles={this.getStyles}
           willEnter={this.willEnter}
           willLeave={this.willLeave}
         >
@@ -46,7 +64,7 @@ const ColumnCards = React.createClass({
             <div className="column-cards">
               {styles.map((card) => {
                 return (
-                  <Card key={card.key} id={card.key} style={card.style} />
+                  <Card key={card.key} id={card.key} style={card.style} onClick={e => this.handleCardClick(e, card.key, this.phase.id)} />
                 )
               })}
             </div>
@@ -56,13 +74,24 @@ const ColumnCards = React.createClass({
     } else {
       return null;
     }
+  }
 
-  },
-
-});
+}
 
 ColumnCards.propTypes = {
-  columnCardIds: PropTypes.arrayOf(PropTypes.string.isRequired)
+  columnCardIds: PropTypes.arrayOf(PropTypes.string.isRequired),
+  phase: PropTypes.object.isRequired
 };
 
-export default ColumnCards;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onSetActiveCard: (cardId, phaseId, cardPageX, cardPageY) => {
+      dispatch(setActiveCard(cardId, phaseId, cardPageX, cardPageY))
+    }
+  }
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(ColumnCards);

@@ -22,8 +22,9 @@ CardPhasePoints.propTypes = {
 
 const mapStateToProps = (state) => {
   const workingPhases = _.pickBy(state.phases, function(value, key) {return value.isWorkPhase;});
+  const phasePoints = state.workedPhasePoints ? state.workedPhasePoints : state.cardPhasePoints;
   return {
-    cardPhasePoints: state.cardPhasePoints,
+    cardPhasePoints: phasePoints,
     workingPhases: workingPhases
   }
 };

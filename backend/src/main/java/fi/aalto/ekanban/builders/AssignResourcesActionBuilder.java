@@ -4,7 +4,9 @@ import fi.aalto.ekanban.models.AssignResourcesAction;
 
 public final class AssignResourcesActionBuilder {
     private String cardId;
-    private String phaseId;
+    private String cardPhaseId;
+    private Integer dieIndex;
+    private String diePhaseId;
     private Integer points;
 
     private AssignResourcesActionBuilder() {
@@ -19,8 +21,18 @@ public final class AssignResourcesActionBuilder {
         return this;
     }
 
-    public AssignResourcesActionBuilder withPhaseId(String phaseId) {
-        this.phaseId = phaseId;
+    public AssignResourcesActionBuilder withCardPhaseId(String cardPhaseId) {
+        this.cardPhaseId = cardPhaseId;
+        return this;
+    }
+
+    public AssignResourcesActionBuilder withDieIndex(Integer dieIndex) {
+        this.dieIndex = dieIndex;
+        return this;
+    }
+
+    public AssignResourcesActionBuilder withDiePhaseId(String diePhaseId) {
+        this.diePhaseId = diePhaseId;
         return this;
     }
 
@@ -32,7 +44,9 @@ public final class AssignResourcesActionBuilder {
     public AssignResourcesAction build() {
         AssignResourcesAction assignResourcesAction = new AssignResourcesAction();
         assignResourcesAction.setCardId(cardId);
-        assignResourcesAction.setPhaseId(phaseId);
+        assignResourcesAction.setCardPhaseId(cardPhaseId);
+        assignResourcesAction.setDieIndex(dieIndex);
+        assignResourcesAction.setDiePhaseId(diePhaseId);
         assignResourcesAction.setPoints(points);
         return assignResourcesAction;
     }

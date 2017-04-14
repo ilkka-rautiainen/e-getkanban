@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.models.*;
 import fi.aalto.ekanban.models.db.games.*;
+import fi.aalto.ekanban.services.turnplayers.MediumTurnPlayerService;
 import fi.aalto.ekanban.services.turnplayers.NormalTurnPlayerService;
 import fi.aalto.ekanban.services.turnplayers.TurnPlayer;
 
@@ -13,11 +14,14 @@ import fi.aalto.ekanban.services.turnplayers.TurnPlayer;
 public class PlayerService {
 
     private NormalTurnPlayerService normalTurnPlayerService;
+    private MediumTurnPlayerService mediumTurnPlayerService;
     private CFDCalculatorService cfdCalculatorService;
 
     @Autowired
-    public PlayerService(NormalTurnPlayerService normalTurnPlayerService, CFDCalculatorService cfdCalculatorService) {
+    public PlayerService(NormalTurnPlayerService normalTurnPlayerService, MediumTurnPlayerService mediumTurnPlayerService,
+                         CFDCalculatorService cfdCalculatorService) {
         this.normalTurnPlayerService = normalTurnPlayerService;
+        this.mediumTurnPlayerService = mediumTurnPlayerService;
         this.cfdCalculatorService = cfdCalculatorService;
     }
 
@@ -42,6 +46,9 @@ public class PlayerService {
     private TurnPlayer getTurnPlayer(Game game) {
         if (game.getDifficultyLevel() == GameDifficulty.NORMAL) {
             return normalTurnPlayerService;
+        }
+        else if (game.getDifficultyLevel() == GameDifficulty.MEDIUM) {
+            return mediumTurnPlayerService;
         }
         else {
             throw new UnsupportedOperationException("Just the normal version is supported for now");

@@ -25,7 +25,7 @@ const PhaseWithSingleColumn = ({phase, column, isFinalPhase}) => {
       wipLimit={phase.wipLimit}
       titleStyle={phaseHeaderStyle}
     />
-    <ColumnCards columnCardIds={column.cards} />
+    <ColumnCards columnCardIds={column.cards} phase={phase} />
   </div>
 };
 

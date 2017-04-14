@@ -42,11 +42,13 @@ class Card extends React.Component {
   }
 
   render() {
+    const isAdvancedGame = this.gameDifficulty === constants.GAME_DIFFICULTY_ADVANCED;
+    const isEasyGame = this.gameDifficulty === constants.GAME_DIFFICULTY_EASY;
     return (
-      <Paper className={this.cardClass} zDepth={3} style={this.props.style} >
+      <Paper className={this.cardClass} zDepth={3} style={this.props.style} onClick={!isEasyGame && this.props.onClick}>
       <div className="card-title">
         <span className="order-number">S{this.card.orderNumber}</span>
-        { this.gameDifficulty !== "NORMAL" &&
+        { isAdvancedGame &&
           <span className="value">${this.card.financialValue}</span>
         }
       </div>
@@ -57,7 +59,7 @@ class Card extends React.Component {
         <CardInfoItem title="Day Started" value={this.card.dayStarted}/>
         <span className="special-char">=</span>
         <CardInfoItem givenClass="lead-time" title="Lead Time" value={this.card.leadTimeInDays}/>
-        { this.gameDifficulty !== constants.GAME_DIFFICULTY_NORMAL &&
+        { isAdvancedGame &&
           <CardInfoItem title="Subscribers" value={this.card.subscribers}/>
         }
       </div>
@@ -68,11 +70,9 @@ class Card extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   const gameDifficulty = state.game.difficultyLevel ? state.game.difficultyLevel : "NORMAL";
-  const waitForCardRender = state.game.currentDay >= 0;
   return {
     card: state.cards[ownProps.id],
-    gameDifficulty: gameDifficulty,
-    waitForCardRender: waitForCardRender
+    gameDifficulty: gameDifficulty
   }
 };
 

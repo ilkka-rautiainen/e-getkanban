@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux'
 import { Schema, arrayOf } from 'normalizr';
-import { CHANGE_WIP, SET_GAME_DATA, REMOVE_DICE, ADD_DICE, ENABLE_NEXT_ROUND } from '../actions/actionTypes';
-
+import { CHANGE_WIP, SET_GAME_DATA, REMOVE_DICE, ADD_DICE, ENABLE_NEXT_ROUND,
+         SET_ACTIVE_DICE, SET_ACTIVE_CARD, ASSIGN_DIE, REMOVE_ASSIGNED_DICE, SET_DICE_DATA, SET_PHASE_POINTS,
+         ADD_ASSIGNED_RESOURCE, RESET_ASSIGNED_RESOURCES } from '../actions/actionTypes';
 export const gameSchema = new Schema('games');
 const boardSchema = new Schema('boards');
 const phaseSchema = new Schema('phases');
@@ -110,6 +111,28 @@ function wipLimits(state = null, action) {
   }
 }
 
+function assignResources(state = [], action) {
+  switch (action.type) {
+    case ADD_ASSIGNED_RESOURCE:
+      return state.concat([action.resource]);
+    case RESET_ASSIGNED_RESOURCES:
+      return [];
+    default:
+      return state;
+  }
+}
+
+function assignedDice(state = [], action) {
+  switch (action.type) {
+    case ASSIGN_DIE:
+      return state.concat([action.die]);
+    case REMOVE_ASSIGNED_DICE:
+      return [];
+    default:
+      return state;
+  }
+}
+
 function cfdData(state = null, action) {
   switch (action.type) {
     case SET_GAME_DATA:
@@ -143,6 +166,42 @@ function nextRoundUIState(state = { showDice: false, enableButtonPress: true }, 
   }
 }
 
+function phaseDice(state = null, action) {
+  switch (action.type) {
+    case SET_ACTIVE_DICE:
+      return action.phase;
+    default:
+      return state;
+  }
+}
+
+function dice(state = null, action) {
+  switch (action.type) {
+    case SET_DICE_DATA:
+      return action.dice;
+    default:
+      return state;
+  }
+}
+
+function workedPhasePoints(state = null, action) {
+  switch (action.type) {
+    case SET_PHASE_POINTS:
+      return action.phasePoints;
+    default:
+      return state;
+  }
+}
+
+function activeCard(state = null, action) {
+  switch (action.type) {
+    case SET_ACTIVE_CARD:
+      return action.card;
+    default:
+      return state;
+  }
+}
+
 const reducers = combineReducers({
   game,
   board,
@@ -151,10 +210,16 @@ const reducers = combineReducers({
   cards,
   cardPhasePoints,
   backlogDeck,
+  dice,
   wipLimits,
+  assignResources,
+  assignedDice,
   nextRoundUIState,
   cfdData,
-  cfdConfig
+  cfdConfig,
+  phaseDice,
+  workedPhasePoints,
+  activeCard
 });
 
 export default reducers;

@@ -679,23 +679,6 @@ public class ActionExecutorServiceTest {
             }
         }
 
-        public class withTooMuchPoints {
-            private final Integer POINTS_TO_ADD = 6;
-
-            @Before
-            public void doAction() {
-                assignResourcesAndFetchResults(POINTS_TO_ADD);
-            }
-
-            @Test
-            public void shouldLeavePointsDoneIntact() {
-                CardPhasePoint cardPhasePoint = firstCardAfter.getCardPhasePoints().stream()
-                        .filter(c -> c.getPhaseId().equals(phase.getId()))
-                        .findFirst().orElse(null);
-                assertThat(cardPhasePoint.getPointsDone(), equalTo(POINTS_BEFORE_ACTION));
-            }
-        }
-
         private void assignResourcesAndFetchResults(Integer points) {
             List<AssignResourcesAction> actions = getActions(points);
             Game gameWithResourcesAssigned = actionExecutorService.assignResources(
@@ -709,7 +692,7 @@ public class ActionExecutorServiceTest {
         private List<AssignResourcesAction> getActions(Integer points) {
             return Arrays.asList(AssignResourcesActionBuilder.anAssignResourcesAction()
                     .withCardId(firstCard.getId())
-                    .withPhaseId(phase.getId())
+                    .withCardPhaseId(phase.getId())
                     .withPoints(points)
                     .build());
         }

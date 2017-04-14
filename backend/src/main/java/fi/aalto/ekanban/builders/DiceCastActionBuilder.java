@@ -1,12 +1,12 @@
 package fi.aalto.ekanban.builders;
 
-import java.util.List;
-
 import fi.aalto.ekanban.models.DiceCastAction;
+
+import java.util.List;
 
 public final class DiceCastActionBuilder {
     private String phaseId;
-    private List<Integer> diceValues;
+    private List<Die> dice;
 
     private DiceCastActionBuilder() {
     }
@@ -20,15 +20,15 @@ public final class DiceCastActionBuilder {
         return this;
     }
 
-    public DiceCastActionBuilder withDiceValues(List<Integer> diceValues) {
-        this.diceValues = diceValues;
+    public DiceCastActionBuilder withDice(List<Die> dice) {
+        this.dice = dice;
         return this;
     }
 
     public DiceCastAction build() {
         DiceCastAction diceCastAction = new DiceCastAction();
         diceCastAction.setPhaseId(phaseId);
-        diceCastAction.setDiceValues(diceValues);
+        diceCastAction.setDice(dice);
         return diceCastAction;
     }
 }

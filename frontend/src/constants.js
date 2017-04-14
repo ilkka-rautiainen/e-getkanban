@@ -2,6 +2,8 @@ var backendHost = process.env.NODE_ENV === "development" ? "http://localhost:808
 
 const constants = {
   GAME_DIFFICULTY_NORMAL: 'NORMAL',
+  GAME_DIFFICULTY_MEDIUM: 'MEDIUM',
+  GAME_DIFFICULTY_ADVANCED: 'ADVANCED',
   GAMES_PATH: "games/",
   BACKEND_HOST: backendHost,
   GAME_ENDED_MESSAGE: "Game Has Ended!",

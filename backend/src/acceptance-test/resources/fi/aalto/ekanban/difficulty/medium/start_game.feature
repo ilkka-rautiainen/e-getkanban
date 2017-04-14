@@ -13,4 +13,3 @@ Feature: Start Game on Medium level
       And game should have player name as Halosen Tarja
       And game should have current day of 0
       And game should have difficulty of Medium
-      And game doesn't have resource dice values for the phases because it's not needed on the first turn as the board's empty

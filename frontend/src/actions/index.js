@@ -1,5 +1,8 @@
 import _ from 'lodash';
-import { CHANGE_WIP, START_GAME, PLAY_TURN, SET_GAME_DATA, REMOVE_DICE, ADD_DICE, ENABLE_NEXT_ROUND } from './actionTypes';
+import { CHANGE_WIP, START_GAME, PLAY_TURN, SET_GAME_DATA, REMOVE_DICE,
+         ADD_DICE, ENABLE_NEXT_ROUND, SET_ACTIVE_CARD, SET_ACTIVE_DICE,
+         ASSIGN_DIE, REMOVE_ASSIGNED_DICE, SET_DICE_DATA, SET_PHASE_POINTS,
+         ADD_ASSIGNED_RESOURCE, RESET_ASSIGNED_RESOURCES} from './actionTypes';
 import constants from '../constants';
 
 
@@ -9,6 +12,23 @@ import constants from '../constants';
 
 export function changeWip(phase, wipLimit) {
   return { type: CHANGE_WIP, phase, wipLimit };
+}
+
+export function assignResource(cardId, cardPhaseId, diePhaseId, dieIndex) {
+  return {
+    type: ADD_ASSIGNED_RESOURCE,
+    resource: {
+      cardId: cardId,
+      cardPhaseId: cardPhaseId,
+      diePhaseId: diePhaseId,
+      dieIndex: dieIndex,
+      points: 0
+    }
+  }
+}
+
+export function resetAssignedResources() {
+  return { type: RESET_ASSIGNED_RESOURCES };
 }
 
 export function removeDice() {
@@ -33,7 +53,7 @@ export function startGame(playerName, difficultyLevel) {
   };
 }
 
-export function playTurn(gameId, newWipLimits) {
+export function playTurn(gameId, newWipLimits, assignResourcesActions) {
   return {
     type: PLAY_TURN,
     gameId: gameId,
@@ -43,9 +63,73 @@ export function playTurn(gameId, newWipLimits) {
       },
       moveCardActions: [],
       drawFromBacklogActions: [],
-      assignResourcesActions: [],
+      assignResourcesActions: assignResourcesActions,
       diceCastActions: []
     }
+  }
+}
+
+export function setActiveDice(phaseId, dieIndex, diePageX, diePageY) {
+  let phaseValue = null;
+  if (phaseId) {
+    phaseValue = {
+      id: phaseId,
+      diceIndex: dieIndex,
+      diePageX: diePageX,
+      diePageY: diePageY
+    }
+  }
+  return {
+    type: SET_ACTIVE_DICE,
+    phase: phaseValue
+  }
+}
+
+export function setActiveCard(cardId, phaseId, cardPageX, cardPageY) {
+  let cardValue = null;
+  if (cardId) {
+    cardValue = {
+      id: cardId,
+      phaseId: phaseId,
+      cardPageX: cardPageX,
+      cardPageY: cardPageY
+    }
+  }
+  return {
+    type: SET_ACTIVE_CARD,
+    card: cardValue
+  }
+}
+
+export function assignDie(phaseId, dieIndex, xMovement, yMovement) {
+  return {
+    type: ASSIGN_DIE,
+    die: {
+      phaseId: phaseId,
+      index: dieIndex,
+      xMovement: xMovement,
+      yMovement: yMovement
+    }
+  }
+}
+
+export function removeAssignedDice() {
+  return { type: REMOVE_ASSIGNED_DICE }
+}
+
+export function setDiceData(normalizedData) {
+  const game = normalizedData.entities.games[normalizedData.result];
+  const diceCastActions = game.lastTurn.diceCastActions;
+  return {
+    type: SET_DICE_DATA,
+    dice: diceCastActions
+  }
+}
+
+export function setPhasePoints(normalizedData) {
+  return {
+    type: SET_PHASE_POINTS,
+    phasePoints: normalizedData.entities.cardPhasePoints
   }
 }
 

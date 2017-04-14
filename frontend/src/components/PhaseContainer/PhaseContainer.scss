@@ -4,6 +4,7 @@
   position: relative;
   height: 100%;
   padding: 0;
+  overflow: visible;
 
   &:not(.single-col) {
     border-right: 2px solid $phase-separator-color;

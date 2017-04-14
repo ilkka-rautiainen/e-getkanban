@@ -89,10 +89,7 @@ public class ActionExecutorService {
 
     private boolean isValidAssignResourcesAction(AssignResourcesAction assignResourcesAction, Game game) {
         Card card = game.getCardWithId(assignResourcesAction.getCardId());
-        CardPhasePoint cardPhasePoint = card.getCardPhasePointOfPhase(assignResourcesAction.getPhaseId());
-        Integer pointsLeft = cardPhasePoint.getTotalPoints() - cardPhasePoint.getPointsDone();
-        return assignResourcesAction.getPoints() <= pointsLeft
-                && game.isCardInFirstColumnOfPhase(card, assignResourcesAction.getPhaseId());
+        return game.isCardInFirstColumnOfPhase(card, assignResourcesAction.getCardPhaseId());
     }
 
     private boolean isValidMoveCardAction(MoveCardAction moveCardAction, Game game) {
