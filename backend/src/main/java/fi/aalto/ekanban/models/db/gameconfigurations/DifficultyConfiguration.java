@@ -78,6 +78,11 @@ public class DifficultyConfiguration {
         return getId().equals(GameDifficulty.NORMAL.toString());
     }
 
+    @JsonIgnore
+    public boolean isMedium() {
+        return getId().equals(GameDifficulty.MEDIUM.toString());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

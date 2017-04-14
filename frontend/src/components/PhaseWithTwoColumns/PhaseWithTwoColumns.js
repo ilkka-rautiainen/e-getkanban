@@ -57,6 +57,7 @@ export default class PhaseWithTwoColumns extends React.Component {
         {this.phase.columns.map((columnId, index) =>
           <Col xs key={columnId} className="column-col">
             <Column id={columnId}
+                    phase={this.phase}
                     showBorderRight={index===0}
                     titleStyle={this.titleStyle}
                     borderRightStyle={this.borderRightStyle}

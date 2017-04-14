@@ -168,7 +168,7 @@ public class Game {
 
     public void performAssignResourcesAction(AssignResourcesAction assignResourcesAction) {
         Card card = getCardWithId(assignResourcesAction.getCardId());
-        CardPhasePoint cardPhasePoint = card.getCardPhasePointOfPhase(assignResourcesAction.getPhaseId());
+        CardPhasePoint cardPhasePoint = card.getCardPhasePointOfPhase(assignResourcesAction.getCardPhaseId());
         cardPhasePoint.increasePointsDoneBy(assignResourcesAction.getPoints());
     }
 

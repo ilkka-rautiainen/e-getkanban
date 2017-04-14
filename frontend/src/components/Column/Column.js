@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ColumnCards from '../ColumnCards/ColumnCards';
 import './Column.scss';
 
-const Column = ({ column, showBorderRight, titleStyle, borderRightStyle }) => {
+const Column = ({ column, phase, showBorderRight, titleStyle, borderRightStyle }) => {
   if (column) {
     let borderStyle = {};
     if (showBorderRight) {
@@ -14,7 +14,7 @@ const Column = ({ column, showBorderRight, titleStyle, borderRightStyle }) => {
         <div className="column-header">
           <div className="name" style={titleStyle} >{column.name}</div>
         </div>
-        <ColumnCards columnCardIds={column.cards} />
+        <ColumnCards columnCardIds={column.cards} phase={phase} />
       </div>
     )
   } else {

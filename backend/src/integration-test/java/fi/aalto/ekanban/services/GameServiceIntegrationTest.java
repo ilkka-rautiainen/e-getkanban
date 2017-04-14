@@ -2,18 +2,26 @@ package fi.aalto.ekanban.services;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static fi.aalto.ekanban.ApplicationConstants.ANALYSIS_PHASE_ID;
+import static fi.aalto.ekanban.ApplicationConstants.DEVELOPMENT_PHASE_ID;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.rits.cloning.Cloner;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import fi.aalto.ekanban.builders.TurnBuilder;
+import fi.aalto.ekanban.builders.*;
 import fi.aalto.ekanban.enums.GameDifficulty;
+import fi.aalto.ekanban.models.AssignResourcesAction;
+import fi.aalto.ekanban.models.db.games.Card;
+import fi.aalto.ekanban.models.db.games.CardPhasePoint;
+import fi.aalto.ekanban.models.db.phases.Column;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.Turn;
 import fi.aalto.ekanban.models.db.phases.Phase;
@@ -99,34 +107,109 @@ public class GameServiceIntegrationTest extends SpringIntegrationTest {
     public class playTurn {
         Game newGame;
 
-        @Before
-        public void setup() {
-            TestGameContainer initialGameContainer = TestGameContainer.withNormalDifficultyMockGame();
-            initialGameContainer.fillFirstWorkPhasesWithSomeAlmostReadyCards();
-            initialGameContainer.fillLastWorkPhaseWithSomeAlmostReadyCards();
-            Game initialGame = gameRepository.save(initialGameContainer.getGame());
-            Turn blankTurn = TurnBuilder.aTurn().build();
-            newGame = gameService.playTurn(initialGame.getId(), blankTurn);
+        public class withNormalDifficulty {
+            @Before
+            public void setup() {
+                TestGameContainer initialGameContainer = TestGameContainer.withNormalDifficultyMockGame();
+                initialGameContainer.fillFirstWorkPhasesWithSomeAlmostReadyCards();
+                initialGameContainer.fillLastWorkPhaseWithSomeAlmostReadyCards();
+                Game initialGame = gameRepository.save(initialGameContainer.getGame());
+                Turn blankTurn = TurnBuilder.aTurn().build();
+                newGame = gameService.playTurn(initialGame.getId(), blankTurn);
+            }
+
+            @Test
+            public void gameShouldHaveLastTurn() {
+                assertThat(newGame.getLastTurn(), is(notNullValue()));
+            }
+
+            @Test
+            public void gameLastTurnShouldHaveAssignResourceActions() {
+                assertThat(newGame.getLastTurn().getAssignResourcesActions(), is(not(empty())));
+            }
+
+            @Test
+            public void gameLastTurnShouldHaveMoveCardsActions() {
+                assertThat(newGame.getLastTurn().getMoveCardActions(), is(not(empty())));
+            }
+
+            @Test
+            public void gameLastTurnShouldHaveDrawFromBacklogActions() {
+                assertThat(newGame.getLastTurn().getDrawFromBacklogActions(), is(not(empty())));
+            }
         }
 
-        @Test
-        public void gameShouldHaveLastTurn() {
-            assertThat(newGame.getLastTurn(), is(notNullValue()));
-        }
+        public class withMediumDifficulty {
 
-        @Test
-        public void gameLastTurnShouldHaveAssignResourceActions() {
-            assertThat(newGame.getLastTurn().getAssignResourcesActions(), is(not(empty())));
-        }
+            private List<CardPhasePoint> analysisCardPointsBefore;
+            private List<CardPhasePoint> developmentSecondCardPointsBefore;
 
-        @Test
-        public void gameLastTurnShouldHaveMoveCardsActions() {
-            assertThat(newGame.getLastTurn().getMoveCardActions(), is(not(empty())));
-        }
+            private Card cardInAnalysis;
+            private Card secondCardInDevelopment;
 
-        @Test
-        public void gameLastTurnShouldHaveDrawFromBacklogActions() {
-            assertThat(newGame.getLastTurn().getDrawFromBacklogActions(), is(not(empty())));
+            @Before
+            public void setup() {
+                Cloner cloner = new Cloner();
+                TestGameContainer initialGameContainer = TestGameContainer.withNormalDifficultyMockGame();
+                Game game = initialGameContainer.getGame();
+                game.setDifficultyLevel(GameDifficulty.MEDIUM);
+
+                Phase analysisPhase = game.getBoard().getWorkPhases().get(0);
+                Phase developmentPhase = game.getBoard().getWorkPhases().get(1);
+
+                Column analysisInProgressColumn = analysisPhase.getFirstColumn();
+                Column developmentInProgressColumn = developmentPhase.getFirstColumn();
+
+                cardInAnalysis = CardBuilder.aCard().withMockPhasePoints().build();
+                analysisCardPointsBefore = cloner.deepClone(cardInAnalysis.getCardPhasePoints());
+                Card cardInDevelopment = CardBuilder.aCard().withMockPhasePoints().build();
+                secondCardInDevelopment = CardBuilder.aCard().withMockPhasePoints().build();
+                developmentSecondCardPointsBefore = cloner.deepClone(secondCardInDevelopment.getCardPhasePoints());
+
+                analysisInProgressColumn.setCards(Arrays.asList(cardInAnalysis));
+                developmentInProgressColumn.setCards(Arrays.asList(cardInDevelopment, secondCardInDevelopment));
+
+                AssignResourcesAction assignResourcesActionWithDevelopmentDieToAnalysisCard =
+                        AssignResourcesActionBuilder.anAssignResourcesAction()
+                                .withCardId(cardInAnalysis.getId())
+                                .withCardPhaseId(analysisPhase.getId())
+                                .withDieIndex(1)
+                                .withDiePhaseId(developmentPhase.getId())
+                                .build();
+
+                AssignResourcesAction assignResourcesActionWithAnalysisDieToDevelopmentCard =
+                        AssignResourcesActionBuilder.anAssignResourcesAction()
+                                .withCardId(secondCardInDevelopment.getId())
+                                .withCardPhaseId(developmentPhase.getId())
+                                .withDieIndex(0)
+                                .withDiePhaseId(analysisPhase.getId())
+                                .build();
+
+                List<AssignResourcesAction> assignResourcesActions = Arrays.asList(
+                        assignResourcesActionWithAnalysisDieToDevelopmentCard,
+                        assignResourcesActionWithDevelopmentDieToAnalysisCard
+                );
+
+                Turn turnWithAssignResources = TurnBuilder.aTurn()
+                        .withAssignResourcesActions(assignResourcesActions)
+                        .build();
+
+                Game initialGame = gameRepository.save(game);
+                newGame = gameService.playTurn(initialGame.getId(), turnWithAssignResources);
+                cardInAnalysis = newGame.getBoard().getPhases().get(0).getColumns().get(0).getCards().get(0);
+                secondCardInDevelopment = newGame.getBoard().getPhases().get(1).getColumns().get(0).getCards().get(1);
+            }
+
+            @Test
+            public void shouldAssignResourcesToSelectedCards() {
+                Integer firstCardAnalysisPointsDoneBefore = analysisCardPointsBefore.get(0).getPointsDone();
+                Integer secondCardDevelopmentPointsDoneBefore = developmentSecondCardPointsBefore.get(1).getPointsDone();
+                assertThat(firstCardAnalysisPointsDoneBefore,
+                        lessThan(cardInAnalysis.getCardPhasePointOfPhase(ANALYSIS_PHASE_ID).getPointsDone()));
+                assertThat(secondCardDevelopmentPointsDoneBefore,
+                        lessThan(secondCardInDevelopment.getCardPhasePointOfPhase(DEVELOPMENT_PHASE_ID).getPointsDone()));
+            }
+
         }
 
     }

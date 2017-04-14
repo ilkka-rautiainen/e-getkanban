@@ -162,7 +162,7 @@ public class AssignResourcesAIServiceIntegrationTest {
         private AssignResourcesAction getActionForCardInPhase(Card card, String phaseId) {
             return generatedActions.stream()
                     .filter(a -> a.getCardId().equals(card.getId()))
-                    .filter(a -> a.getPhaseId().equals(phaseId))
+                    .filter(a -> a.getCardPhaseId().equals(phaseId))
                     .findFirst().orElse(null);
         }
 

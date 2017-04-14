@@ -3,6 +3,7 @@ package fi.aalto.ekanban.utils;
 import java.util.Arrays;
 
 import fi.aalto.ekanban.builders.*;
+import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Column;
@@ -24,6 +25,12 @@ public class TestGameContainer {
     public static TestGameContainer withNormalDifficultyMockGame() {
         TestGameContainer testGameContainer = new TestGameContainer();
         testGameContainer.initializeWithNormalDifficultyMockGame();
+        return testGameContainer;
+    }
+
+    public static TestGameContainer withMediumDifficultyMockGame() {
+        TestGameContainer testGameContainer = new TestGameContainer();
+        testGameContainer.initializeWithMediumDifficultyMockGame();
         return testGameContainer;
     }
 
@@ -198,6 +205,15 @@ public class TestGameContainer {
         String playerName = "player";
         game = GameBuilder.aGame()
                 .withNormalDifficultyMockDefaults(playerName)
+                .build();
+    }
+
+    private void initializeWithMediumDifficultyMockGame() {
+        String playerName = "player";
+        game = GameBuilder.aGame()
+                .withNormalDifficultyMockDefaults(playerName)
+                .withDifficultyLevel(GameDifficulty.MEDIUM)
+                .withId("1")
                 .build();
     }
 

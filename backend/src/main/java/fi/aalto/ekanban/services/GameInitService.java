@@ -25,6 +25,12 @@ public class GameInitService {
                             playerName, baseCardRepository, phaseRepository)
                     .build();
         }
+        else if (difficultyConfiguration.isMedium()) {
+            return GameBuilder.aGame()
+                    .withMediumDifficultyDefaults(difficultyConfiguration,
+                            playerName, baseCardRepository, phaseRepository)
+                    .build();
+        }
         else {
             throw new UnsupportedOperationException("Just the normal version is supported for now");
         }

@@ -37,8 +37,8 @@ public class NormalTurnPlayerService implements TurnPlayer {
         game.setLastTurn(turn);
         game = actionExecutorService.adjustWipLimits(game, turn.getAdjustWipLimitsAction());
         game = assignResourcesWithAI(game);
-        game = moveCardsWithAI(game);
-        game = drawFromBacklogWithAI(game);
+        game = moveCardsWithAI(moveCardsAIService, actionExecutorService, game);
+        game = drawFromBacklogWithAI(drawFromBacklogAIService, actionExecutorService, game);
         return game;
     }
 
@@ -54,17 +54,4 @@ public class NormalTurnPlayerService implements TurnPlayer {
         return game;
     }
 
-    private Game moveCardsWithAI(Game game) {
-        List<MoveCardAction> moveCardActions = moveCardsAIService.getMoveCardsActions(game);
-        game = actionExecutorService.moveCards(game, moveCardActions);
-        game.getLastTurn().setMoveCardActions(moveCardActions);
-        return game;
-    }
-
-    private Game drawFromBacklogWithAI(Game game) {
-        List<DrawFromBacklogAction> drawFromBacklogActions = drawFromBacklogAIService.getDrawFromBacklogActions(game);
-        game = actionExecutorService.drawFromBacklog(game, drawFromBacklogActions);
-        game.getLastTurn().setDrawFromBacklogActions(drawFromBacklogActions);
-        return game;
-    }
 }

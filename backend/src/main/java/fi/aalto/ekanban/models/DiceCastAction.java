@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import fi.aalto.ekanban.builders.Die;
+
 public class DiceCastAction {
     private String phaseId;
-    private List<Integer> diceValues;
+    private List<Die> dice;
 
     public String getPhaseId() {
         return phaseId;
@@ -16,12 +18,12 @@ public class DiceCastAction {
         this.phaseId = phaseId;
     }
 
-    public List<Integer> getDiceValues() {
-        return diceValues;
+    public List<Die> getDice() {
+        return dice;
     }
 
-    public void setDiceValues(List<Integer> diceValues) {
-        this.diceValues = diceValues;
+    public void setDice(List<Die> Dice) {
+        this.dice = Dice;
     }
 
     @Override
@@ -34,22 +36,22 @@ public class DiceCastAction {
         DiceCastAction action = (DiceCastAction) o;
 
         if (phaseId != null ? !phaseId.equals(action.phaseId) : action.phaseId != null) return false;
-        return diceValues != null ? diceValues.equals(action.diceValues) : action.diceValues == null;
+        return dice != null ? dice.equals(action.dice) : action.dice == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = phaseId != null ? phaseId.hashCode() : 0;
-        result = 31 * result + (diceValues != null ? diceValues.hashCode() : 0);
+        result = 31 * result + (dice != null ? dice.hashCode() : 0);
         return result;
     }
 
     @JsonIgnore
     public Integer getTotalDiceValue() {
-        return getDiceValues()
+        return getDice()
                 .stream()
-                .mapToInt(Integer::intValue)
+                .mapToInt(die -> die.getPrimaryValue())
                 .sum();
     }
 }

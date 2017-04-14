@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import fi.aalto.ekanban.builders.TurnBuilder;
 import fi.aalto.ekanban.models.Turn;
 import fi.aalto.ekanban.models.db.games.Game;
+import fi.aalto.ekanban.services.turnplayers.MediumTurnPlayerService;
 import fi.aalto.ekanban.services.turnplayers.NormalTurnPlayerService;
 import fi.aalto.ekanban.utils.TestGameContainer;
 
@@ -22,6 +23,7 @@ public class PlayerServiceTest {
 
     private static PlayerService playerService;
     private static NormalTurnPlayerService normalTurnPlayerService;
+    private static MediumTurnPlayerService mediumTurnPlayerService;
     private static CFDCalculatorService cfdCalculatorService;
 
     private TestGameContainer initialGameContainer;
@@ -32,11 +34,12 @@ public class PlayerServiceTest {
     @BeforeClass
     public static void initService() {
         normalTurnPlayerService = Mockito.mock(NormalTurnPlayerService.class);
+        mediumTurnPlayerService = Mockito.mock(MediumTurnPlayerService.class);
         cfdCalculatorService = Mockito.mock(CFDCalculatorService.class);
         Mockito.when(normalTurnPlayerService.playTurn(Mockito.any(Game.class), Mockito.any(Turn.class)))
                 .then(returnsFirstArg());
         Mockito.when(cfdCalculatorService.calculateCFDForCurrentDay(Mockito.any(Game.class))).then(returnsFirstArg());
-        playerService = new PlayerService(normalTurnPlayerService, cfdCalculatorService);
+        playerService = new PlayerService(normalTurnPlayerService, mediumTurnPlayerService, cfdCalculatorService);
     }
 
     @Before

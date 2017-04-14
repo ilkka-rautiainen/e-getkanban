@@ -64,6 +64,13 @@ public final class DifficultyConfigurationBuilder {
         return this;
     }
 
+    public DifficultyConfigurationBuilder withMediumDifficultyDefaults() {
+        this.id = GameDifficulty.MEDIUM.toString();
+        this.gameDifficulty = GameDifficulty.MEDIUM;
+        this.boardEnteredTracklineColor = "551a8b";
+        return this;
+    }
+
     public DifficultyConfiguration createIfNotCreated(DifficultyConfigurationRepository repository) {
         DifficultyConfiguration diffConfig = repository.findOne(id);
         if (diffConfig != null) {

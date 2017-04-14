@@ -9,9 +9,12 @@ class GameContainer extends React.Component {
 
   constructor() {
     super();
-    this.state = {value: '', playerName: 'noname'};
+    this.state = {value: '', playerName: 'noname', normal: true, medium: false};
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleNormalDifficulty = this.handleNormalDifficulty.bind(this);
+    this.handleMediumDifficulty = this.handleMediumDifficulty.bind(this);
   };
 
   handleChange(event) {
@@ -20,12 +23,32 @@ class GameContainer extends React.Component {
     this.setState({playerName: playerName});
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    const difficulty = this.state.normal ? "NORMAL" : "MEDIUM";
+    this.props.onStartGame(this.state.playerName, difficulty);
+  }
+
+  handleNormalDifficulty(event) {
+    event.preventDefault();
+    this.setState({normal: true, medium: false});
+  }
+
+  handleMediumDifficulty(event) {
+    event.preventDefault();
+    this.setState({normal: false, medium: true});
+  }
+
   render() {
     return this.props.game ? <Game /> :
       <StartScreen
-        onSubmit={(event) => {event.preventDefault(); this.props.onStartGame(this.state.playerName, "NORMAL");}}
+        onSubmit={this.handleSubmit}
         onChange={this.handleChange}
         value={this.state.value}
+        normalDifficulty={this.state.normal}
+        mediumDifficulty={this.state.medium}
+        normalDifficultyClick={this.handleNormalDifficulty}
+        mediumDifficultyClick={this.handleMediumDifficulty}
       />
   }
 
