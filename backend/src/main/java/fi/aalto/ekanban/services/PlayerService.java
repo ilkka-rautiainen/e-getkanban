@@ -51,7 +51,7 @@ public class PlayerService {
             return mediumTurnPlayerService;
         }
         else {
-            throw new UnsupportedOperationException("Just the normal version is supported for now");
+            return mediumTurnPlayerService;
         }
     }
 }

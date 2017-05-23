@@ -1,6 +1,7 @@
 package fi.aalto.ekanban.builders;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import fi.aalto.ekanban.enums.GameDifficulty;
@@ -68,6 +69,18 @@ public final class DifficultyConfigurationBuilder {
         this.id = GameDifficulty.MEDIUM.toString();
         this.gameDifficulty = GameDifficulty.MEDIUM;
         this.boardEnteredTracklineColor = "551a8b";
+        return this;
+    }
+
+    public DifficultyConfigurationBuilder withAdvancedDifficultyDefaults() {
+        this.id = GameDifficulty.ADVANCED.toString();
+        this.gameDifficulty = GameDifficulty.ADVANCED;
+        this.boardEnteredTracklineColor = "551a8b";
+        this.initialGameOptionChanges = Arrays.asList(
+                GameOptionChangeBuilder.aGameOptionChange()
+                        .withMethodName("enableCardThreeDayMoveCycle")
+                        .withParameters("fi.aalto.ekanban.models.db.games.Game").build()
+        );
         return this;
     }
 

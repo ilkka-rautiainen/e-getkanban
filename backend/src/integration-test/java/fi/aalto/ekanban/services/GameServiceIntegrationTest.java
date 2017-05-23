@@ -44,10 +44,10 @@ public class GameServiceIntegrationTest extends SpringIntegrationTest {
         private Game newGame;
         private String playerName;
         private GameDifficulty gameDifficulty;
+        private Long gameCountBeforeAction;
 
         public class whenDifficultyIsNormal {
 
-            private Long gameCountBeforeAction;
             private List<CFDDailyValue> cfdDailyValues;
 
             @Before
@@ -98,6 +98,29 @@ public class GameServiceIntegrationTest extends SpringIntegrationTest {
                     assertThat(firstDailyValue.getPhaseValues(), hasKey(phase.getId()));
                 });
                 assertThat(firstDailyValue.getPhaseValues().size(), equalTo(phasesWithTrackLine.size()));
+            }
+
+        }
+
+        public class whenDifficultyIsAdvanced {
+
+            @Before
+            public void setupGame() {
+                gameCountBeforeAction = gameRepository.count();
+                gameDifficulty = GameDifficulty.ADVANCED;
+                playerName = "Player";
+                newGame = gameService.startGame(playerName, gameDifficulty);
+            }
+
+            @Test
+            public void shouldReturnCreatedGame() {
+                assertThat(gameRepository.count(), equalTo(gameCountBeforeAction + 1));
+                assertThat(newGame, is(notNullValue()));
+            }
+
+            @Test
+            public void shouldReturnGameWithAdvancedDifficulty() {
+                assertThat(newGame.getDifficultyLevel(), equalTo(GameDifficulty.ADVANCED));
             }
 
         }

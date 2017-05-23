@@ -16,9 +16,11 @@ public final class ColumnBuilder {
     private String id;
     private List<Card> cards;
     private String name;
+    private Integer dayMultiplierToEnter;
 
     private ColumnBuilder() {
         this.id = ObjectId.get().toString();
+        this.dayMultiplierToEnter = 1;
     }
 
     public static ColumnBuilder aColumn() {
@@ -37,6 +39,11 @@ public final class ColumnBuilder {
 
     public ColumnBuilder withName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public ColumnBuilder withDayMultiplierToEnter(Integer dayMultiplierToEnter) {
+        this.dayMultiplierToEnter = dayMultiplierToEnter;
         return this;
     }
 
@@ -61,6 +68,7 @@ public final class ColumnBuilder {
         column.setId(id);
         column.setCards(cards);
         column.setName(name);
+        column.setDayMultiplierToEnter(dayMultiplierToEnter);
         return column;
     }
 }

@@ -21,6 +21,7 @@ public class DifficultyConfigurationsBuilder {
     public DifficultyConfigurationsBuilder withAllDifficultyConfigurations() {
         addNormalDiffConfig();
         addMediumDiffConfig();
+        addAdvancedDiffConfig();
         return this;
     }
 
@@ -32,6 +33,11 @@ public class DifficultyConfigurationsBuilder {
     private void addMediumDiffConfig() {
         diffConfigBuilders.add(DifficultyConfigurationBuilder.aDifficultyConfiguration()
                 .withMediumDifficultyDefaults());
+    }
+
+    private void addAdvancedDiffConfig() {
+        diffConfigBuilders.add(DifficultyConfigurationBuilder.aDifficultyConfiguration()
+                .withAdvancedDifficultyDefaults());
     }
 
     public List<DifficultyConfiguration> createIfNotCreated(DifficultyConfigurationRepository diffConfigRepository) {

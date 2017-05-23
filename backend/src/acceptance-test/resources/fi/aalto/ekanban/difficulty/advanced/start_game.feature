@@ -1,9 +1,32 @@
 Feature: Start Game on Advanced level
   As a game player
   I want to start a fresh game when entering site
-  So that I can practice for board version of kanban game
+  So that I can practice full version of kanban game
 
 
+  Scenario: Player starts an advanced game with no special options
+    Given I enter player name as Kekkosen Urkki
+      And I choose Advanced difficulty
+
+    When I press start game
+
+    Then I should get a new game
+      And game should have player name as Kekkosen Urkki
+      And game should have difficulty of Advanced
+      And game should include a board
+        And board should include different phases
+          And 1. phase in board is Analysis
+            And In Progress column of Analysis should allow new cards to be drawn in every third day
+            And Waiting for Development column of Analysis should allow new cards to be drawn in every day
+          And 2. phase in board is Development
+            And In Progress column of Development should allow new cards to be drawn in every day
+            And Waiting for Test column of Development should allow new cards to be drawn in every day
+          And 3. phase in board is Test
+            And column of Test should allow new cards to be drawn in every day
+          And 4. phase in board is Deployed
+            And column of Deployed should allow new cards to be drawn in every third day
+
+  @ignore
   Scenario: Player starts an advanced game with no special options
     Given I enter player name as Kekkosen Urkki
       And I choose Advanced difficulty
@@ -33,7 +56,7 @@ Feature: Start Game on Advanced level
         And the CFD-diagram should include a line for the cards passed the track line of phase Development
         And the CFD-diagram should include a line for the cards passed the track line of phase Deployed
 
-
+  @ignore
   Scenario: Player starts the game with advanced difficulty with the cycles
     Given I enter player name as Kekkosen Urkki
       And I choose Advanced difficulty
@@ -70,7 +93,7 @@ Feature: Start Game on Advanced level
         And the CFD-diagram should include a line for the cards passed the track line of phase Test
         And the CFD-diagram should include a line for the cards passed the track line of phase Deployed
 
-
+  @ignore
   Scenario: Player starts the game with advanced difficulty with the expedite lane
     Given I enter player name as Kekkosen Urkki
       And I choose Advanced difficulty
