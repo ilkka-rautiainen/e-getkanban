@@ -9,12 +9,13 @@ class GameContainer extends React.Component {
 
   constructor() {
     super();
-    this.state = {value: '', playerName: 'noname', normal: true, medium: false};
+    this.state = {value: '', playerName: 'noname', normal: true, medium: false, advanced: false};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleNormalDifficulty = this.handleNormalDifficulty.bind(this);
     this.handleMediumDifficulty = this.handleMediumDifficulty.bind(this);
+    this.handleAdvancedDifficulty = this.handleAdvancedDifficulty.bind(this);
   };
 
   handleChange(event) {
@@ -31,12 +32,17 @@ class GameContainer extends React.Component {
 
   handleNormalDifficulty(event) {
     event.preventDefault();
-    this.setState({normal: true, medium: false});
+    this.setState({normal: true, medium: false, advanced: false});
   }
 
   handleMediumDifficulty(event) {
     event.preventDefault();
-    this.setState({normal: false, medium: true});
+    this.setState({normal: false, medium: true, advanced: false});
+  }
+
+  handleAdvancedDifficulty(event) {
+    event.preventDefault();
+    this.setState({normal: false, medium: false, advanced: true});
   }
 
   render() {
@@ -47,8 +53,10 @@ class GameContainer extends React.Component {
         value={this.state.value}
         normalDifficulty={this.state.normal}
         mediumDifficulty={this.state.medium}
+        advancedDifficulty={this.state.advanced}
         normalDifficultyClick={this.handleNormalDifficulty}
         mediumDifficultyClick={this.handleMediumDifficulty}
+        advancedDifficultyClick={this.handleAdvancedDifficulty}
       />
   }
 

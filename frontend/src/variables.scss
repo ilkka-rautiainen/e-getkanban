@@ -2,6 +2,7 @@
 $phase-header-height: 100px;
 $column-header-height: 30px;
 $board-min-width: 1270px;
+$screen-min-width: 960px;
 
 // Colors
 $board-border-color: #000000;
@@ -10,6 +11,7 @@ $column-separator-color: lighten($phase-separator-color, 50%);
 $background-color: #00BCD4;
 $cfd-background-color: #FFFFFF;
 $minor-color: orange;
+$tooltip-background-color: #FFFFFF;
 
 $die-border-color: #999999;
 $die-bg-color: #ffffff;

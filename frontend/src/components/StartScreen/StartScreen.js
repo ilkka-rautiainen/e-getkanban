@@ -9,13 +9,14 @@ class StartScreen extends React.Component {
     value: PropTypes.string
   };
 
-  constructor({onSubmit, onChange, normalDifficultyClick, mediumDifficultyClick}) {
+  constructor({onSubmit, onChange, normalDifficultyClick, mediumDifficultyClick, advancedDifficultyClick}) {
     super();
 
     this.onSubmit = onSubmit;
     this.onChange = onChange;
     this.normalDifficultyClick = normalDifficultyClick;
     this.mediumDifficultyClick = mediumDifficultyClick;
+    this.advancedDifficultyClick = advancedDifficultyClick;
   };
 
   get buttonStyle() {
@@ -37,7 +38,13 @@ class StartScreen extends React.Component {
   get secondDifficultyButtonStyle() {
     return {
       ...this.difficultyButtonStyle,
-      left: 150
+      left: "39%"
+    };
+  }
+  get thirdDifficultyButtonStyle() {
+    return {
+      ...this.difficultyButtonStyle,
+      left: "68.5%"
     };
   }
 
@@ -46,8 +53,18 @@ class StartScreen extends React.Component {
       <div className="game-container">
         <h1>eKanban</h1>
           <form onSubmit={this.onSubmit}>
-          <RaisedButton label="NORMAL" primary={this.props.normalDifficulty} style={this.difficultyButtonStyle} onClick={this.normalDifficultyClick}  />
-          <RaisedButton label="MEDIUM" primary={this.props.mediumDifficulty} style={this.secondDifficultyButtonStyle} onClick={this.mediumDifficultyClick} />
+          <RaisedButton className="button" label="NORMAL" primary={this.props.normalDifficulty}
+                        style={this.difficultyButtonStyle} onClick={this.normalDifficultyClick}  />
+          <span className="tooltip">Player can adjust WIP-limits, other actions are made by AI</span>
+          <RaisedButton className="button" label="MEDIUM" primary={this.props.mediumDifficulty}
+                        style={this.secondDifficultyButtonStyle} onClick={this.mediumDifficultyClick} />
+          <span className="tooltip">Player can adjust WIP-limits and assign resource dice to cards</span>
+          <RaisedButton className="button" label="ADVANCED" primary={this.props.advancedDifficulty}
+                        style={this.thirdDifficultyButtonStyle} onClick={this.advancedDifficultyClick} />
+          <span className="tooltip">
+            Player can adjust WIP-limits and assign resource dice to cards.
+            3-day start and deploy-queue is introduced.
+          </span>
           <TextField
             hintText="Player name"
             floatingLabelText="Insert player name here"
@@ -56,6 +73,7 @@ class StartScreen extends React.Component {
           />
           <RaisedButton type="submit" label="Start game" primary={true} style={this.buttonStyle} />
         </form>
+        <h3>Made By Antti Ahonen & Ilkka Rautiainen</h3>
       </div>
     )
   };

@@ -35,6 +35,18 @@
       margin-left: 0;
       margin-right: 2px;
     }
+    @media screen and (max-width: 1500px) {
+      font-size: 1.0em;
+      &.minor {
+        font-size: 0.6em;
+        margin-left: 1px;
+        line-height: 32px;
+      }
+      &.minor:first-of-type {
+        margin-left: 0;
+        margin-right: 1px;
+      }
+    }
   }
 
   &:hover {
@@ -51,6 +63,9 @@
   }
   &.selected {
     border-color: $minor-color;
+    opacity: 1;
+  }
+  &.assigned {
     opacity: 1;
   }
   &:nth-of-type(2) {
