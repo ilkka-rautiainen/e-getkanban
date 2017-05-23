@@ -125,7 +125,7 @@ class PhaseContainer extends React.Component {
         const dieVisibilityClass = this.dieVisibilityClass(assignedClass);
         dice.push(<Die key={i} onClick={e => this.handleDieClick(e, dieNumber)}
                        castNumbers={castNumbers} visibilityClass={dieVisibilityClass} selectedClass={selectedClass}
-                       dieStyle={this.dieStyle} diePosition={diePosition}
+                       dieStyle={this.dieStyle} diePosition={diePosition} assignedClass={assignedClass}
                        gameDifficulty={this.gameDifficulty} />);
       }
     }

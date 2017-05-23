@@ -10,6 +10,7 @@
   bottom: 0;
   left: 0;
   background-color: $background-color;
+  min-width: $screen-min-width;
   h1 {
     position: absolute;
     top: 0;
@@ -17,9 +18,42 @@
     font-size: 3em;
     text-shadow: 3px 3px gray;
   }
+  h3 {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    color: #fff;
+    font-size: 1em;
+    text-shadow: 3px 3px gray;
+    font-style: oblique;
+  }
   form {
     position: relative;
     background-color: $minor-color;
     padding: 45px;
+  }
+  .button:hover + .tooltip {
+    opacity: 1;
+  }
+  span.tooltip {
+    transition: all ease-in-out 0.3s;
+    opacity: 0;
+    position: absolute;
+    left: 30%;
+    top: -80px;
+    display: block;
+    width: 200px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: $tooltip-background-color;
+    font-size: 0.8em;
+    &:nth-of-type(1) {
+      left: 0%;
+      top: -65px;
+    }
+    &:nth-of-type(3) {
+      left: 65%;
+      top: -95px;
+    }
   }
 }

@@ -18,7 +18,7 @@ class Die extends React.Component {
   }
 
   get dieClass() {
-    return "die " + this.props.visibilityClass + " " + this.props.selectedClass;
+    return "die " + this.props.visibilityClass + " " + this.props.selectedClass + " " + this.props.assignedClass;
   }
 
   get isNormalGame() {
