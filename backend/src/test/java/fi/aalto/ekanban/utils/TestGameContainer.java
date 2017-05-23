@@ -8,6 +8,7 @@ import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Column;
 import fi.aalto.ekanban.models.db.phases.Phase;
+import fi.aalto.ekanban.services.GameInitService;
 
 import java.util.List;
 
@@ -31,6 +32,12 @@ public class TestGameContainer {
     public static TestGameContainer withMediumDifficultyMockGame() {
         TestGameContainer testGameContainer = new TestGameContainer();
         testGameContainer.initializeWithMediumDifficultyMockGame();
+        return testGameContainer;
+    }
+
+    public static TestGameContainer withAdvancedDifficultyMockGame() {
+        TestGameContainer testGameContainer = new TestGameContainer();
+        testGameContainer.initializeWithAdvancedDifficultyMockGame();
         return testGameContainer;
     }
 
@@ -215,6 +222,16 @@ public class TestGameContainer {
                 .withDifficultyLevel(GameDifficulty.MEDIUM)
                 .withId("1")
                 .build();
+    }
+
+    private void initializeWithAdvancedDifficultyMockGame() {
+        String playerName = "player";
+        game = GameBuilder.aGame()
+                .withNormalDifficultyMockDefaults(playerName)
+                .withDifficultyLevel(GameDifficulty.ADVANCED)
+                .withId("1")
+                .build();
+        game = new GameInitService().enableCardThreeDayMoveCycle(game);
     }
 
     private void fillDevelopmentInProgressTowardsFullWip(Integer amountToLeaveUnfilled) {

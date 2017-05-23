@@ -24,6 +24,9 @@ public class Column {
     @Field
     private String name;
 
+    @Field
+    private Integer dayMultiplierToEnter;
+
     public String getId() {
         return id;
     }
@@ -48,6 +51,15 @@ public class Column {
         this.name = name;
     }
 
+    public Integer getDayMultiplierToEnter() {
+        return dayMultiplierToEnter;
+    }
+
+    public void setDayMultiplierToEnter(Integer dayMultiplierToEnter) {
+        this.dayMultiplierToEnter = dayMultiplierToEnter;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,6 +71,7 @@ public class Column {
 
         if (id != null ? !id.equals(column.id) : column.id != null) return false;
         if (cards != null ? !cards.equals(column.cards) : column.cards != null) return false;
+        if (dayMultiplierToEnter != null ? !dayMultiplierToEnter.equals(column.dayMultiplierToEnter) : column.dayMultiplierToEnter != null) return false;
         return name != null ? name.equals(column.name) : column.name == null;
 
     }
@@ -67,6 +80,7 @@ public class Column {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (cards != null ? cards.hashCode() : 0);
+        result = 31 * result + (dayMultiplierToEnter != null ? dayMultiplierToEnter.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }

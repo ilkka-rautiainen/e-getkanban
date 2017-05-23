@@ -83,6 +83,11 @@ public class DifficultyConfiguration {
         return getId().equals(GameDifficulty.MEDIUM.toString());
     }
 
+    @JsonIgnore
+    public boolean isAdvanced() {
+        return getId().equals(GameDifficulty.ADVANCED.toString());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

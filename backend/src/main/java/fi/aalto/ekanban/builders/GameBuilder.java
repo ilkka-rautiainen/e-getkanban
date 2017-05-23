@@ -86,23 +86,6 @@ public final class GameBuilder {
         return this;
     }
 
-    public GameBuilder withMediumDifficultyDefaults(DifficultyConfiguration difficultyConfiguration,
-                                                    String playerName,
-                                                    BaseCardRepository baseCardRepository,
-                                                    PhaseRepository phaseRepository) {
-        this.playerName = playerName;
-        this.difficultyLevel = GameDifficulty.MEDIUM;
-        this.board = BoardBuilder.aBoard()
-                .withNormalDifficultyDefaults(difficultyConfiguration, baseCardRepository, phaseRepository)
-                .build();
-        this.cfd = CFDBuilder.aCFD()
-                .withCfdDailyValues(CFDDailyValuesBuilder.aSetOfCfdDailyValues()
-                        .withOneDailyValueWithZerosBasedOnPhases(this.board.getPhases())
-                        .build())
-                .build();
-        return this;
-    }
-
     public GameBuilder withNormalDifficultyMockDefaults(String playerName) {
         this.playerName = playerName;
         this.difficultyLevel = GameDifficulty.NORMAL;

@@ -1,9 +1,28 @@
 Feature: Play Turn on Advanced level
   As a game player
-  I want to play a turn after possibly adjusting wip limits, assigning&using resources, moving cards, drawing cards from backlog and possibly using the expedite lane
-  So that I can see the current day's event card and I can follow the CFD and financial summary charts
+  I want to play a turn doing all the possible actions myself
+  So that I can see how they affect the game and its entities day by day
 
+  @focus
+  Scenario Outline: Player plays turn of the game
+    Given I have a game with difficulty of Advanced
+      And In Progress column of Analysis has <inProgAnalysisCards> cards
+      And Waiting for Development column of Analysis has <waitingForTestCards> cards
+      And the current day of the game is <currentDay>
 
+    When I change WIP limit of phase Analysis to 5
+      And I change WIP limit of phase Development to 0
+      And I press the next round button
+
+    Then game should have current day of <nextDay>
+      And Analysis phase should contain <analysisCardCount> cards
+
+    Examples:
+      | currentDay | inProgAnalysisCards | waitingForTestCards | nextDay | analysisCardCount |
+      | 0          |  0                  |  0                  |  1      | 5                 |
+      | 1          |  1                  |  0                  |  2      | 1                 |
+
+  @ignore
   Scenario: Player plays the first turn of the game without any special options
     Given I have a new game with difficulty of Advanced
     When I draw as many cards to the first column as the WIP-limit allows
@@ -11,7 +30,7 @@ Feature: Play Turn on Advanced level
     Then I have a game with difficulty of Advanced
       And I receive an event card for the first day
 
-
+  @ignore
   Scenario: Player wants to be able to move cards to the cycled phases on the day 3 when the cycles are enabled
     Given I have a new game with difficulty of Advanced
       And the game has the option of the 3 days cycles between getting new cards from backlog to the Selected-phase
@@ -25,7 +44,7 @@ Feature: Play Turn on Advanced level
       And moving cards to the phase Selected is enabled
       And moving cards to the phase Deployed is enabled
 
-
+  @ignore
   Scenario: Player wants not to be able to move cards to the cycled phases on the day 4 when the cycles are enabled
     Given I have a new game with difficulty of Advanced
       And the game has the option of the 3 days cycles between getting new cards from backlog to the Selected-phase

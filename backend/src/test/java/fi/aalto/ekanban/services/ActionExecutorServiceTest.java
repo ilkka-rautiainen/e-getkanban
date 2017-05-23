@@ -23,7 +23,6 @@ import fi.aalto.ekanban.models.AssignResourcesAction;
 import fi.aalto.ekanban.models.DrawFromBacklogAction;
 import fi.aalto.ekanban.models.MoveCardAction;
 import fi.aalto.ekanban.models.db.games.Card;
-import fi.aalto.ekanban.models.db.games.CardPhasePoint;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Column;
 import fi.aalto.ekanban.models.db.phases.Phase;
