@@ -20,4 +20,11 @@
   .align-wrapper .phase-name {
     font-size: 1.5em;
   }
+  span.material-icons:hover + .tooltip {
+    opacity: 1;
+  }
+  .tooltip {
+    width: 150px;
+    right: 40px;
+  }
 }

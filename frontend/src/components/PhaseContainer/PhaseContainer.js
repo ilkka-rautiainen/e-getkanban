@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Col } from 'react-flexbox-grid';
+import FontIcon from 'material-ui/FontIcon';
 import _ from 'lodash';
 import { setActiveDice, setActiveCard, assignResource, assignDie } from '../../actions';
 import PhaseWithSingleColumn from '../PhaseWithSingleColumn/PhaseWithSingleColumn';
@@ -21,10 +22,12 @@ class PhaseContainer extends React.Component {
     }),
   };
 
-  constructor({ phase, phases, gameDifficulty }) {
+  constructor({ phase, phases, gameDifficulty, isFinalPhase, isFirstPhase }) {
     super();
     this.phase = phase;
     this.gameDifficulty = gameDifficulty;
+    this.isFinalPhase = isFinalPhase;
+    this.isFirstPhase = isFirstPhase;
     const otherWorkingPhases = _.pickBy(phases, function(value, key) {
       return value.isWorkPhase && value.id !== phase.id;
     });
@@ -133,12 +136,37 @@ class PhaseContainer extends React.Component {
     return dice;
   }
 
+  get iconStyle() {
+    return {
+      position: "absolute",
+      top: "5px",
+      right: "10px",
+      cursor: "help"
+    }
+  }
+
+  get tooltipText() {
+    const baseText = this.isFirstPhase ? "Next draw from backlog in " : "Next deploy in ";
+    const daysUntilActionModulo = (this.props.gameCurrentDay) % this.props.firstColumn.dayMultiplierToEnter;
+    let daysUntilAction;
+    switch (daysUntilActionModulo) {
+      case 0: daysUntilAction = 1; break;
+      case 1: daysUntilAction = 3; break;
+      case 2: daysUntilAction = 2; break;
+    }
+    const dayText = daysUntilAction === 1 ? " day" : " days";
+    return baseText + daysUntilAction + dayText;
+  }
+
   render() {
     if (!this.phase) {
       return null;
     }
+    const isAdvancedGameFinalOrFirstPhase = this.gameDifficulty === constants.GAME_DIFFICULTY_ADVANCED && (this.isFinalPhase || this.isFirstPhase);
     return (
       <Col xs className={this.className}>
+        { isAdvancedGameFinalOrFirstPhase && <FontIcon className="material-icons" style={this.iconStyle}>info</FontIcon> }
+        { isAdvancedGameFinalOrFirstPhase && <span className="tooltip">{this.tooltipText}</span> }
         {this.dice}
         {this.phase.columns.length === 1 ?
           <PhaseWithSingleColumn
@@ -157,7 +185,6 @@ const mapStateToProps = (state, ownProps) => {
   const phase = state.phases[ownProps.id];
   const phases = state.phases;
   const firstColumn = phase === undefined ? null : state.columns[phase.columns[0]];
-  const isFinalPhase = phase.id === constants.DEPLOYED;
   let dice = null;
   if (state.dice) {
     dice = state.dice.filter(function(diceAction) {return diceAction.phaseId === phase.id})[0];
@@ -167,13 +194,15 @@ const mapStateToProps = (state, ownProps) => {
                .forEach((column) => phaseCardCount += column.cards.length);
   return {
     gameDifficulty: gameDifficulty,
+    gameCurrentDay: state.game.currentDay,
     phase: phase,
     phases: phases,
     firstColumn: firstColumn,
     dice: dice,
     showDice: state.nextRoundUIState.showDice,
     enableNextRound: state.nextRoundUIState.enableButtonPress,
-    isFinalPhase: isFinalPhase,
+    isFinalPhase: phase.id === constants.DEPLOYED,
+    isFirstPhase: phase.id === constants.ANALYSIS,
     selectedDice: state.phaseDice,
     selectedCard: state.activeCard,
     assignedDice: state.assignedDice,
