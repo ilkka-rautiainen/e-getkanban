@@ -48,7 +48,8 @@ class Card extends React.Component {
       <Paper className={this.cardClass} zDepth={3} style={this.props.style} onClick={!isEasyGame && this.props.onClick}>
       <div className="card-title">
         <span className="order-number">S{this.card.orderNumber}</span>
-        { isAdvancedGame &&
+        {/* TODO: use isAdvancedGame here when financial value is implemented */}
+        { false &&
           <span className="value">${this.card.financialValue}</span>
         }
       </div>
@@ -59,7 +60,8 @@ class Card extends React.Component {
         <CardInfoItem title="Day Started" value={this.card.dayStarted}/>
         <span className="special-char">=</span>
         <CardInfoItem givenClass="lead-time" title="Lead Time" value={this.card.leadTimeInDays}/>
-        { isAdvancedGame &&
+        {/* TODO: use isAdvancedGame here when subscribers are implemented */}
+        { false &&
           <CardInfoItem title="Subscribers" value={this.card.subscribers}/>
         }
       </div>

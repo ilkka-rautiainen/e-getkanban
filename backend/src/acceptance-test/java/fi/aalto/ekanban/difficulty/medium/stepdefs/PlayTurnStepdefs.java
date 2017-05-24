@@ -1,9 +1,9 @@
 package fi.aalto.ekanban.difficulty.medium.stepdefs;
 
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static fi.aalto.ekanban.ApplicationConstants.*;
+import static fi.aalto.ekanban.AcceptanceTestUtil.getIndexInt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,6 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
@@ -66,19 +65,6 @@ public class PlayTurnStepdefs extends SpringSteps {
                 .withPhaseWipLimits(new HashMap<>())
                 .build();
         assignResourcesActions = new ArrayList<>();
-    }
-
-    private Integer getIndexInt(String stringIndex) {
-        Integer intIndex;
-        switch (stringIndex) {
-            case "first": intIndex = 0;
-                break;
-            case "second": intIndex = 1;
-                break;
-            default: intIndex = 2;
-                break;
-        }
-        return intIndex;
     }
 
     @Given("^the game has (-?\\d+) cards in (.+) column of (.+) phase$")

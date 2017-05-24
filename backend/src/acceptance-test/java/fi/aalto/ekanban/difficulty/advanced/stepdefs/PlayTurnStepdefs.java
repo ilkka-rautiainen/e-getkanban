@@ -3,6 +3,7 @@ package fi.aalto.ekanban.difficulty.advanced.stepdefs;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static fi.aalto.ekanban.ApplicationConstants.*;
+import static fi.aalto.ekanban.AcceptanceTestUtil.getIndexInt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import fi.aalto.ekanban.SpringSteps;
 import fi.aalto.ekanban.builders.AdjustWipLimitsActionBuilder;
+import fi.aalto.ekanban.builders.AssignResourcesActionBuilder;
 import fi.aalto.ekanban.builders.CardBuilder;
 import fi.aalto.ekanban.builders.TurnBuilder;
 import fi.aalto.ekanban.models.AdjustWipLimitsAction;
@@ -78,6 +80,15 @@ public class PlayTurnStepdefs extends SpringSteps {
         columnToAddCards.setCards(phaseCards);
     }
 
+    @Given("^(.+) phase has (\\d+) cards$")
+    public void phase_has_cards(String phaseName, int cardCount) {
+        List<Card> phaseCards = new ArrayList<>();
+        for (int i = 0; i < cardCount; i++) {
+            phaseCards.add(CardBuilder.aCard().withMockPhasePoints().withDayStarted(1).build());
+        }
+        initialGameContainer.getGame().getBoard().getPhaseWithId(phaseName.toUpperCase()).getFirstColumn().setCards(phaseCards);
+    }
+
     @Given("^the current day of the game is (\\d+)$")
     public void the_current_day_of_the_game_is(Integer currentDay) throws Throwable {
         initialGameContainer.getGame().setCurrentDay(currentDay);
@@ -89,6 +100,21 @@ public class PlayTurnStepdefs extends SpringSteps {
     public void i_change_wip_limit_of_phase_to(String phaseName, Integer wipLimit) {
         Phase phase = phaseRepository.findByName(phaseName);
         adjustWipLimitsAction.getPhaseWipLimits().put(phase.getId(), wipLimit);
+    }
+
+    @When("^I assign the (.+) resource dice of (.+) phase to the first card in (.+) phase$")
+    public void i_assign_the_resource_dice_of_phase_to_the_first_card_in_phase(String dieIndex, String diePhase, String cardPhase) {
+        Column columnOfCard = initialGameContainer.getGame().getBoard()
+                .getPhaseWithId(cardPhase.toUpperCase()).getColumns().get(0);
+        Card firstCard = columnOfCard.getCards().get(0);
+        AssignResourcesAction assignResourcesAction =
+                AssignResourcesActionBuilder.anAssignResourcesAction()
+                        .withCardId(firstCard.getId())
+                        .withCardPhaseId(cardPhase.toUpperCase())
+                        .withDieIndex(getIndexInt(dieIndex))
+                        .withDiePhaseId(diePhase.toUpperCase())
+                        .build();
+        assignResourcesActions.add(assignResourcesAction);
     }
 
     @When("^I press the next round button$")
@@ -109,9 +135,10 @@ public class PlayTurnStepdefs extends SpringSteps {
         response.body("currentDay", equalTo(currentDay));
     }
 
-    @Then("^Analysis phase should contain (\\d+) cards$")
-    public void analysis_phase_should_contain_cards(int analysisCardCount) {
-        response.body("board.phases.find { it.id == '" + ANALYSIS_PHASE_ID + "' }.columns.cards.flatten().size()", equalTo(analysisCardCount));
+    @Then("^(.+) phase should contain (\\d+) cards$")
+    public void analysis_phase_should_contain_cards(String phaseName, int analysisCardCount) {
+        response.body("board.phases.find { it.id == '" + phaseName.toUpperCase() + "' }.columns.cards.flatten().size()",
+                equalTo(analysisCardCount));
     }
 
 }
