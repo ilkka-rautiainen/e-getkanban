@@ -5,5 +5,5 @@ import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty"}, features = "classpath:fi/aalto/ekanban/difficulty/advanced/", tags={"@focus"})
+@CucumberOptions(plugin = {"pretty"}, features = "classpath:fi/aalto/ekanban/difficulty/advanced/", tags={"~@ignore"})
 public class RunAdvancedDifficulty { }

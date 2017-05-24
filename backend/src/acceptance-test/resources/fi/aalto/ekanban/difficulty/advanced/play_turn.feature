@@ -3,8 +3,7 @@ Feature: Play Turn on Advanced level
   I want to play a turn doing all the possible actions myself
   So that I can see how they affect the game and its entities day by day
 
-  @focus
-  Scenario Outline: Player plays turn of the game
+  Scenario Outline: Player tries to draw from backlog when 3-day cycle is enabled
     Given I have a game with difficulty of Advanced
       And In Progress column of Analysis has <inProgAnalysisCards> cards
       And Waiting for Development column of Analysis has <waitingForTestCards> cards
@@ -21,6 +20,28 @@ Feature: Play Turn on Advanced level
       | currentDay | inProgAnalysisCards | waitingForTestCards | nextDay | analysisCardCount |
       | 0          |  0                  |  0                  |  1      | 5                 |
       | 1          |  1                  |  0                  |  2      | 1                 |
+
+  @focus
+  Scenario Outline: Player tries to deploy a card when 3-day cycle is enabled
+    Given I have a game with difficulty of Advanced
+      And Deployed phase has 0 cards
+      And Test phase has 1 cards
+      And the current day of the game is <currentDay>
+
+    When I assign the first resource dice of Test phase to the first card in Test phase
+      And I assign the second resource dice of Test phase to the first card in Test phase
+      And I assign the first resource dice of Development phase to the first card in Test phase
+      And I assign the second resource dice of Development phase to the first card in Test phase
+      And I assign the third resource dice of Development phase to the first card in Test phase
+      And I press the next round button
+
+    Then game should have current day of <nextDay>
+      And Deployed phase should contain <deployedCardCount> cards
+
+    Examples:
+      | currentDay |  nextDay | deployedCardCount |
+      | 5          |   6      |   0               |
+      | 6          |   7      |   1               |
 
   @ignore
   Scenario: Player plays the first turn of the game without any special options

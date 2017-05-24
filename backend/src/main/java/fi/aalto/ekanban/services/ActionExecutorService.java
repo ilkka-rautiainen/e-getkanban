@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import fi.aalto.ekanban.enums.GameDifficulty;
 import fi.aalto.ekanban.models.AdjustWipLimitsAction;
 import fi.aalto.ekanban.models.AssignResourcesAction;
 import fi.aalto.ekanban.models.DrawFromBacklogAction;
@@ -65,7 +66,7 @@ public class ActionExecutorService {
             Phase firstPhase = game.getBoard().getPhases().get(0);
 
             drawActions.forEach(drawAction -> {
-                if (isValidDrawFromBacklogAction(firstPhase, drawAction)) {
+                if (isValidDrawFromBacklogAction(game, firstPhase, drawAction)) {
                     List<Card> backlogDeck = game.getBoard().getBacklogDeck();
                     Card cardToDraw = backlogDeck.get(0);
                     Boolean cardSuccessfullyRemovedFromDeck = backlogDeck.remove(cardToDraw);
@@ -81,7 +82,12 @@ public class ActionExecutorService {
         return game;
     }
 
-    private Boolean isValidDrawFromBacklogAction(Phase firstPhase, DrawFromBacklogAction drawAction) {
+    private Boolean isValidDrawFromBacklogAction(Game game, Phase firstPhase, DrawFromBacklogAction drawAction) {
+        Boolean advancedGameCycleDoesNotAllowToDrawFromBacklog = game.getDifficultyLevel() == GameDifficulty.ADVANCED &&
+            (game.getCurrentDay() - 1) % firstPhase.getFirstColumn().getDayMultiplierToEnter() != 0;
+        if (advancedGameCycleDoesNotAllowToDrawFromBacklog) {
+            return false;
+        }
         return !firstPhase.isFullWip()
                 && drawAction.getIndexToPlaceCardAt() >= 0
                 && drawAction.getIndexToPlaceCardAt() <= firstPhase.getColumns().get(0).getCards().size();
@@ -93,6 +99,11 @@ public class ActionExecutorService {
     }
 
     private boolean isValidMoveCardAction(MoveCardAction moveCardAction, Game game) {
+        Boolean advancedGameCycleDoesNotAllowToMoveCard = game.getDifficultyLevel() == GameDifficulty.ADVANCED &&
+            (game.getCurrentDay() - 1) % game.getColumnWithId(moveCardAction.getToColumnId()).getDayMultiplierToEnter() != 0;
+        if (advancedGameCycleDoesNotAllowToMoveCard) {
+            return false;
+        }
         return game.isColumnNextAdjacent(moveCardAction.getFromColumnId(), moveCardAction.getToColumnId()) &&
                 !game.doesMoveExceedWIP(moveCardAction) &&
                 game.isCardInColumn(moveCardAction.getCardId(), moveCardAction.getFromColumnId());

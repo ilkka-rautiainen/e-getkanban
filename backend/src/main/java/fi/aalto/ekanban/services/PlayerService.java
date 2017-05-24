@@ -51,6 +51,7 @@ public class PlayerService {
             return mediumTurnPlayerService;
         }
         else {
+            // the current advanced version doesn't hold anything new over mediumTurnPlayer
             return mediumTurnPlayerService;
         }
     }

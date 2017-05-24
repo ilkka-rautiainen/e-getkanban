@@ -112,6 +112,91 @@ public class DrawFromBacklogAIServiceIntegrationTest {
             }
         }
 
+        public class andDifficultyIsAdvanced {
+
+            @Before
+            public void init() {
+                initialGameContainer = TestGameContainer.withAdvancedDifficultyMockGame();
+                initialGameContainer.getGame().getBoard().getPhases().forEach(phase -> phase.setWipLimit(5));
+                List<Card> backlogDeck = initialGameContainer.getGame().getBoard().getBacklogDeck();
+
+                cardsInBacklogBefore = backlogDeck.size();
+                cardsInFirstPhaseBefore = initialGameContainer.getAnalysisPhase().getTotalAmountOfCards();
+                placesInFirstPhaseBefore = initialGameContainer.getAnalysisPhase().getWipLimit() -
+                        initialGameContainer.getAnalysisPhase().getTotalAmountOfCards();
+                firstCardsInBacklogBefore = new Cloner().deepClone(backlogDeck.subList(0, placesInFirstPhaseBefore));
+            }
+
+            public class withValidFirstGameDay {
+                @Before
+                public void initAndDoAction() {
+                    initialGameContainer.getGame().setCurrentDay(1);
+                    performDrawFromBacklog();
+                }
+
+                @Test
+                public void shouldFillFirstPhaseToFull() {
+                    assertThat(drawnCardsGameContainer.getAnalysisPhase().isFullWip(), equalTo(true));
+                }
+
+                @Test
+                public void shouldRemoveRightAmountOfCardsFromBacklog() {
+                    Integer cardsRemovedFromBacklog = cardsInBacklogBefore - cardsInBacklogAfter;
+                    assertThat(cardsRemovedFromBacklog, equalTo(placesInFirstPhaseBefore));
+                }
+
+                @Test
+                public void shouldAddRightAmountOfCardsToFirstPhase() {
+                    Integer cardsAddedToFirstPhase = cardsInFirstPhaseAfter - cardsInFirstPhaseBefore;
+                    assertThat(cardsAddedToFirstPhase, equalTo(placesInFirstPhaseBefore));
+                }
+            }
+
+            //In advanced, only 1,4,7,10,13... are valid days to draw from backlog to analysis
+            public class withOtherValidGameDay {
+                @Before
+                public void initAndDoAction() {
+                    initialGameContainer.getGame().setCurrentDay(4);
+                    performDrawFromBacklog();
+                }
+
+                @Test
+                public void shouldFillFirstPhaseToFull() {
+                    assertThat(drawnCardsGameContainer.getAnalysisPhase().isFullWip(), equalTo(true));
+                }
+
+                @Test
+                public void shouldRemoveRightAmountOfCardsFromBacklog() {
+                    Integer cardsRemovedFromBacklog = cardsInBacklogBefore - cardsInBacklogAfter;
+                    assertThat(cardsRemovedFromBacklog, equalTo(placesInFirstPhaseBefore));
+                }
+
+                @Test
+                public void shouldAddRightAmountOfCardsToFirstPhase() {
+                    Integer cardsAddedToFirstPhase = cardsInFirstPhaseAfter - cardsInFirstPhaseBefore;
+                    assertThat(cardsAddedToFirstPhase, equalTo(placesInFirstPhaseBefore));
+                }
+            }
+
+            public class withInvalidGameDays {
+                @Before
+                public void initAndDoAction() {
+                    initialGameContainer.getGame().setCurrentDay(2);
+                    performDrawFromBacklog();
+                }
+
+                @Test
+                public void shouldRemainBacklogDeckIntact() {
+                    assertThat(cardsInBacklogAfter, equalTo(cardsInBacklogBefore));
+                }
+
+                @Test
+                public void shouldRemainFirstPhaseIntact() {
+                    assertThat(cardsInFirstPhaseAfter, equalTo(cardsInFirstPhaseBefore));
+                }
+            }
+        }
+
     }
 
     public class withRestrictedBacklogDeck {

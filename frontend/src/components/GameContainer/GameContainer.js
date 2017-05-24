@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import StartScreen from '../StartScreen/StartScreen'
 import Game from '../Game/Game';
 import { startGame } from '../../actions';
+import constants from '../../constants'
 import './GameContainer.scss';
 
 class GameContainer extends React.Component {
@@ -26,7 +27,9 @@ class GameContainer extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const difficulty = this.state.normal ? "NORMAL" : "MEDIUM";
+    let difficulty = constants.GAME_DIFFICULTY_NORMAL;
+    difficulty = this.state.medium ? constants.GAME_DIFFICULTY_MEDIUM : difficulty;
+    difficulty = this.state.advanced ? constants.GAME_DIFFICULTY_ADVANCED : difficulty;
     this.props.onStartGame(this.state.playerName, difficulty);
   }
 

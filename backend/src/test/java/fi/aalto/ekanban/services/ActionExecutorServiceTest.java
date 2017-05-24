@@ -50,8 +50,8 @@ public class ActionExecutorServiceTest {
 
         @Before
         public void buildCardsToMoveAndSetColumns() {
-            firstCardToMove = CardBuilder.aCard().withId("1").build();
-            secondCardToMove = CardBuilder.aCard().withId("2").build();
+            firstCardToMove = CardBuilder.aCard().withId("1").withDayStarted(1).build();
+            secondCardToMove = CardBuilder.aCard().withId("2").withDayStarted(1).build();
         }
 
         public class withToColumnInSamePhase {
@@ -110,6 +110,47 @@ public class ActionExecutorServiceTest {
                 public class andToColumnIsNextAdjacent {
                     private TestGameContainer.ColumnName fromColumnName;
                     private TestGameContainer.ColumnName toColumnName;
+
+                    public class andCardDeployCycleIsEnabled {
+                        @Before
+                        public void setFromAndToColumn() {
+                            initialGameContainer = TestGameContainer.withAdvancedDifficultyMockGame();
+                            fromColumnName = TestGameContainer.ColumnName.TEST;
+                            toColumnName = TestGameContainer.ColumnName.DEPLOYED;
+                        }
+
+                        public class whenGameDayIsValidToDeploy {
+                            @Before
+                            public void moveCards() {
+                                initialGameContainer.getGame().setCurrentDay(4);
+                                moveTestGameCards(fromColumnName, toColumnName);
+                            }
+                            @Test
+                            public void shouldRemoveCardsFromOldColumn() {
+                                assertThat(fromColumnAfter.getCards(), not(hasItems(firstCardToMove, secondCardToMove)));
+                            }
+                            @Test
+                            public void shouldAllowAllCardsToBeMovedToNewColumn() {
+                                assertThat(toColumnAfter.getCards(), hasItems(firstCardToMove, secondCardToMove));
+                            }
+                        }
+
+                        public class whenGameDayIsNotReadyToDeploy {
+                            @Before
+                            public void moveCards() {
+                                initialGameContainer.getGame().setCurrentDay(3);
+                                moveTestGameCards(fromColumnName, toColumnName);
+                            }
+                            @Test
+                            public void shouldRemainCardsInOldColumnIntact() {
+                                assertThat(fromColumnAfter.getCards(), hasItems(firstCardToMove, secondCardToMove));
+                            }
+                            @Test
+                            public void shouldNotMoveAnyCardsToNewColumn() {
+                                assertThat(toColumnAfter.getCards(), not(hasItems(firstCardToMove, secondCardToMove)));
+                            }
+                        }
+                    }
 
                     @Before
                     public void setFromAndToColumn() {
