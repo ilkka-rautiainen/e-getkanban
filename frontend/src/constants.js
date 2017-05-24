@@ -8,6 +8,7 @@ const constants = {
   BACKEND_HOST: backendHost,
   GAME_ENDED_MESSAGE: "Game Has Ended!",
   START_OVER_MESSAGE: "Start Over",
+  ANALYSIS: "ANALYSIS",
   TEST: "TEST",
   DEPLOYED: "DEPLOYED",
   ENTERED_BOARD: "ENTERED_BOARD",
