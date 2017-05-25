@@ -146,7 +146,7 @@ class PhaseContainer extends React.Component {
   }
 
   get tooltipText() {
-    const baseText = this.isFirstPhase ? "Next draw from backlog in " : "Next deploy in ";
+    const baseText = this.isFirstPhase ? "Can draw from backlog in " : "Can deploy in ";
     const daysUntilActionModulo = (this.props.gameCurrentDay) % this.props.firstColumn.dayMultiplierToEnter;
     let daysUntilAction;
     switch (daysUntilActionModulo) {

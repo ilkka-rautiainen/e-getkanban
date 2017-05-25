@@ -14,11 +14,13 @@ const muiTheme = getMuiTheme({
   }
 });
 
-export default () => (
+const App = () => (
   <MuiThemeProvider muiTheme={muiTheme}>
     <div className="app">
       <GameContainer/>
     </div>
   </MuiThemeProvider>
 );
+
+export default App;
 
