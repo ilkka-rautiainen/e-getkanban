@@ -1,4 +1,4 @@
-var backendHost = process.env.NODE_ENV === "development" ? "http://localhost:8080/" : "http://e-kanban.aalto.fi:8080/";
+const backendHost = process.env.NODE_ENV === "production" ? "http://e-kanban.aalto.fi:8080/" : "http://localhost:8080/";
 
 const constants = {
   GAME_DIFFICULTY_NORMAL: 'NORMAL',

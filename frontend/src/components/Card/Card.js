@@ -42,13 +42,14 @@ class Card extends React.Component {
   }
 
   render() {
-    const isAdvancedGame = this.gameDifficulty === constants.GAME_DIFFICULTY_ADVANCED;
+    //TODO take into use later when needed
+    //const isAdvancedGame = this.gameDifficulty === constants.GAME_DIFFICULTY_ADVANCED;
     const isEasyGame = this.gameDifficulty === constants.GAME_DIFFICULTY_EASY;
     return (
       <Paper className={this.cardClass} zDepth={3} style={this.props.style} onClick={!isEasyGame && this.props.onClick}>
       <div className="card-title">
         <span className="order-number">S{this.card.orderNumber}</span>
-        {/* TODO: use isAdvancedGame here when financial value is implemented */}
+        {/* TODO use isAdvancedGame here when financial value is implemented */}
         { false &&
           <span className="value">${this.card.financialValue}</span>
         }
@@ -60,7 +61,7 @@ class Card extends React.Component {
         <CardInfoItem title="Day Started" value={this.card.dayStarted}/>
         <span className="special-char">=</span>
         <CardInfoItem givenClass="lead-time" title="Lead Time" value={this.card.leadTimeInDays}/>
-        {/* TODO: use isAdvancedGame here when subscribers are implemented */}
+        {/* TODO use isAdvancedGame here when subscribers are implemented */}
         { false &&
           <CardInfoItem title="Subscribers" value={this.card.subscribers}/>
         }
