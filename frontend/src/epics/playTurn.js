@@ -7,7 +7,7 @@ import { setGameData, setDiceData, setPhasePoints, removeDice, addDice,
          enableNextRoundButton, removeAssignedDice, resetAssignedResources } from "../actions";
 import constants from "../constants";
 
-export default function playTurn(action$, store) {
+export default function playTurn(action$, store, { ajaxPut }) {
   const headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
@@ -33,7 +33,7 @@ export default function playTurn(action$, store) {
 
       return Observable.concat(
         Observable.of(removeDice()),
-        Observable.ajax.put(constants.BACKEND_HOST+constants.GAMES_PATH+action.gameId, action.turn, headers).delay(playTurnDelay)
+        ajaxPut(constants.BACKEND_HOST+constants.GAMES_PATH+action.gameId, action.turn, headers).delay(playTurnDelay)
           .flatMap(data => {
             const normalizedData = normalize(data.response, gameSchema);
             return Observable.concat(

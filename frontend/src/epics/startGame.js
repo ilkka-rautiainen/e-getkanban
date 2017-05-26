@@ -6,10 +6,10 @@ import { START_GAME } from "../actions/actionTypes";
 import { setGameData } from "../actions";
 import constants from "../constants";
 
-export default function startGame(action$) {
+export default function startGame(action$, store, { ajaxPost }) {
   return action$.ofType(START_GAME)
     .mergeMap(action =>
-      Observable.ajax.post(constants.BACKEND_HOST+constants.GAMES_PATH, action.payload)
+      ajaxPost(constants.BACKEND_HOST+constants.GAMES_PATH, action.payload)
         .map(data => normalize(data.response, gameSchema))
         .map(normalizedData => setGameData(normalizedData))
         .catch(error => Observable.concat(
