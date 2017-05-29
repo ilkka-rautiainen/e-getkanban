@@ -8,7 +8,7 @@ import fi.aalto.ekanban.models.db.games.Card;
 import fi.aalto.ekanban.models.db.games.Game;
 import fi.aalto.ekanban.models.db.phases.Column;
 import fi.aalto.ekanban.models.db.phases.Phase;
-import fi.aalto.ekanban.services.GameInitService;
+import fi.aalto.ekanban.services.GameOptionService;
 
 import java.util.List;
 
@@ -231,7 +231,7 @@ public class TestGameContainer {
                 .withDifficultyLevel(GameDifficulty.ADVANCED)
                 .withId("1")
                 .build();
-        game = new GameInitService().enableCardThreeDayMoveCycle(game);
+        game = new GameOptionService().enableCardThreeDayMoveCycle(game);
     }
 
     private void fillDevelopmentInProgressTowardsFullWip(Integer amountToLeaveUnfilled) {
