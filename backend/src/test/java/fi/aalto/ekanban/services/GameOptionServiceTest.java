@@ -16,7 +16,7 @@ import fi.aalto.ekanban.models.db.phases.Column;
 
 
 @RunWith(HierarchicalContextRunner.class)
-public class GameInitServiceTest {
+public class GameOptionServiceTest {
 
     public class enableCardThreeDayMoveCycle {
 
@@ -27,9 +27,9 @@ public class GameInitServiceTest {
 
         @Before
         public void initContextAndDoAction() {
-            GameInitService gameInitService = new GameInitService();
+            GameOptionService gameOptionService = new GameOptionService();
             Game defaultGame = GameBuilder.aGame().withNormalDifficultyMockDefaults("Player").build();
-            gameWithMoveCycleEnabled = gameInitService.enableCardThreeDayMoveCycle(defaultGame);
+            gameWithMoveCycleEnabled = gameOptionService.enableCardThreeDayMoveCycle(defaultGame);
             inProgressColumnOfAnalysis = gameWithMoveCycleEnabled.getBoard().getPhaseWithId(ANALYSIS_PHASE_ID).getFirstColumn();
             firstColumnOfDeployed = gameWithMoveCycleEnabled.getBoard().getPhaseWithId(DEPLOYED_PHASE_ID).getFirstColumn();
         }

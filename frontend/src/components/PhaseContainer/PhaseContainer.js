@@ -116,9 +116,9 @@ class PhaseContainer extends React.Component {
         }
         const diceAssigned = this.props.dice && this.props.showDice && !this.props.enableNextRound && assignedClass !== "";
         const isNormalGameWithCardsInPhase = this.props.dice && this.gameDifficulty === constants.GAME_DIFFICULTY_NORMAL;
-        const majorValue = (isNormalGameWithCardsInPhase|| diceAssigned) ? this.props.dice.dice[i].primaryValue : 0;
-        const firstMinorValue = (isNormalGameWithCardsInPhase|| diceAssigned) ? this.props.dice.dice[i].firstSecondaryValue : 0;
-        const secondMinorValue = (isNormalGameWithCardsInPhase|| diceAssigned) ? this.props.dice.dice[i].secondSecondaryValue : 0;
+        const majorValue = (isNormalGameWithCardsInPhase|| diceAssigned) ? this.props.dice.dice[i].primaryValue : "?";
+        const firstMinorValue = (isNormalGameWithCardsInPhase|| diceAssigned) ? this.props.dice.dice[i].firstSecondaryValue : "?";
+        const secondMinorValue = (isNormalGameWithCardsInPhase|| diceAssigned) ? this.props.dice.dice[i].secondSecondaryValue : "?";
         const castNumbers = {
           firstMinor: firstMinorValue,
           major: majorValue,

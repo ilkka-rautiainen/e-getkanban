@@ -78,13 +78,18 @@ GameOptionChange-class can alter the game and its options in the **game initiali
 ```java
 public Game getInitializedGame(DifficultyConfiguration difficultyConfiguration, String playerName) {
 ...
+    Object gameWithGameOptionChanges = GameBuilder.aGame()
+            .withNormalDifficultyDefaults(difficultyConfiguration,
+                    playerName, baseCardRepository, phaseRepository)
+            .withDifficultyLevel(GameDifficulty.ADVANCED)
+            .build();
     for (int i = 0; i < difficultyConfiguration.getInitialGameOptionChanges().size(); i++) {
         GameOptionChange gameOptionChange = difficultyConfiguration.getInitialGameOptionChanges().get(i);
         String methodName = gameOptionChange.getMethodName();
         try {
-            Class cls = Class.forName(gameOptionChange.getParameters());
-            Method methodToInvoke = this.getClass().getMethod(methodName, cls);
-            gameWithGameOptionChanges = methodToInvoke.invoke(this, gameWithGameOptionChanges);
+            Class parameterCls = Class.forName(gameOptionChange.getParameters());
+            Method methodToInvoke = GameOptionService.class.getMethod(methodName, parameterCls);
+            gameWithGameOptionChanges = methodToInvoke.invoke(new GameOptionService(), gameWithGameOptionChanges);
         } catch (Exception e) {
             throw new GameInitException();
         }
